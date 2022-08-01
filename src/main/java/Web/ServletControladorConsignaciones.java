@@ -2,6 +2,7 @@ package Web;
 
 import Datos.DaoActualizacion;
 import Datos.DaoConsignaciones;
+import Datos.DaoConsignaciones2;
 import Datos.DaoEstados;
 import Datos.DaoFiles;
 import Datos.DaoObservacion;
@@ -168,6 +169,22 @@ public class ServletControladorConsignaciones extends HttpServlet {
                     }
                 }
                 break;
+                case "cancelarCambiosIndividual": {
+                    try {
+                        this.cancelarCambiosIndividual(req, resp);
+                    } catch (ClassNotFoundException ex) {
+                        Logger.getLogger(ServletControladorConsignaciones.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+                break;
+                case "cancelarDevolucionConsignacionById": {
+                    try {
+                        this.cancelarDevolucionConsignacionById(req, resp);
+                    } catch (ClassNotFoundException | SQLException ex) {
+                        Logger.getLogger(ServletControladorConsignaciones.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+                break;        
 
             }
         }
@@ -684,5 +701,35 @@ public class ServletControladorConsignaciones extends HttpServlet {
 
         out.print(actualizarConsigObser);
         out.flush();
+    }
+    
+     private void cancelarCambiosIndividual(HttpServletRequest req, HttpServletResponse resp) throws ClassNotFoundException, IOException {
+        int idConsignacion = Integer.parseInt(req.getParameter("idConsignacion"));
+        int eliminarConsingacion = new DaoConsignaciones2().eliminarConsignacionById(idConsignacion);
+        resp.setContentType("text/plain");
+
+        PrintWriter out = resp.getWriter();
+
+        out.print(eliminarConsingacion);
+        out.flush();
+    }
+    
+
+     private void cancelarDevolucionConsignacionById(HttpServletRequest req, HttpServletResponse resp) throws ClassNotFoundException, SQLException, IOException {
+        int idConsignacion = Integer.parseInt(req.getParameter("idConsignacion"));
+        
+        int id_observacion_temporal = new DaoObservacion().obtenerIdObservacionTemporalByIdConsignacion(idConsignacion);
+        
+        int eliminar_observacion_temporal = new DaoObservacion().eliminarObserTempById(id_observacion_temporal);
+        
+        int eliminar_consignacion_temporal = new DaoConsignaciones().eliminarConsigTempById(idConsignacion);
+        resp.setContentType("text/plain");
+
+        PrintWriter out = resp.getWriter();
+
+        out.print(eliminar_consignacion_temporal);
+        out.flush();
+        
+        
     }
 }

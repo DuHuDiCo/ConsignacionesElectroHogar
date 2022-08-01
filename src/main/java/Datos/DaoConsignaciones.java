@@ -41,7 +41,8 @@ public class DaoConsignaciones {
     private static final String SQL_SELECT_CONSIGNACIONESMESBYSEDE = "SELECT consignacion.idConsignacion, consignacion.num_recibo, consignacion.fecha_creacion, consignacion.fecha_pago, consignacion.valor, actualizacion.fecha_actualizacion, estado.nombre_estado, plataforma.nombre_plataforma, obligacion.nombre_titular, sede.nombre_sede FROM consignacion INNER JOIN actualizacion ON consignacion.id_actualizacion = actualizacion.idActualizacion INNER JOIN estado ON actualizacion.id_estado = estado.idEstado INNER JOIN plataforma ON consignacion.id_plataforma = plataforma.idPlataforma INNER JOIN obligacion ON consignacion.id_obligacion = obligacion.idObligacion INNER JOIN sede ON obligacion.id_sede = sede.idSede WHERE sede.nombre_sede = ? AND consignacion.fecha_creacion >= ? AND consignacion.fecha_creacion <= ? AND estado.nombre_estado = 'Comprobado'  ORDER BY consignacion.fecha_creacion DESC ";
     private static final String SQL_SELECT_CONSIGNACIONESDIABYSEDE = "SELECT consignacion.idConsignacion, consignacion.num_recibo, consignacion.fecha_creacion, consignacion.fecha_pago, consignacion.valor, actualizacion.fecha_actualizacion, estado.nombre_estado, plataforma.nombre_plataforma, obligacion.nombre_titular, sede.nombre_sede FROM consignacion INNER JOIN actualizacion ON consignacion.id_actualizacion = actualizacion.idActualizacion INNER JOIN estado ON actualizacion.id_estado = estado.idEstado INNER JOIN plataforma ON consignacion.id_plataforma = plataforma.idPlataforma INNER JOIN obligacion ON consignacion.id_obligacion = obligacion.idObligacion INNER JOIN sede ON obligacion.id_sede = sede.idSede WHERE sede.nombre_sede = ? AND consignacion.fecha_creacion = ? AND estado.nombre_estado = 'Comprobado'  ORDER BY consignacion.fecha_creacion DESC ";
     private static final String SQL_UPDATE_CONSIGNACIONOBSERVACIONTEMPORAL = "UPDATE temporal_consignacion SET id_observacion = ? WHERE idConsignacion = ?";
-
+    private static final String SQL_DELETE_CONSIGNACIONTEMPORALBYID = "DELETE FROM temporal_consignacion WHERE idConsignacion = ?";
+    
     public List<Consignacion> listarConsignaciones() throws ClassNotFoundException {
         Connection con = null;
         PreparedStatement stmt = null;
@@ -1029,6 +1030,29 @@ public class DaoConsignaciones {
             stmt = con.prepareStatement(SQL_UPDATE_CONSIGNACIONOBSERVACIONTEMPORAL);
             stmt.setInt(1, id_observacion);
             stmt.setInt(2, id_consignacion);
+
+            rown = stmt.executeUpdate();
+
+        } catch (SQLException ex) {
+            ex.printStackTrace(System.out);
+        } finally {
+            Conexion.close(con);
+            Conexion.close(stmt);
+
+        }
+        return rown;
+    }
+    
+     public int eliminarConsigTempById(int id_consignacion) throws ClassNotFoundException, SQLException {
+        Connection con = null;
+        PreparedStatement stmt = null;
+
+        int rown = 0;
+        try {
+            con = Conexion.getConnection();
+            stmt = con.prepareStatement(SQL_DELETE_CONSIGNACIONTEMPORALBYID);
+            stmt.setInt(1, id_consignacion);
+            
 
             rown = stmt.executeUpdate();
 

@@ -20,6 +20,8 @@ public class DaoObservacion {
     private static final String SQL_DELETE_OBSERVACIONTEMPORAL = "DELETE FROM observaciones_temporal";
     private static final String SQL_SELECT_OBSERVACIONTEMPORALBYID = "SELECT * FROM observaciones_temporal WHERE idObservaciones = ?";
     private static final String SQL_UPDATE_ENVIARIDCONSIGNACION = "UPDATE observaciones_temporal SET id_consignacion = ? WHERE idObservaciones = ?";
+    private static final String SQL_SELECT_IDOBSERVACIONTEMPORALBYIDCONSIGNACION = "SELECT id_observacion FROM temporal_consignacion WHERE idConsignacion = ?";
+    private static final String SQL_DELETE_OBSERVACIONTEMPORALBYID = "DELETE FROM observaciones_temporal WHERE idObservacion = ?";
 
     public int guardarObservacion(Observaciones obs) throws ClassNotFoundException, SQLException {
         Connection con = null;
@@ -114,7 +116,6 @@ public class DaoObservacion {
     public int observacionTemporal(String observacion, int id_usuario) throws ClassNotFoundException, SQLException {
         Connection con = null;
         PreparedStatement stmt = null;
-        
 
         int rown = 0;
         try {
@@ -122,8 +123,7 @@ public class DaoObservacion {
             stmt = con.prepareStatement(SQL_INSERT_OBSERVACIONTEMPORAL);
             stmt.setString(1, observacion);
 
-            stmt.setInt(2,  id_usuario);
-            
+            stmt.setInt(2, id_usuario);
 
             rown = stmt.executeUpdate();
 
@@ -216,13 +216,12 @@ public class DaoObservacion {
                     observaciones.setId_consignacion(id_consignacion);
 
                 }
-            }else{
+            } else {
                 String error = "null";
                 observaciones = new Observaciones();
                 observaciones.setError(error);
             }
 
-            
         } catch (SQLException ex) {
             ex.printStackTrace(System.out);
         } finally {
@@ -232,8 +231,8 @@ public class DaoObservacion {
         }
         return observaciones;
     }
-    
-     public int enviarIdConsignacion(int id_consignacion, int id_observacion) throws ClassNotFoundException, SQLException {
+
+    public int enviarIdConsignacion(int id_consignacion, int id_observacion) throws ClassNotFoundException, SQLException {
         Connection con = null;
         PreparedStatement stmt = null;
 
@@ -244,7 +243,57 @@ public class DaoObservacion {
             stmt.setInt(1, id_consignacion);
 
             stmt.setInt(2, id_observacion);
-            
+
+            rown = stmt.executeUpdate();
+
+        } catch (SQLException ex) {
+            ex.printStackTrace(System.out);
+        } finally {
+            Conexion.close(con);
+            Conexion.close(stmt);
+
+        }
+        return rown;
+    }
+
+    public int obtenerIdObservacionTemporalByIdConsignacion(int id_consignacion) throws ClassNotFoundException, SQLException {
+        Connection con = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        int rown = 0;
+        try {
+            con = Conexion.getConnection();
+            stmt = con.prepareStatement(SQL_SELECT_IDOBSERVACIONTEMPORALBYIDCONSIGNACION);
+            stmt.setInt(1, id_consignacion);
+
+            rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                int idObservacion = rs.getInt("id_observacion");
+
+                rown = idObservacion;
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace(System.out);
+        } finally {
+            Conexion.close(con);
+            Conexion.close(stmt);
+
+        }
+        return rown;
+    }
+
+    public int eliminarObserTempById(int id_observacion) throws ClassNotFoundException, SQLException {
+        Connection con = null;
+        PreparedStatement stmt = null;
+
+        int rown = 0;
+        try {
+            con = Conexion.getConnection();
+            stmt = con.prepareStatement(SQL_DELETE_OBSERVACIONTEMPORALBYID);
+            stmt.setInt(1, id_observacion);
 
             rown = stmt.executeUpdate();
 
