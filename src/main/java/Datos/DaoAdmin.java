@@ -16,11 +16,11 @@ public class DaoAdmin {
     
     private static final String SQL_INSERT_ESTADOS = "INSERT INTO estado(nombre_estado) VALUES (?)";
     private static final String SQL_SELEC_ESTADOS =  "SELECT * FROM estado";
-    private static final String SQL_INSERT_TIPOPAGO = "INSERT INTO tipoPago(tipo_pago) VALUES (?)";
-    private static final String SQL_SELEC_TIPOPAGO =  "SELECT * FROM tipoPago";
+    private static final String SQL_INSERT_TIPOPAGO = "INSERT INTO tipopago(tipo_pago) VALUES (?)";
+    private static final String SQL_SELEC_TIPOPAGO =  "SELECT * FROM tipopago";
     private static final String SQL_INSERT_BANCO = "INSERT INTO plataforma(nombre_plataforma, id_tipoPago) VALUES (?, ?)";
-    private static final String SQL_SELEC_BANCO =  "SELECT plataforma.idPlataforma, plataforma.nombre_plataforma,  tipoPago.idTipoPago, tipoPago.tipo_pago "
-            + " FROM plataforma INNER JOIN tipoPago ON plataforma.id_tipoPago = tipoPago.idTipoPago";
+    private static final String SQL_SELEC_BANCO =  "SELECT plataforma.idPlataforma, plataforma.nombre_plataforma,  tipopago.idTipoPago, tipopago.tipo_pago "
+            + " FROM plataforma INNER JOIN tipopago ON plataforma.id_tipoPago = tipopago.idTipoPago";
     
     
     
