@@ -10,6 +10,7 @@ public class DaoActualizacion {
 
     private static final String SQL_INSERT_ACTUALIZACION = "INSERT INTO actualizacion(fecha_actualizacion, id_estado, id_usuarios) VALUES (NOW(),?,?)";
     private static final String SQL_SELEC_IDACTUALIZACION = "SELECT MAX(idActualizacion) FROM actualizacion ";
+    private static final String SQL_SELECT_IDESTADO = "SELECT id_estado FROM actualizacion WHERE idActualizacion = ?";
 
     public int guardarActualizacion(Actualizacion actu) throws ClassNotFoundException, SQLException {
         Connection con = null;
@@ -57,6 +58,35 @@ public class DaoActualizacion {
                 int idActualizacion = rs.getInt("MAX(idActualizacion)");
 
                 rown = idActualizacion;
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace(System.out);
+        } finally {
+            Conexion.close(con);
+            Conexion.close(stmt);
+
+        }
+        return rown;
+    }
+    
+    public int obtenerIdEstadoByIdActualizacion(int idActu) throws ClassNotFoundException, SQLException {
+        Connection con = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        int rown = 0;
+        try {
+            con = Conexion.getConnection();
+            stmt = con.prepareStatement(SQL_SELECT_IDESTADO);
+            stmt.setInt(1, idActu);
+
+            rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                int idEstado = rs.getInt("id_estado");
+
+                rown = idEstado;
             }
 
         } catch (SQLException ex) {

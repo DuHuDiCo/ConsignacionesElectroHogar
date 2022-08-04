@@ -21,6 +21,8 @@ public class DaoConsignaciones2 {
     private static final String SQL_SELECT_CONSIGNACIONESTEMPORALESCARTERA = "SELECT temporal_consignacion_cartera.idConsignacion, temporal_consignacion_cartera.num_recibo, temporal_consignacion_cartera.fecha_creacion, temporal_consignacion_cartera.fecha_pago, temporal_consignacion_cartera.valor, actualizacion.fecha_actualizacion, estado.nombre_estado, plataforma.nombre_plataforma, obligacion.n_documento, sede.nombre_sede FROM temporal_consignacion_cartera INNER JOIN actualizacion ON temporal_consignacion_cartera.id_actualizacion = actualizacion.idActualizacion INNER JOIN estado ON actualizacion.id_estado = estado.idEstado INNER JOIN plataforma ON temporal_consignacion_cartera.id_plataforma = plataforma.idPlataforma INNER JOIN obligacion ON temporal_consignacion_cartera.id_obligacion = obligacion.idObligacion INNER JOIN sede ON obligacion.id_sede = sede.idSede WHERE id_guardado = ? ORDER BY temporal_consignacion_cartera.fecha_creacion DESC ";
     private static final String SQL_DELETE_TEMPORALCARTERA = "DELETE FROM temporal_consignacion_cartera WHERE id_guardado = ?";
     private static final String SQL_DELETE_CONSIGNACIONBYID = "DELETE FROM temporal_consignacion WHERE idConsignacion = ?";
+    private static final String SQL_UPDATE_ACTUALIZACIONCONSIGNACIONTEMPORALCAJA = "UPDATE temporal_consignacion_caja SET id_actualizacion = ? WHERE idConsignacion = ?";
+    private static final String SQL_SELECT_VALIDARCONSIGNACIONFECHAVALOR = "SELECT consignacion.idConsignacion, consignacion.num_recibo, consignacion.fecha_pago, consignacion.valor, obligacion.idObligacion, obligacion.nombre_titular, sede.nombre_sede FROM consignacion INNER JOIN obligacion ON consignacion.id_obligacion = obligacion.idObligacion INNER JOIN sede ON obligacion.id_sede = sede.idSede INNER JOIN actualizacion ON consignacion.id_actualizacion = actualizacion.idActualizacion INNER JOIN estado ON actualizacion.id_estado = estado.idEstado WHERE consignacion.fecha_pago = ? AND consignacion.valor = ? AND estado.nombre_estado = ?";
     
     
     public List<Consignacion> listarConsignacionesAplicadasByIdUsuario(int id) throws ClassNotFoundException, SQLException {
@@ -292,6 +294,127 @@ public class DaoConsignaciones2 {
 
         }
         return rown;
+    }
+    
+    public int actualizarEstadoConsigTempCaja(int id_actu, int id_con) throws ClassNotFoundException {
+        Connection con = null;
+        PreparedStatement stmt = null;
+        int rown = 0;
+        try {
+            con = Conexion.getConnection();
+            stmt = con.prepareStatement(SQL_UPDATE_ACTUALIZACIONCONSIGNACIONTEMPORALCAJA);
+            
+            stmt.setInt(1, id_actu);
+            stmt.setInt(2, id_con);
+
+            rown = stmt.executeUpdate();
+
+        } catch (SQLException ex) {
+            ex.printStackTrace(System.out);
+        } finally {
+            Conexion.close(con);
+            Conexion.close(stmt);
+
+        }
+        return rown;
+    }
+    
+    public int ListarConsignacionFechaValor(Date fecha, float value) throws ClassNotFoundException, SQLException {
+        Connection con = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        Consignacion consignaciones = null;
+
+        List<Consignacion> consigna = new ArrayList<>();
+
+        try {
+            con = Conexion.getConnection();
+            stmt = con.prepareStatement(SQL_SELECT_VALIDARCONSIGNACIONFECHAVALOR);
+            stmt.setDate(1, fecha);
+            stmt.setFloat(2, value);
+            stmt.setString(3, "Pendiente");
+
+            rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                int idConsignacion = rs.getInt("idConsignacion");
+                String num_recibo = rs.getString("num_recibo");
+                Date fecha_pago = rs.getDate("fecha_pago");
+                float valor = rs.getFloat("valor");
+                int idObligacion = rs.getInt("idObligacion");
+                String nombre_titular = rs.getString("nombre_titular");
+                String nombre_sede = rs.getString("nombre_sede");
+
+                consignaciones = new Consignacion();
+                consignaciones.setIdConsignacion(idConsignacion);
+                consignaciones.setNum_recibo(num_recibo);
+                consignaciones.setFecha_pago(fecha_pago);
+                consignaciones.setValor(valor);
+                consignaciones.setId_obligacion(idObligacion);
+                consignaciones.setNombre_titular(nombre_titular);
+                consignaciones.setNombre_sede(nombre_sede);
+                consigna.add(consignaciones);
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace(System.out);
+        } finally {
+            Conexion.close(con);
+            Conexion.close(stmt);
+            Conexion.close(rs);
+        }
+        
+        return consigna.size();
+
+    }
+    
+    public List<Consignacion> validarConsignacionFechaValor(Date fecha, float value) throws ClassNotFoundException, SQLException {
+        Connection con = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        Consignacion consignaciones = null;
+
+        List<Consignacion> consigna = new ArrayList<>();
+
+        try {
+            con = Conexion.getConnection();
+            stmt = con.prepareStatement(SQL_SELECT_VALIDARCONSIGNACIONFECHAVALOR);
+            stmt.setDate(1, fecha);
+            stmt.setFloat(2, value);
+            stmt.setString(3, "Pendiente");
+
+            rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                int idConsignacion = rs.getInt("idConsignacion");
+                String num_recibo = rs.getString("num_recibo");
+                Date fecha_pago = rs.getDate("fecha_pago");
+                float valor = rs.getFloat("valor");
+                int idObligacion = rs.getInt("idObligacion");
+                String nombre_titular = rs.getString("nombre_titular");
+                String nombre_sede = rs.getString("nombre_sede");
+
+                consignaciones = new Consignacion();
+                consignaciones.setIdConsignacion(idConsignacion);
+                consignaciones.setNum_recibo(num_recibo);
+                consignaciones.setFecha_pago(fecha_pago);
+                consignaciones.setValor(valor);
+                consignaciones.setId_obligacion(idObligacion);
+                consignaciones.setNombre_titular(nombre_titular);
+                consignaciones.setNombre_sede(nombre_sede);
+                consigna.add(consignaciones);
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace(System.out);
+        } finally {
+            Conexion.close(con);
+            Conexion.close(stmt);
+            Conexion.close(rs);
+        }
+
+        return consigna;
+
     }
 
 }

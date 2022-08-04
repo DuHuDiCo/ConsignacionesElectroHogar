@@ -441,7 +441,7 @@
                                                     <div class="form-group row">
                                                         <div class="col-sm-3"></div>
                                                         <div class="col-sm-6">
-                                                            <a href="#" onclick="abrirModalObservaciones();" class="btn btn-primary btn-user btn-block mt-1" style="font-family: inherit; font-size: 15px;" value="Guardar Consignacion" >Guardar Consignacion</a>
+                                                            <a href="#" onclick="abrirModalObservacionesGuardar();" class="btn btn-primary btn-user btn-block mt-1" style="font-family: inherit; font-size: 15px;" value="Guardar Consignacion" >Guardar Consignacion</a>
 
 
                                                         </div>
@@ -483,10 +483,10 @@
                                         <div class="col-md-2">
                                             <a onclick="generarReporte();" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Generar Reporte</a>
                                         </div>
-                                        
+
                                     </div>
-                                    
-                                    
+
+
                                 </div>
                                 <div class="card-body">
 
@@ -687,7 +687,7 @@
                                     </div>
 
                                     <div class="modal-footer">
-                                        
+
                                         <a type="button" id="" class="btn btn-secondary" data-dismiss="modal">Cerrar</a>
 
                                     </div>
@@ -712,8 +712,8 @@
                                     <textarea id="observacionGuardarConsig" name="observacionGuardarConsig" rows="5" cols="10" class="form-control"></textarea>
                                 </div>
                                 <div class="modal-footer">
-                                    <a href="#" id="btnNoEnviarObser" onclick="noCrearObservacion();" class="btn btn-secondary" data-dismiss="modal">No</a>
-                                    <a href="#" id="bntEnviarObser" onclick="guardarConsignacionConObservacion();" class="btn btn-primary">Si</a>
+                                    <a href="#" id="btnNoEnviarObser" onclick="noCrearObservacionCartera();" class="btn btn-secondary" data-dismiss="modal">No</a>
+                                    <a href="#" id="bntEnviarObser" onclick="guardarConsignacionConObservacionCartera();" class="btn btn-primary">Si</a>
                                 </div>
                             </div>
                         </div>
@@ -739,6 +739,56 @@
             <a class="scroll-to-top rounded" href="#page-top">
                 <i class="fas fa-angle-up"></i>
             </a>
+
+            <!-- Modal Consignaciones iguales-->
+            <div class="modal fade" id="ModalConsignacionesIguales" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-dialog modal-lg modal-dialog-scrollable">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Consignaciones Que Coinciden:</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <input type="hidden" id="observa" name="name" value="">
+                        <div class="modal-body">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="alert alert-danger" role="alert">
+                                        Estas Consignaciones Coinciden en Fecha y Valor con la que Intentas Crear!!
+                                    </div>
+                                    <table class="table" id="tableIgual">
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Recibo</th>
+                                                <th>Fecha Pago</th>
+                                                <th>Valor</th>
+                                                <th>Cliente</th>
+                                                <th>Sede</th>
+                                            </tr>
+
+                                        </thead>
+                                        <tbody>
+
+                                        </tbody>
+
+                                    </table>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+
+                            <button type="button" onclick="validarGuardar();" class="btn btn-primary" data-dismiss="modal">Guardar de Todos Modos</button>
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <!-- Logout Modal-->
             <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"

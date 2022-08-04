@@ -142,7 +142,7 @@ public class ServletObservaciones extends HttpServlet {
 
         
 
-        int observacionTemporal = new DaoObservacion().observacionTemporal(mensaje, id_usuario);
+        int observacionTemporal = new DaoObservacion().observacionTemporal(mensaje, id_usuario, idConsignacion);
         resp.setContentType("text/plain");
 
         PrintWriter out = resp.getWriter();

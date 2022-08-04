@@ -13,11 +13,11 @@ function abrirModalObservaciones() {
     var fecha = document.getElementById('dateCreacion').value;
     var sede = document.getElementById('sltBancoCartera').value;
     var file = document.getElementById('file').files;
-    var cliente =document.getElementById('obligacion').checked;;
-    
+    var cedula = document.getElementById('txtCliente').value;
 
 
-    if (recibo === "" || valor === "" || fecha === "" || sede === "" || file.length === 0 || !cliente) {
+
+    if (cedula === "") {
 
         Swal.fire({
             icon: 'error',
@@ -25,10 +25,46 @@ function abrirModalObservaciones() {
             text: 'Alguno de los Campos estan Vacios',
             footer: '<a href="">Why do I have this issue?</a>'
         });
-        recibo.focus();
     } else {
-        $('#modalConsignacion').modal('show');
+        if (document.getElementById('obligacion') === null) {
+
+            var nombreNuevo = document.getElementById('nuevoCliente').value;
+            var cedulaNuevo = document.getElementById('cedulaCliente').value;
+            var sedeNuevo = document.getElementById('sltSedeCon').value;
+            if (nombreNuevo === "" || cedulaNuevo === "" || sedeNuevo === "") {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error al guardar la consignacion',
+                    text: 'Alguno de los Campos estan Vacios',
+                    footer: '<a href="">Why do I have this issue?</a>'
+                });
+            } else {
+
+                $('#modalConsignacion').modal('show');
+
+
+            }
+
+        } else {
+            var cliente = document.getElementById('obligacion').checked;
+            var file = document.getElementById('file').files;
+            if (recibo === "" || valor === "" || fecha === "" || sede === "" || file.length === 0 || cliente === false) {
+                alert(cliente);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error al guardar la consignacion',
+                    text: 'Alguno de los Campos estan Vacios',
+                    footer: '<a href="">Why do I have this issue?</a>'
+                });
+                recibo.focus();
+            } else {
+                $('#modalConsignacion').modal('show');
+            }
+        }
+
     }
+
+
 
 }
 
