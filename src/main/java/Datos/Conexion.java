@@ -9,13 +9,11 @@ import javax.sql.DataSource;
 import org.apache.commons.dbcp2.BasicDataSource;
 
 public class Conexion {
-//     private static final String JDBC_URL = "jdbc:mysql://103.23.61.139:3306/electro_hogar?zeroDateTimeBehavior=CONVERT_TO_NULL";
-//    private static final String JDBC_USER = "admin";
-//    private static final String JDBC_PASSWORD = "admin";
+     private static final String JDBC_URL = "jdbc:mysql://103.23.61.139:3306/electro_hogar?zeroDateTimeBehavior=CONVERT_TO_NULL";
+    private static final String JDBC_USER = "admin";
+    private static final String JDBC_PASSWORD = "admin";
 
-    private static final String JDBC_URL = "jdbc:mysql://localhost:3306/electro_hogar?zeroDateTimeBehavior=CONVERT_TO_NULL";
-    private static final String JDBC_USER = "root";
-    private static final String JDBC_PASSWORD = "";
+   
     private static Connection cnx = null;
 
     private static BasicDataSource ds;
