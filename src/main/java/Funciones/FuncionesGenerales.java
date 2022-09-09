@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.text.DateFormat;
+import java.text.Normalizer;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -299,6 +300,7 @@ public class FuncionesGenerales {
         String nombre = new DaoConsignaciones().obtenerNombreUsuario(email);
         int random = (int) (Math.random() * 100);
         String ruta = "/var/lib/tomcat9/webapps/ROOT/archivos/reportes/Caja/reporte_" + fecha + "_" + random + "_" + cargo + ".pdf";
+//        String ruta = "J:\\Duvan Humberto Diaz Contreras\\ConsignacionesElectroHogar\\ConsignacionesElectroHogar\\src\\main\\webapp\\archivos\\reportes\\Caja\\reporte_" + fecha + "_" + random + "_" + cargo + ".pdf";
 
         float heightDoc = 792;
         float widthDoc = 612;
@@ -320,7 +322,7 @@ public class FuncionesGenerales {
                     int numeroPaginas = (int) (cantidad / 4) + 1;
                     int list = 0;
                     int count = 0;
-                    for (int i = 0; i < numeroPaginas; i++) {
+                    for (int i = 1; i <= numeroPaginas; i++) {
                         blanckPage = new PDPage();
                         doc.addPage(blanckPage);
                         if (i < numeroPaginas) {
@@ -406,7 +408,7 @@ public class FuncionesGenerales {
                         } else {
 
                             if (i == numeroPaginas) {
-                                int num = i * 4;
+                                int num = (i - 1) * 4;
                                 int valor = cantidad - num;
 
                                 if (valor == 1) {
@@ -717,7 +719,7 @@ public class FuncionesGenerales {
                             if (can == 3) {
                                 Consignacion co = con.get(list);
                                 Consignacion co2 = con.get(list + 1);
-                                Consignacion co3 = con.get(list + 2);
+                                Consignacion co3 = con.get(list + 1);
                                 int idFile = new DaoFiles().obtenerIdFileImg(co.getIdConsignacion());
                                 int idFile2 = new DaoFiles().obtenerIdFileImg(co2.getIdConsignacion());
                                 int idFile3 = new DaoFiles().obtenerIdFileImg(co3.getIdConsignacion());
@@ -777,8 +779,8 @@ public class FuncionesGenerales {
                                 if (can == 4) {
                                     Consignacion co = con.get(list);
                                     Consignacion co2 = con.get(list + 1);
-                                    Consignacion co3 = con.get(list + 2);
-                                    Consignacion co4 = con.get(list + 3);
+                                    Consignacion co3 = con.get(list + 1);
+                                    Consignacion co4 = con.get(list + 1);
                                     int idFile = new DaoFiles().obtenerIdFileImg(co.getIdConsignacion());
                                     int idFile2 = new DaoFiles().obtenerIdFileImg(co2.getIdConsignacion());
                                     int idFile3 = new DaoFiles().obtenerIdFileImg(co3.getIdConsignacion());
@@ -866,7 +868,10 @@ public class FuncionesGenerales {
         }
         return ruta;
     }
-
+    
+    
+    
+    
     public static void nuevaLinea(String linea, int x, int y, PDPageContentStream contens, PDFont fuente, int tamañoFont) throws IOException {
         contens.beginText();
         PDFont font = fuente;
@@ -1040,6 +1045,14 @@ public class FuncionesGenerales {
             System.out.println(ex);
         }
 
+    }
+    
+    
+    public static String limpiarCaracteres(String datos) {
+        String original = datos;
+        String cadenaNormalize = Normalizer.normalize(original, Normalizer.Form.NFD);
+        String cadenaSinAcentos = cadenaNormalize.replaceAll("[^\\p{ASCII}]", "");
+        return cadenaSinAcentos;
     }
 
 }

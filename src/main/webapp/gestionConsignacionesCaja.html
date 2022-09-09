@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
     <head>
 
@@ -72,7 +72,7 @@
                     <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                         <div class="bg-white py-2 collapse-inner rounded">
                             <h6 class="collapse-header">Opciones:</h6>
-                            <a class="collapse-item" href="gestionConsignacionesCartera.html">Consultar</a>
+                            <a class="collapse-item" href="gestionConsignacionesCaja.html">Consultar</a>
                             <a class="collapse-item" href="informesCaja.html">Reportes</a>
                         </div>
                     </div>
@@ -356,12 +356,10 @@
                                             </form>
                                         </div>
 
-
-
-                                        <div class="table-responsive mt-3" style="overflow-y: auto;height: 400px;" >
+                                        <div class="table-responsive mt-3" style="overflow-y: auto;height: 400px;">
                                             <table class="table table-bordered " id="dataTable" width="100%" cellspacing="0" name="tblConsignaciones" >
-                                                <thead>
-                                                    <tr>
+                                                <thead class="bg-light " style="position: sticky;top:0;">
+                                                    <tr >
                                                         <th></th>
                                                         <th>Nombre Titular</th>
                                                         <th>Numero Documento</th>
@@ -376,14 +374,16 @@
 
                                                     </tr>
                                                 </thead>
-
-                                                <tbody >
+                                                
+                                                <tbody  >
 
                                                 </tbody>
 
 
                                             </table>
                                         </div>
+
+
                                     </div>
                                 </div>
 
@@ -453,6 +453,29 @@
                 </div>
             </div>
 
+            <!-- Modal Devolver Coonsigancioens -->
+            <div class="modal fade" id="staticBackdropCaja" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="staticBackdropLabel">Observaciones</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="cerrarModal">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <h5>Razones de la Devolucion</h5>
+                            <textarea id="observacionDevolucion" class="form-control" name="observacionDevolucion" rows="5" cols="53"></textarea>
+                        </div>
+                        <input type="hidden" id="idConsignacion" name="name" value="">
+                        <div class="modal-footer">
+                            <a type="button" id="" class="btn btn-secondary" data-dismiss="modal">Cerrar</a>
+                            <button type="button"  id="enviarObservacion" class="btn btn-primary">Enviar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Modal Observaciones -->
             <div class="modal fade" id="staticBackdropObserCaja" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropObserLabel" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered">
@@ -475,6 +498,7 @@
 
                                 <div class="col-md-9 input-group">
                                     <input class="form-control" type="text" placeholder="Ingrese el Texto de la Observacion" id="txtObservacion">
+                                    <input type="hidden" id="id_consignacion" name="name" value="">
                                 </div>
 
                                 <div class="col-md-3">
