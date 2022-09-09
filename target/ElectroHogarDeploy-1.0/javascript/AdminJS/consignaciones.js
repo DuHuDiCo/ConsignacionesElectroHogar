@@ -13,11 +13,11 @@ function abrirModalObservaciones() {
     var fecha = document.getElementById('dateCreacion').value;
     var sede = document.getElementById('sltBancoCartera').value;
     var file = document.getElementById('file').files;
-    var cliente =document.getElementById('obligacion').checked;;
-    
+    var cedula = document.getElementById('txtCliente').value;
 
 
-    if (recibo === "" || valor === "" || fecha === "" || sede === "" || file.length === 0 || !cliente) {
+
+    if (cedula === "") {
 
         Swal.fire({
             icon: 'error',
@@ -25,10 +25,46 @@ function abrirModalObservaciones() {
             text: 'Alguno de los Campos estan Vacios',
             footer: '<a href="">Why do I have this issue?</a>'
         });
-        recibo.focus();
     } else {
-        $('#modalConsignacion').modal('show');
+        if (document.getElementById('obligacion') === null) {
+
+            var nombreNuevo = document.getElementById('nuevoCliente').value;
+            var cedulaNuevo = document.getElementById('cedulaCliente').value;
+            var sedeNuevo = document.getElementById('sltSedeCon').value;
+            if (nombreNuevo === "" || cedulaNuevo === "" || sedeNuevo === "") {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error al guardar la consignacion',
+                    text: 'Alguno de los Campos estan Vacios',
+                    footer: '<a href="">Why do I have this issue?</a>'
+                });
+            } else {
+
+                $('#modalConsignacion').modal('show');
+
+
+            }
+
+        } else {
+            var cliente = document.getElementById('obligacion').checked;
+            var file = document.getElementById('file').files;
+            if (recibo === "" || valor === "" || fecha === "" || sede === "" || file.length === 0 || cliente === false) {
+                alert(cliente);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error al guardar la consignacion',
+                    text: 'Alguno de los Campos estan Vacios',
+                    footer: '<a href="">Why do I have this issue?</a>'
+                });
+                recibo.focus();
+            } else {
+                $('#modalConsignacion').modal('show');
+            }
+        }
+
     }
+
+
 
 }
 
@@ -68,14 +104,13 @@ function cargarConsignacionesGeneralAdmin() {
         var contador = 1;
 
         $.each(json, function (key, value) {
-            var imagen = '<a href="#" onclick="abrirModalImagen(' + value.idConsignacion + ')" class="btn btn-success btn-sm"><i class="fas fa-image"></i></a>';
-            var observa = '<a href="#" id="btn_observa" onclick="abrirModalObservacionesAdmin(' + value.idConsignacion + ');" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>';
-            var accion = "<td><a href='#' class='btn btn-primary btn-sm' onclick='editarConsignacion(" + value.idConsignacion + ")'><i class='fas fa-pen'></i></a>" + observa + imagen + "</td>";
+            var imagen = '<button  onclick="abrirModalImagen(' + value.idConsignacion + ')" class="btn btn-success btn-sm"><i class="fas fa-image"></i></button>';
+            var observa = '<button  id="btn_observa" onclick="abrirModalObservacionesAdmin(' + value.idConsignacion + ');" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></button>';
+            var accion = "<td><button  class='btn btn-primary btn-sm' onclick='editarConsignacion(" + value.idConsignacion + ")'><i class='fas fa-pen'></i></button>" + observa + imagen + "</td>";
 
             $("#dataTable").append('<tr> <td>' + contador + '</td><td>' + value.num_recibo + '</td><td>' + value.nombre_titular + '</td><td>' + value.fecha_pago + '</td><td>' + value.fecha_creacion + '</td><td>' + value.valor + '</td><td>' + value.nombre_estado + '</td><td>' + value.nombre_sede + '</td><td>' + value.nombre_plataforma + '</td>' + accion + '</tr>');
             contador = contador + 1;
         });
-
 
 
 
@@ -454,17 +489,17 @@ select.addEventListener('change', (event) => {
         $.each(json, function (key, value) {
             if (valor !== 'Pendiente') {
                 if (valor === 'Devuelta') {
-                    var imagen = '<a href="#" onclick="abrirModalImagen(' + value.idConsignacion + ')" class="btn btn-success btn-sm"><i class="fas fa-image"></i></a>';
-                    var editar = "<a href='#' class='btn btn-primary btn-sm' onclick='editarConsignacion(" + value.idConsignacion + ")'><i class='fas fa-pen'></i></a>";
-                    var obser = '<td><a href="#" id="btn_observa" onclick="abrirModalObservacionesAdmin(' + value.idConsignacion + ');" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>' + editar + imagen + '</td>';
+                    var imagen = '<button  onclick="abrirModalImagen(' + value.idConsignacion + ')" class="btn btn-success btn-sm"><i class="fas fa-image"></i></button>';
+                    var editar = "<button  class='btn btn-primary btn-sm' onclick='editarConsignacion(" + value.idConsignacion + ")'><i class='fas fa-pen'></i></button>";
+                    var obser = '<td><button  id="btn_observa" onclick="abrirModalObservacionesAdmin(' + value.idConsignacion + ');" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></button>' + editar + imagen + '</td>';
                     //var comprobar = '<td><a href="#" id="btn_comprobar" onclick="comprobarConsignacion(' + value.idConsignacion + ');" class="btn btn-primary btn-sm" disabled><i class="fas fa-check"></i></a>' +  obser + '</td>';
                     $("#dataTable").append('<tr> <td>' + contador + '</td><td>' + value.num_recibo + '</td><td>' + value.nombre_titular + '</td><td>' + value.fecha_pago + '</td><td>' + value.fecha_creacion + '</td><td>' + value.valor + '</td><td>' + value.nombre_estado + '</td><td>' + value.nombre_sede + '</td><td>' + value.nombre_plataforma + '</td>' + obser + '</tr>');
                     contador = contador + 1;
                     document.getElementById('btnCancelarConsignacion').style.display = "block";
                     document.getElementById('nuevoEstado').value = "Pendiente";
                 } else {
-                    var imagen = '<a href="#" onclick="abrirModalImagen(' + value.idConsignacion + ')" class="btn btn-success btn-sm"><i class="fas fa-image"></i></a>';
-                    var obser = '<td><a href="#" id="btn_observa" onclick="abrirModalObservacionesAdmin(' + value.idConsignacion + ');" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>' + imagen + '</td>';
+                    var imagen = '<button  onclick="abrirModalImagen(' + value.idConsignacion + ')" class="btn btn-success btn-sm"><i class="fas fa-image"></i></button>';
+                    var obser = '<td><button  id="btn_observa" onclick="abrirModalObservacionesAdmin(' + value.idConsignacion + ');" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></button>' + imagen + '</td>';
                     //var comprobar = '<td><a href="#" id="btn_comprobar" onclick="comprobarConsignacion(' + value.idConsignacion + ');" class="btn btn-primary btn-sm" disabled><i class="fas fa-check"></i></a>' +  obser + '</td>';
                     $("#dataTable").append('<tr> <td>' + contador + '</td><td>' + value.num_recibo + '</td><td>' + value.nombre_titular + '</td><td>' + value.fecha_pago + '</td><td>' + value.fecha_creacion + '</td><td>' + value.valor + '</td><td>' + value.nombre_estado + '</td><td>' + value.nombre_sede + '</td><td>' + value.nombre_plataforma + '</td>' + obser + '</tr>');
                     contador = contador + 1;
@@ -472,9 +507,9 @@ select.addEventListener('change', (event) => {
 
 
             } else {
-                var imagen = '<a href="#" onclick="abrirModalImagen(' + value.idConsignacion + ')" class="btn btn-success btn-sm"><i class="fas fa-image"></i></a>';
-                var obser = '<a href="#" id="btn_observa" onclick="abrirModalObservacionesAdmin(' + value.idConsignacion + ');" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>';
-                var comprobar = '<td><a href="#" id="btn_comprobar" onclick="editarConsignacion(' + value.idConsignacion + ');" class="btn btn-primary btn-sm"><i class="fas fa-pen"></i></a>' + obser + imagen + '</td>';
+                var imagen = '<button onclick="abrirModalImagen(' + value.idConsignacion + ')" class="btn btn-success btn-sm"><i class="fas fa-image"></i></button>';
+                var obser = '<button id="btn_observa" onclick="abrirModalObservacionesAdmin(' + value.idConsignacion + ');" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></button>';
+                var comprobar = '<td><button id="btn_comprobar" onclick="editarConsignacion(' + value.idConsignacion + ');" class="btn btn-primary btn-sm"><i class="fas fa-pen"></i></button>' + obser + imagen + '</td>';
 
                 $("#dataTable").append('<tr> <td>' + contador + '</td><td>' + value.num_recibo + '</td><td>' + value.nombre_titular + '</td><td>' + value.fecha_pago + '</td><td>' + value.fecha_creacion + '</td><td>' + value.valor + '</td><td>' + value.nombre_estado + '</td><td>' + value.nombre_sede + '</td><td>' + value.nombre_plataforma + '</td>' + comprobar + '</tr>');
                 contador = contador + 1;
@@ -520,24 +555,24 @@ function consignacionesCedulaAdmin() {
             $.each(json, function (key, value) {
                 if (value.nombre_estado !== 'Pendiente') {
                     if (value.nombre_estado === 'Devuelta') {
-                        var imagen = '<a href="#" onclick="abrirModalImagen(' + value.idConsignacion + ')" class="btn btn-success btn-sm"><i class="fas fa-image"></i></a>';
-                        var editar = "<a href='#' class='btn btn-primary btn-sm' onclick='editarConsignacion(" + value.idConsignacion + ")'><i class='fas fa-pen'></i></a>";
-                        var obser = '<td><a href="#" id="btn_observa" onclick="abrirModalObservacionesAdmin(' + value.idConsignacion + ');" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>' + editar + imagen + '</td>';
+                        var imagen = '<button onclick="abrirModalImagen(' + value.idConsignacion + ')" class="btn btn-success btn-sm"><i class="fas fa-image"></i></button>';
+                        var editar = "<button class='btn btn-primary btn-sm' onclick='editarConsignacion(" + value.idConsignacion + ")'><i class='fas fa-pen'></i></button>";
+                        var obser = '<td><button id="btn_observa" onclick="abrirModalObservacionesAdmin(' + value.idConsignacion + ');" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></button>' + editar + imagen + '</td>';
                         //var comprobar = '<td><a href="#" id="btn_comprobar" onclick="comprobarConsignacion(' + value.idConsignacion + ');" class="btn btn-primary btn-sm" disabled><i class="fas fa-check"></i></a>' +  obser + '</td>';
                         $("#dataTable").append('<tr> <td>' + contador + '</td><td>' + value.num_recibo + '</td><td>' + value.nombre_titular + '</td><td>' + value.fecha_pago + '</td><td>' + value.fecha_creacion + '</td><td>' + value.valor + '</td><td>' + value.nombre_estado + '</td><td>' + value.nombre_sede + '</td><td>' + value.nombre_plataforma + '</td>' + obser + '</tr>');
                         contador = contador + 1;
                     } else {
-                        var imagen = '<a href="#" onclick="abrirModalImagen(' + value.idConsignacion + ')" class="btn btn-success btn-sm"><i class="fas fa-image"></i></a>';
-                        var obser = '<td><a href="#" id="btn_observa" onclick="abrirModalObservacionesAdmin(' + value.idConsignacion + ');" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a></td>';
+                        var imagen = '<button onclick="abrirModalImagen(' + value.idConsignacion + ')" class="btn btn-success btn-sm"><i class="fas fa-image"></i></button>';
+                        var obser = '<td><button id="btn_observa" onclick="abrirModalObservacionesAdmin(' + value.idConsignacion + ');" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></button></td>';
                         //var comprobar = '<td><a href="#" id="btn_comprobar" onclick="comprobarConsignacion(' + value.idConsignacion + ');" class="btn btn-primary btn-sm" disabled><i class="fas fa-check"></i></a>' +  obser + '</td>';
                         $("#dataTable").append('<tr> <td>' + contador + '</td><td>' + value.num_recibo + '</td><td>' + value.nombre_titular + '</td><td>' + value.fecha_pago + '</td><td>' + value.fecha_creacion + '</td><td>' + value.valor + '</td><td>' + value.nombre_estado + '</td><td>' + value.nombre_sede + '</td><td>' + value.nombre_plataforma + '</td>' + obser + imagen + '</tr>');
                         contador = contador + 1;
                     }
 
                 } else {
-                    var imagen = '<a href="#" onclick="abrirModalImagen(' + value.idConsignacion + ')" class="btn btn-success btn-sm"><i class="fas fa-image"></i></a>';
-                    var obser = '<a href="#" id="btn_observa" onclick="abrirModalObservacionesAdmin(' + value.idConsignacion + ');" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>';
-                    var comprobar = '<td><a href="#" id="btn_comprobar" onclick="editarConsignacion(' + value.idConsignacion + ');" class="btn btn-primary btn-sm"><i class="fas fa-pen"></i></a>' + obser + '</td>';
+                    var imagen = '<button onclick="abrirModalImagen(' + value.idConsignacion + ')" class="btn btn-success btn-sm"><i class="fas fa-image"></i></button>';
+                    var obser = '<button id="btn_observa" onclick="abrirModalObservacionesAdmin(' + value.idConsignacion + ');" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></button>';
+                    var comprobar = '<td><button id="btn_comprobar" onclick="editarConsignacion(' + value.idConsignacion + ');" class="btn btn-primary btn-sm"><i class="fas fa-pen"></i></button>' + obser + '</td>';
 
                     $("#dataTable").append('<tr> <td>' + contador + '</td><td>' + value.num_recibo + '</td><td>' + value.nombre_titular + '</td><td>' + value.fecha_pago + '</td><td>' + value.fecha_creacion + '</td><td>' + value.valor + '</td><td>' + value.nombre_estado + '</td><td>' + value.nombre_sede + '</td><td>' + value.nombre_plataforma + '</td>' + comprobar + imagen + '</tr>');
                     contador = contador + 1;
