@@ -206,14 +206,14 @@ public class DaoObservacion {
                     int idObservacion = rs.getInt("idObservaciones");
                     String observacion = rs.getString("observacion");
                     String fecha = rs.getString("fecha");
-                    DateTime fechaHora = Funciones.FuncionesGenerales.stringToDateTime(fecha);
+                    //DateTime fechaHora = Funciones.FuncionesGenerales.stringToDateTime(fecha);
                     int id_usuario = rs.getInt("id_usuario");
                     int id_consignacion = rs.getInt("id_consignacion");
 
                     observaciones = new Observaciones();
                     observaciones.setIdObservaciones(idObservacion);
                     observaciones.setObservacion(observacion);
-                    observaciones.setFecha(fechaHora);
+                    observaciones.setFecha_observacion(fecha);
                     observaciones.setId_usuario(id_usuario);
                     observaciones.setId_consignacion(id_consignacion);
 

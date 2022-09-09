@@ -419,9 +419,9 @@ public class ServletControladorConsignaciones extends HttpServlet {
                 if (obs.getError() == null) {
                     int crearObservacionTablaObservacion = new DaoObservacion().guardarObservacion(obs);
                     int actualizarObservacionConsig = new DaoConsignaciones().actualizarObservacionConsignacion(crearObservacionTablaObservacion, consig.getIdConsignacion());
-                    estado = "Devuelta";
+                    String estadoD = "Devuelta";
 
-                    int id_estado = new DaoEstados().obtenerIdEstado(estado);
+                    int id_estado = new DaoEstados().obtenerIdEstado(estadoD);
 
                     Actualizacion actu = new Actualizacion(id_estado, id_usuario);
                     //guardamos la actualizacion
@@ -606,7 +606,7 @@ public class ServletControladorConsignaciones extends HttpServlet {
 
             PrintWriter out = resp.getWriter();
 
-            out.print(eliminarObserTem);
+            out.print(guardarFile);
             out.flush();
         } else {
             resp.setContentType("text/plain");

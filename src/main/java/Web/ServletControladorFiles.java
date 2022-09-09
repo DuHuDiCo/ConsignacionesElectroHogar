@@ -43,6 +43,7 @@ import javax.servlet.http.Part;
 public class ServletControladorFiles extends HttpServlet {
 
     private final String rutaFiles = "/var/lib/tomcat9/webapps/ROOT/archivos/txt/";
+//    private final String rutaFiles = "J:\\Duvan Humberto Diaz Contreras\\ConsignacionesElectroHogar\\ConsignacionesElectroHogar\\src\\main\\webapp\\archivos\\txt";
     private final File uploads = new File(rutaFiles);
     private final String[] extens = {".txt"};
 
@@ -224,6 +225,7 @@ public class ServletControladorFiles extends HttpServlet {
         String linea = "";
         String delimitante = "\\|";
         String ruta = "/var/lib/tomcat9/webapps/ROOT/archivos/txt/" + nombre;
+//        String ruta = "J:\\Duvan Humberto Diaz Contreras\\ConsignacionesElectroHogar\\ConsignacionesElectroHogar\\src\\main\\webapp\\archivos\\txt\\" + nombre;
 
         Obligaciones obligacion = null;
         int guardarObliga = 0;
@@ -234,7 +236,9 @@ public class ServletControladorFiles extends HttpServlet {
 
             while ((linea = reader.readLine()) != null) {
                 String[] campo = linea.split(delimitante);
-                String nombreTitular = campo[0];
+                String name = campo[0];
+                System.out.println(name);
+                String nombreTitular = Funciones.FuncionesGenerales.limpiarCaracteres(name);
                 String tipoDoc = campo[1];
                 String documento = campo[2];
 
@@ -336,6 +340,7 @@ public class ServletControladorFiles extends HttpServlet {
 
         String nombreArchivo = new DaoFiles().obtenerNombreFile(idFileImagen);
         String ruta = "/archivos/img/" + nombreArchivo;
+        
 
         resp.setContentType("text/plain");
 
@@ -535,9 +540,9 @@ public class ServletControladorFiles extends HttpServlet {
         } else {
             String fecha1 = fecha + " 00:00:00";
             String fecha2 = fecha + " 23:59:59";
-             reportes = new DaoFiles().listarFilesByFecha(idUsuario, fecha1, fecha2);
+            reportes = new DaoFiles().listarFilesByFecha(idUsuario, fecha1, fecha2);
         }
-         Gson gson = new Gson();
+        Gson gson = new Gson();
 
         String json = gson.toJson(reportes);
         resp.setContentType("application/json");
@@ -546,7 +551,7 @@ public class ServletControladorFiles extends HttpServlet {
 
         out.print(json);
         out.flush();
-        
+
     }
 
 }

@@ -148,6 +148,30 @@ public class ServletControladorConsignaciones2 extends HttpServlet {
                     }
                 }
                 break;
+                case "validarIfExist": {
+                    try {
+                        this.validarIfExist(req, resp);
+                    } catch (ClassNotFoundException | SQLException ex) {
+                        Logger.getLogger(ServletControladorConsignaciones2.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+                break;
+                case "validarEstado": {
+                    try {
+                        this.validarEstado(req, resp);
+                    } catch (ClassNotFoundException | SQLException ex) {
+                        Logger.getLogger(ServletControladorConsignaciones2.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+                break;
+                case "validarIfExistContabilidad": {
+                    try {
+                        this.validarIfExistContabilidad(req, resp);
+                    } catch (ClassNotFoundException | SQLException ex) {
+                        Logger.getLogger(ServletControladorConsignaciones2.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+                break;
             }
         }
     }
@@ -168,8 +192,7 @@ public class ServletControladorConsignaciones2 extends HttpServlet {
                     }
                 }
                 break;
-                case "devolverConsignacionCaja":
-                {
+                case "devolverConsignacionCaja": {
                     try {
                         this.devolverConsignacionCaja(req, resp);
                     } catch (ClassNotFoundException | SQLException ex) {
@@ -342,17 +365,17 @@ public class ServletControladorConsignaciones2 extends HttpServlet {
     private void cancelarConsignacion(HttpServletRequest req, HttpServletResponse resp) throws ClassNotFoundException, SQLException, IOException {
         int idConsignacion = Integer.parseInt(req.getParameter("idConsignacion"));
         HttpSession session = req.getSession(true);
-        String email = (String)session.getAttribute("usuario");
+        String email = (String) session.getAttribute("usuario");
         int id_usuario = new DaoUsuarios().obtenerIdUsuario(email);
-        
+
         int id_estado = new DaoEstados().obtenerIdEstado("Cancelado");
-        
+
         Actualizacion actu = new Actualizacion(id_estado, id_usuario);
-        
+
         int id_actualizacion = new DaoActualizacion().guardarActualizacion(actu);
-        
+
         int actualizar_consig = new DaoConsignaciones().actualizarEstadoConsig(id_actualizacion, idConsignacion);
-        
+
         resp.setContentType("text/plain");
 
         PrintWriter out = resp.getWriter();
@@ -390,7 +413,7 @@ public class ServletControladorConsignaciones2 extends HttpServlet {
         out.flush();
 
     }
-    
+
     private void cancelarCambiosIndividual(HttpServletRequest req, HttpServletResponse resp) throws ClassNotFoundException, SQLException, IOException {
         int idConsignacion = Integer.parseInt(req.getParameter("idConsignacion"));
 
@@ -408,7 +431,7 @@ public class ServletControladorConsignaciones2 extends HttpServlet {
         }
 
     }
-    
+
     private void validarConsignacion(HttpServletRequest req, HttpServletResponse resp) throws ClassNotFoundException, SQLException, IOException {
         float valor = Float.valueOf(req.getParameter("valor"));
         Date fecha = Funciones.FuncionesGenerales.fechaSQL(req.getParameter("fecha"), "yyyy-MM-dd");
@@ -423,12 +446,11 @@ public class ServletControladorConsignaciones2 extends HttpServlet {
         out.flush();
 
     }
-    
-    
+
     private void listarConsignacionesFechaValor(HttpServletRequest req, HttpServletResponse resp) throws ClassNotFoundException, SQLException, IOException {
         float valor = Float.valueOf(req.getParameter("valor"));
         Date fecha = Funciones.FuncionesGenerales.fechaSQL(req.getParameter("fecha"), "yyyy-MM-dd");
-        
+
         List<Consignacion> cons = new DaoConsignaciones2().validarConsignacionFechaValor(fecha, valor);
         Gson gson = new Gson();
 
@@ -438,6 +460,54 @@ public class ServletControladorConsignaciones2 extends HttpServlet {
         PrintWriter out = resp.getWriter();
 
         out.print(json);
+        out.flush();
+    }
+
+    private void validarIfExist(HttpServletRequest req, HttpServletResponse resp) throws ClassNotFoundException, SQLException, IOException {
+        int idConsignacion = Integer.parseInt(req.getParameter("idConsignacion"));
+
+        HttpSession session = req.getSession(true);
+        String email = (String) session.getAttribute("usuario");
+        int id_usuario = new DaoUsuarios().obtenerIdUsuario(email);
+
+        int exist = new DaoConsignaciones2().validarIfExistConsignacionByIdConsignacionAndIdUsuario(idConsignacion, id_usuario);
+        resp.setContentType("text/plain");
+
+        PrintWriter out = resp.getWriter();
+
+        out.print(exist);
+        out.flush();
+    }
+
+    private void validarEstado(HttpServletRequest req, HttpServletResponse resp) throws ClassNotFoundException, SQLException, IOException {
+        int idConsignacion = Integer.parseInt(req.getParameter("idConsignacion"));
+        
+        HttpSession session = req.getSession(true);
+        String email = (String) session.getAttribute("usuario");
+        int id_usuario = new DaoUsuarios().obtenerIdUsuario(email);
+        
+        int validarEstado = new DaoConsignaciones2().validarEstadoConsig(idConsignacion, id_usuario);
+        resp.setContentType("text/plain");
+
+        PrintWriter out = resp.getWriter();
+
+        out.print(validarEstado);
+        out.flush();
+    }
+
+    private void validarIfExistContabilidad(HttpServletRequest req, HttpServletResponse resp) throws ClassNotFoundException, SQLException, IOException {
+        int idConsignacion = Integer.parseInt(req.getParameter("idConsignacion"));
+
+        HttpSession session = req.getSession(true);
+        String email = (String) session.getAttribute("usuario");
+        int id_usuario = new DaoUsuarios().obtenerIdUsuario(email);
+
+        int exist = new DaoConsignaciones2().validarIfExistConsignacionByIdConsignacionAndIdUsuarioContabilidad(idConsignacion, id_usuario);
+        resp.setContentType("text/plain");
+
+        PrintWriter out = resp.getWriter();
+
+        out.print(exist);
         out.flush();
     }
 
