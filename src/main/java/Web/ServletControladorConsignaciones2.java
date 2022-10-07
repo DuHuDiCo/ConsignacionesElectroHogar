@@ -172,6 +172,25 @@ public class ServletControladorConsignaciones2 extends HttpServlet {
                     }
                 }
                 break;
+                case "obtenerConsignacionesBySede": {
+                    try {
+                        this.obtenerConsignacionesBySede(req, resp);
+                    } catch (ClassNotFoundException ex) {
+                        Logger.getLogger(ServletControladorConsignaciones2.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+                break;
+                case "obtenerConsignacionesBySedeByEstadoByFecha":
+                {
+                    try {
+                        this.obtenerConsignacionesBySedeByEstadoByFecha(req, resp);
+                    } catch (ClassNotFoundException ex) {
+                        Logger.getLogger(ServletControladorConsignaciones2.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+                    break;
+
+
             }
         }
     }
@@ -481,11 +500,11 @@ public class ServletControladorConsignaciones2 extends HttpServlet {
 
     private void validarEstado(HttpServletRequest req, HttpServletResponse resp) throws ClassNotFoundException, SQLException, IOException {
         int idConsignacion = Integer.parseInt(req.getParameter("idConsignacion"));
-        
+
         HttpSession session = req.getSession(true);
         String email = (String) session.getAttribute("usuario");
         int id_usuario = new DaoUsuarios().obtenerIdUsuario(email);
-        
+
         int validarEstado = new DaoConsignaciones2().validarEstadoConsig(idConsignacion, id_usuario);
         resp.setContentType("text/plain");
 
@@ -508,6 +527,41 @@ public class ServletControladorConsignaciones2 extends HttpServlet {
         PrintWriter out = resp.getWriter();
 
         out.print(exist);
+        out.flush();
+    }
+
+    private void obtenerConsignacionesBySede(HttpServletRequest req, HttpServletResponse resp) throws ClassNotFoundException, IOException {
+        int sede = Integer.parseInt(req.getParameter("sede"));
+        String estado = req.getParameter("estado");
+
+        List<Consignacion> consignaciones = new DaoConsignaciones2().listarConsignacionesByEstadoAndBySede(estado, sede);
+        Gson gson = new Gson();
+
+        String json = gson.toJson(consignaciones);
+        resp.setContentType("application/json");
+
+        PrintWriter out = resp.getWriter();
+
+        out.print(json);
+        out.flush();
+
+    }
+
+    private void obtenerConsignacionesBySedeByEstadoByFecha(HttpServletRequest req, HttpServletResponse resp) throws ClassNotFoundException, IOException {
+        int sede = Integer.parseInt(req.getParameter("sede"));
+        String estado = req.getParameter("estado");
+        String fechaString = req.getParameter("fecha");
+        Date fecha = Funciones.FuncionesGenerales.fechaSQL(fechaString, "yyyy-MM-dd");
+        
+        List<Consignacion> consignaciones = new DaoConsignaciones2().listarConsignacionesByEstadoAndBySedeByEstadoByFecha(estado, sede, fecha);
+        Gson gson = new Gson();
+
+        String json = gson.toJson(consignaciones);
+        resp.setContentType("application/json");
+
+        PrintWriter out = resp.getWriter();
+
+        out.print(json);
         out.flush();
     }
 

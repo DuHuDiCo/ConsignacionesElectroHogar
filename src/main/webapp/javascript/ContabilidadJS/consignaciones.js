@@ -476,38 +476,42 @@ function comprobarConsignacion(id_consignacion) {
 
         var json = data;
 
-
-
-
-        if (json > 0) {
-            Swal.fire({
-                position: 'top-end',
-                icon: 'success',
-                title: 'Consignacion Comprobada Correctamente',
-                showConfirmButton: false,
-                timer: 2000
-            });
-            document.getElementById('sltEstadoConsignacionContabilidad').disabled = true;
-            document.getElementById('txtCedula').disabled = true;
-            $("#btn_comprobar" + id_consignacion).empty();
-            document.getElementById('btn_comprobar' + id_consignacion).outerHTML = '<a id="btn_cancelarCon' + id_consignacion + '" onclick="cancelarConsignacionIndiv(' + id_consignacion + ');" class="btn btn-danger btn-sm"><i class="fas fa-times"></i></a>';
-            $("#btn_devolver" + id_consignacion).empty();
-            document.getElementById('btn_devolver' + id_consignacion).outerHTML = '<a href="#" id="btn_devolver' + id_consignacion + '"  class="btn btn-warning btn-sm disabled" ><i class="fas fa-ban"></i></a>';
-            $("#btn_observa" + id_consignacion).empty();
-            document.getElementById('btn_observa' + id_consignacion).outerHTML = '<a href="#" id="btn_observa' + id_consignacion + '"  class="btn btn-info btn-sm disabled" ><i class="fas fa-ban"></i></a>';
-            $("#btn_image" + id_consignacion).empty();
-            document.getElementById('btn_image' + id_consignacion).outerHTML = '<a href="#" id="btn_image' + id_consignacion + '"  class="btn btn-success btn-sm disabled" ><i class="fas fa-ban"></i></a>';
-
-
+        if (json === "null") {
+            window.location.replace("login.html");
         } else {
-            Swal.fire({
-                icon: 'error',
-                title: 'Error al Comprobar la Consignacion',
-                text: 'Error Desconocido Reporte el Error',
-                footer: '<a href="">Why do I have this issue?</a>'
-            });
-        }
 
+
+
+
+            if (json > 0) {
+                Swal.fire({
+                    position: 'top-end',
+                    icon: 'success',
+                    title: 'Consignacion Comprobada Correctamente',
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+                document.getElementById('sltEstadoConsignacionContabilidad').disabled = true;
+                document.getElementById('txtCedula').disabled = true;
+                $("#btn_comprobar" + id_consignacion).empty();
+                document.getElementById('btn_comprobar' + id_consignacion).outerHTML = '<a id="btn_cancelarCon' + id_consignacion + '" onclick="cancelarConsignacionIndiv(' + id_consignacion + ');" class="btn btn-danger btn-sm"><i class="fas fa-times"></i></a>';
+                $("#btn_devolver" + id_consignacion).empty();
+                document.getElementById('btn_devolver' + id_consignacion).outerHTML = '<a href="#" id="btn_devolver' + id_consignacion + '"  class="btn btn-warning btn-sm disabled" ><i class="fas fa-ban"></i></a>';
+                $("#btn_observa" + id_consignacion).empty();
+                document.getElementById('btn_observa' + id_consignacion).outerHTML = '<a href="#" id="btn_observa' + id_consignacion + '"  class="btn btn-info btn-sm disabled" ><i class="fas fa-ban"></i></a>';
+                $("#btn_image" + id_consignacion).empty();
+                document.getElementById('btn_image' + id_consignacion).outerHTML = '<a href="#" id="btn_image' + id_consignacion + '"  class="btn btn-success btn-sm disabled" ><i class="fas fa-ban"></i></a>';
+
+
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error al Comprobar la Consignacion',
+                    text: 'Error Desconocido Reporte el Error',
+                    footer: '<a href="">Why do I have this issue?</a>'
+                });
+            }
+        }
         var botonGroup = '<a href="#" class="btn btn-primary" onclick="guardarCambios();">Guardar Cambios</a> <a href="#" class="btn btn-danger" onclick="cancelarCambios();">Cancelar Cambios</a>';
         document.getElementById('btn_group').innerHTML = botonGroup;
 

@@ -719,7 +719,7 @@ public class FuncionesGenerales {
                             if (can == 3) {
                                 Consignacion co = con.get(list);
                                 Consignacion co2 = con.get(list + 1);
-                                Consignacion co3 = con.get(list + 1);
+                                Consignacion co3 = con.get(list + 2);
                                 int idFile = new DaoFiles().obtenerIdFileImg(co.getIdConsignacion());
                                 int idFile2 = new DaoFiles().obtenerIdFileImg(co2.getIdConsignacion());
                                 int idFile3 = new DaoFiles().obtenerIdFileImg(co3.getIdConsignacion());
@@ -779,8 +779,8 @@ public class FuncionesGenerales {
                                 if (can == 4) {
                                     Consignacion co = con.get(list);
                                     Consignacion co2 = con.get(list + 1);
-                                    Consignacion co3 = con.get(list + 1);
-                                    Consignacion co4 = con.get(list + 1);
+                                    Consignacion co3 = con.get(list + 2);
+                                    Consignacion co4 = con.get(list + 3);
                                     int idFile = new DaoFiles().obtenerIdFileImg(co.getIdConsignacion());
                                     int idFile2 = new DaoFiles().obtenerIdFileImg(co2.getIdConsignacion());
                                     int idFile3 = new DaoFiles().obtenerIdFileImg(co3.getIdConsignacion());

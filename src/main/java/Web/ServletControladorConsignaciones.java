@@ -184,7 +184,7 @@ public class ServletControladorConsignaciones extends HttpServlet {
                         Logger.getLogger(ServletControladorConsignaciones.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
-                break;        
+                break;
 
             }
         }
@@ -355,6 +355,16 @@ public class ServletControladorConsignaciones extends HttpServlet {
         HttpSession session = req.getSession(true);
         String email = (String) session.getAttribute("usuario");
         int id_usuario = new DaoUsuarios().obtenerIdUsuario(email);
+        if (id_usuario == 0) {
+            
+            resp.setContentType("text/plain");
+
+            PrintWriter out = resp.getWriter();
+
+            out.print("null");
+            out.flush();
+
+        }
 
         Consignacion conTemp = new DaoConsignaciones().listarConsignacionesById(id_consignacion);
         conTemp.setId_aplicado(id_usuario);
@@ -711,11 +721,11 @@ public class ServletControladorConsignaciones extends HttpServlet {
         int idCosignacion = Integer.parseInt(req.getParameter("idConsignacion"));
         System.out.println(idCosignacion);
         String mensaje = req.getParameter("observacion");
-        
+
         HttpSession session = req.getSession(true);
-        String email = (String)session.getAttribute("usuario");
+        String email = (String) session.getAttribute("usuario");
         int id_usuario = new DaoUsuarios().obtenerIdUsuario(email);
-        
+
         Consignacion conTemp = new DaoConsignaciones().listarConsignacionesById(idCosignacion);
         conTemp.setId_aplicado(id_usuario);
         int temporal = new DaoConsignaciones().guardarConsigTemp(conTemp);
@@ -732,8 +742,8 @@ public class ServletControladorConsignaciones extends HttpServlet {
         out.print(actualizarConsigObser);
         out.flush();
     }
-    
-     private void cancelarCambiosIndividual(HttpServletRequest req, HttpServletResponse resp) throws ClassNotFoundException, IOException {
+
+    private void cancelarCambiosIndividual(HttpServletRequest req, HttpServletResponse resp) throws ClassNotFoundException, IOException {
         int idConsignacion = Integer.parseInt(req.getParameter("idConsignacion"));
         int eliminarConsingacion = new DaoConsignaciones2().eliminarConsignacionById(idConsignacion);
         resp.setContentType("text/plain");
@@ -743,15 +753,14 @@ public class ServletControladorConsignaciones extends HttpServlet {
         out.print(eliminarConsingacion);
         out.flush();
     }
-    
 
-     private void cancelarDevolucionConsignacionById(HttpServletRequest req, HttpServletResponse resp) throws ClassNotFoundException, SQLException, IOException {
+    private void cancelarDevolucionConsignacionById(HttpServletRequest req, HttpServletResponse resp) throws ClassNotFoundException, SQLException, IOException {
         int idConsignacion = Integer.parseInt(req.getParameter("idConsignacion"));
-        
+
         int id_observacion_temporal = new DaoObservacion().obtenerIdObservacionTemporalByIdConsignacion(idConsignacion);
-        
+
         int eliminar_observacion_temporal = new DaoObservacion().eliminarObserTempById(id_observacion_temporal);
-        
+
         int eliminar_consignacion_temporal = new DaoConsignaciones().eliminarConsigTempById(idConsignacion);
         resp.setContentType("text/plain");
 
@@ -759,7 +768,6 @@ public class ServletControladorConsignaciones extends HttpServlet {
 
         out.print(eliminar_consignacion_temporal);
         out.flush();
-        
-        
+
     }
 }

@@ -407,7 +407,7 @@
                                                         <div class="col-sm-12 mb-3 mb-sm-0">
 
                                                             <input type="text" class="form-control form-control-user" id="txtNumRecibo" name="num_recibo"
-                                                                   placeholder="Numero Recibo" >
+                                                                   placeholder="Numero Recibo" required>
                                                         </div>
 
                                                     </div>
@@ -415,12 +415,12 @@
                                                     <div class="form-group row">
                                                         <div class="col-sm-6 mb-3 mb-sm-0">
                                                             <input type="number" class="form-control form-control-user" name="valor"
-                                                                   id="txtValor" placeholder="valor" >
+                                                                   id="txtValor" placeholder="valor" required>
                                                         </div>
                                                         <div class="col-sm-6">
 
                                                             <input type="date" class="form-control form-control-user" data-bs-toggle="tooltip" data-bs-placement="top" title="Fecha Consignacion   " id="dateCreacion"
-                                                                   name="fecha_pago"    >
+                                                                   name="fecha_pago"    required>
                                                         </div>
 
                                                     </div>
@@ -447,13 +447,12 @@
                                                                     <input type="number" id="cedulaCliente" class="form-control form-control-user" name="cedulaCliente" placeholder="Ingrese Cedula Cliente" value="" style="display: none;">
                                                                 </div>
                                                                 <div class="col-md-4">
-                                                                    <select id="sltSedeCon" style="font-family: inherit; font-size: 13px; display: none;" name="sltSedeCon" >
+                                                                    <select id="sltSedeCon" style="font-family: inherit; font-size: 13px; display: none;" name="sltSedeCon" required>
                                                                         <option selected>Sede:</option>
                                                                     </select>
                                                                 </div>
                                                             </div>
-                                                            <input type="hidden" id="validacionVacio" name="name" value="">
-
+                                                            <input type="hidden" id="cantidad" name="name" value="">
                                                             <table class="table table-hover" id="tblCliente" style="display: none;">
                                                                 <thead>
                                                                     <tr>
@@ -466,6 +465,7 @@
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody>
+                                                                
 
                                                                 </tbody>
 
@@ -478,7 +478,7 @@
 
                                                     <div class="form-group row">
                                                         <div class="col-sm-12">
-                                                            <select id="sltBancoCartera" style="font-family: inherit; font-size: 13px;" name="plataforma" >
+                                                            <select id="sltBancoCartera" style="font-family: inherit; font-size: 13px;" name="plataforma" required>
                                                                 <option selected>Banco:</option>
                                                             </select>
                                                         </div>
@@ -487,7 +487,7 @@
 
                                                     <div class="input-file input-file--reverse mb-2">
                                                         <label for="" class="input-file__field"></label>
-                                                        <input type="file" id="file" class="input-file__input" name="file" >
+                                                        <input type="file" id="file" class="input-file__input" name="file" required>
                                                         <label for="file" class="input-file__btn" style="font-family: inherit; font-size: 15px;">Seleccionar archivo</label>
                                                     </div>
 
@@ -525,7 +525,6 @@
 
                     </div>
 
-
                     <div class="container-fluid">
 
                         <div class="container">
@@ -546,20 +545,33 @@
                                 <div class="card-body">
 
                                     <div class="row" >
-                                        <div class="col-md-4" >
-                                            <label style="margin-left: 50px;">Estado</label>&nbsp;
-                                            <select id="sltEstadoConsignacion" style="font-family: inherit; font-size: 13px;" name="plataforma" >
+                                        <div class="col-md-3" >
 
+                                            <select id="sltEstadoConsignacion" style="font-family: inherit; font-size: 13px;" name="plataforma" >
+                                                <option value="" selected="">Estado:</option>
                                             </select>
                                         </div>
+                                        <div class="col-md-2">
+                                            <select id="sltSedeConsignacion" style="font-family: inherit; font-size: 13px;" name="plataforma">
+                                                <option value="" selected>Sede:</option>
+                                            </select>
 
-                                        <div class="col-md-8">
-                                            <label style="margin-left: 150px;">Ingrese Documento </label>
+                                        </div>
+                                        <div class="col-md-3">
+                                           
+                                                <input type="date" class="form-control form-control-user" data-bs-toggle="tooltip" data-bs-placement="top" title="Fecha Consignacion" style="font-family: inherit; font-size: 13px;" id="date"
+                                                       name="fecha_pago"    required>
+                                           
+                                        </div>
+
+                                        <div class="col-md-4">
+
                                             <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+
                                                 <div class="input-group">
                                                     <input type="text" class="form-control bg-light border-0 small" placeholder="Buscar" aria-label="Search" aria-describedby="basic-addon2" id="txtCedula"> 
                                                     <div class="input-group-append">
-                                                        <a class="btn btn-primary" onclick="consignacionesCedulaAdmin();">
+                                                        <a class="btn btn-primary" onclick="consignacionesCedula();">
                                                             <i class="fas fa-search fa-sm"></i>
                                                         </a>
                                                     </div>
@@ -574,6 +586,7 @@
                                                     <tr>
                                                         <th></th>
                                                         <th>Numero Recibo</th>
+                                                        <th>Documento</th>
                                                         <th>Nombre Cliente</th>
                                                         <th>Fecha Pago</th>
                                                         <th>Fecha Creacion</th>

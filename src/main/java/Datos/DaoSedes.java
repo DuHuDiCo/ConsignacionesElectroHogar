@@ -10,7 +10,7 @@ import java.util.List;
 
 public class DaoSedes {
 
-    private static final String SQL_SELECT_SEDES = "SELECT * FROM sede";
+    private static final String SQL_SELECT_SEDES = "SELECT * FROM sede ORDER BY nombre_sede ASC";
     private static final String SQL_INSERT_SEDES = "INSERT INTO sede(nombre_sede, municipio, telefono, dato_personalizado) VALUES (?,?,?,?)";
     private static final String SQL_SELECT_SEDEBYID = "SELECT * FROM sede WHERE idSede = ?";
     private static  String SQL_UPDATE_SEDE = "";
