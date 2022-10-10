@@ -185,6 +185,16 @@ public class ServletControladorConsignaciones extends HttpServlet {
                     }
                 }
                 break;
+                case"listarConsignacionesByValor":
+                {
+                    try {
+                        this.listarConsignacionesByValor(req, resp);
+                    } catch (ClassNotFoundException ex) {
+                        Logger.getLogger(ServletControladorConsignaciones.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+                    break;
+
 
             }
         }
@@ -769,5 +779,21 @@ public class ServletControladorConsignaciones extends HttpServlet {
         out.print(eliminar_consignacion_temporal);
         out.flush();
 
+    }
+
+    private void listarConsignacionesByValor(HttpServletRequest req, HttpServletResponse resp) throws ClassNotFoundException, IOException {
+        float valor = Float.valueOf(req.getParameter("valor"));
+        
+         List<Consignacion> consignaciones = new DaoConsignaciones().listarConsignacionesByValor(valor);
+         Gson gson = new Gson();
+
+        String json = gson.toJson(consignaciones);
+        resp.setContentType("application/json");
+
+        PrintWriter out = resp.getWriter();
+
+        out.print(json);
+        out.flush();
+        
     }
 }

@@ -7,6 +7,85 @@ function cargarDatosCaja() {
     obtenerNombreUsuario();
 }
 
+
+var fecha = document.getElementById('date');
+fecha.addEventListener('change', function () {
+    var stado = document.getElementById('sltEstadoConsignacionCaja').value;
+
+    if (stado === '' || stado === null) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error al Consultar',
+            text: 'Seleccione un estado de consignacion',
+            footer: '<a href="">Why do I have this issue?</a>'
+
+        });
+    } else {
+
+        cargarBySedeByEstadoByFecha(stado,fecha.value);
+
+    }
+});
+
+
+function cargarBySedeByEstadoByFecha(estado,fecha) {
+    
+    $.ajax({
+        method: "GET",
+        url: "ServletControladorConsignaciones2?accion=obtenerConsignacionesByEstadoAndFecha&estado=" + estado + "&fecha=" + fecha
+
+    }).done(function (data) {
+        var datos = JSON.stringify(data);
+        var json = JSON.parse(datos);
+
+        $("#dataTable tbody").empty();
+
+        var contador = 1;
+
+        $.each(json, function (key, value) {
+            if (value.nombre_estado === "Devuelta") {
+
+                var observa = '<a href="#" id="btn_observa" onclick="abrirModalObservacionesCartera(' + value.idConsignacion + ');" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>';
+                var accion = "<td><a href='#' class='btn btn-primary btn-sm' onclick='editarConsignacion(" + value.idConsignacion + ")'><i class='fas fa-pen'></i></a>" + observa + "</td>";
+                $("#dataTable").append('<tr> <td>' + contador + '</td><td>' + value.num_recibo + '</td><td>' + value.nombre_titular + '</td><td>' + value.fecha_pago + '</td><td>' + value.fecha_creacion + '</td><td>' + value.valor + '</td><td>' + value.nombre_estado + '</td><td>' + value.nombre_sede + '</td><td>' + value.nombre_plataforma + '</td>' + accion + '</tr>');
+                contador = contador + 1;
+                document.getElementById('btnCancelarConsignacion').style.display = "block";
+                document.getElementById('nuevoEstado').value = "Pendiente";
+
+
+            } else {
+                if (value.nombre_estado === "Pendiente") {
+                    var observa = '<td><a href="#" id="btn_observa" onclick="abrirModalObservacionesCartera(' + value.idConsignacion + ');" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a></td>';
+                    var accion = "<td><a href='#' class='btn btn-primary btn-sm' onclick='editarConsignacion(" + value.idConsignacion + ")'><i class='fas fa-pen'></i></a>" + observa + "</td>";
+                    $("#dataTable").append('<tr> <td>' + contador + '</td><td>' + value.num_recibo + '</td><td>' + value.nombre_titular + '</td><td>' + value.fecha_pago + '</td><td>' + value.fecha_creacion + '</td><td>' + value.valor + '</td><td>' + value.nombre_estado + '</td><td>' + value.nombre_sede + '</td><td>' + value.nombre_plataforma + '</td>' + observa + '</tr>');
+                    contador = contador + 1;
+                } else {
+                    if (value.nombre_estado === "Devuelta-Caja") {
+                        var observa = '<a href="#" id="btn_observa" onclick="abrirModalObservacionesCartera(' + value.idConsignacion + ');" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>';
+                        var accion = "<td><a href='#' class='btn btn-primary btn-sm' onclick='editarConsignacion(" + value.idConsignacion + ")'><i class='fas fa-pen'></i></a>" + observa + "</td>";
+                        $("#dataTable").append('<tr> <td>' + contador + '</td><td>' + value.num_recibo + '</td><td>' + value.nombre_titular + '</td><td>' + value.fecha_pago + '</td><td>' + value.fecha_creacion + '</td><td>' + value.valor + '</td><td>' + value.nombre_estado + '</td><td>' + value.nombre_sede + '</td><td>' + value.nombre_plataforma + '</td>' + accion + '</tr>');
+                        contador = contador + 1;
+                        document.getElementById('btnCancelarConsignacion').style.display = "block";
+                        document.getElementById('nuevoEstado').value = "Comprobado";
+                    } else {
+                        var observa = '<a href="#" id="btn_observa" onclick="abrirModalObservacionesCartera(' + value.idConsignacion + ');" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>';
+                        $("#dataTable").append('<tr> <td>' + contador + '</td><td>' + value.num_recibo + '</td><td>' + value.nombre_titular + '</td><td>' + value.fecha_pago + '</td><td>' + value.fecha_creacion + '</td><td>' + value.valor + '</td><td>' + value.nombre_estado + '</td><td>' + value.nombre_sede + '</td><td>' + value.nombre_plataforma + '</td><td>' + observa + '</td></tr>');
+                        contador = contador + 1;
+                    }
+
+                }
+            }
+
+
+        });
+
+    }).fail(function () {
+        window.location.replace("login.html");
+    }).always(function () {
+    });
+}
+
+
 function listarConsignacionesCaja() {
     validarSession();
     $.ajax({
@@ -256,7 +335,7 @@ function  abrirModalObservacionesCaja(id_consignacion) {
     $('#staticBackdropObserCaja').modal('show');
 
     traerObservacionesCaja(id_consignacion);
-    
+
     document.getElementById('id_consignacion').value = id_consignacion;
 
 

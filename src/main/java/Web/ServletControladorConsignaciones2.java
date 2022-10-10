@@ -180,15 +180,48 @@ public class ServletControladorConsignaciones2 extends HttpServlet {
                     }
                 }
                 break;
-                case "obtenerConsignacionesBySedeByEstadoByFecha":
-                {
+                case "obtenerConsignacionesBySedeByEstadoByFecha": {
                     try {
                         this.obtenerConsignacionesBySedeByEstadoByFecha(req, resp);
                     } catch (ClassNotFoundException ex) {
                         Logger.getLogger(ServletControladorConsignaciones2.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
-                    break;
+                break;
+                case "obtenerConsignacionesByEstadoAndFecha": {
+                    try {
+                        this.obtenerConsignacionesByEstadoByFecha(req, resp);
+                    } catch (ClassNotFoundException ex) {
+                        Logger.getLogger(ServletControladorConsignaciones2.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+                break;
+                case "obtenerConsignacionesByFecha": {
+                    try {
+                        this.obtenerConsignacionesByFecha(req, resp);
+                    } catch (ClassNotFoundException ex) {
+                        Logger.getLogger(ServletControladorConsignaciones2.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+                break;
+                 case "obtenerConsignacionesSede": {
+                    try {
+                        this.obtenerConsignacionesSede(req, resp);
+                    } catch (ClassNotFoundException ex) {
+                        Logger.getLogger(ServletControladorConsignaciones2.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+                break;
+                 case"obtenerConsignacionesSedeByFecha":
+                {
+                    try {
+                        this.obtenerConsignacionesSedeByFecha(req, resp);
+                    } catch (ClassNotFoundException ex) {
+                        Logger.getLogger(ServletControladorConsignaciones2.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+                     break;
+                
 
 
             }
@@ -552,8 +585,69 @@ public class ServletControladorConsignaciones2 extends HttpServlet {
         String estado = req.getParameter("estado");
         String fechaString = req.getParameter("fecha");
         Date fecha = Funciones.FuncionesGenerales.fechaSQL(fechaString, "yyyy-MM-dd");
-        
+
         List<Consignacion> consignaciones = new DaoConsignaciones2().listarConsignacionesByEstadoAndBySedeByEstadoByFecha(estado, sede, fecha);
+        Gson gson = new Gson();
+
+        String json = gson.toJson(consignaciones);
+        resp.setContentType("application/json");
+
+        PrintWriter out = resp.getWriter();
+
+        out.print(json);
+        out.flush();
+    }
+
+    private void obtenerConsignacionesByEstadoByFecha(HttpServletRequest req, HttpServletResponse resp) throws ClassNotFoundException, IOException {
+        String estado = req.getParameter("estado");
+        String fechaString = req.getParameter("fecha");
+        Date fecha = Funciones.FuncionesGenerales.fechaSQL(fechaString, "yyyy-MM-dd");
+        List<Consignacion> consignaciones = new DaoConsignaciones2().listarConsignacionesByEstadoAndByEstadoByFecha(estado, fecha);
+        Gson gson = new Gson();
+
+        String json = gson.toJson(consignaciones);
+        resp.setContentType("application/json");
+
+        PrintWriter out = resp.getWriter();
+
+        out.print(json);
+        out.flush();
+    }
+
+    private void obtenerConsignacionesByFecha(HttpServletRequest req, HttpServletResponse resp) throws ClassNotFoundException, IOException {
+        String fechaString = req.getParameter("fecha");
+        Date fecha = Funciones.FuncionesGenerales.fechaSQL(fechaString, "yyyy-MM-dd");
+        List<Consignacion> consignaciones = new DaoConsignaciones2().listarConsignacionesByFecha(fecha);
+        Gson gson = new Gson();
+
+        String json = gson.toJson(consignaciones);
+        resp.setContentType("application/json");
+
+        PrintWriter out = resp.getWriter();
+
+        out.print(json);
+        out.flush();
+    }
+
+    private void obtenerConsignacionesSede(HttpServletRequest req, HttpServletResponse resp) throws ClassNotFoundException, IOException {
+        int sede = Integer.parseInt(req.getParameter("sede"));
+        List<Consignacion> consignaciones = new DaoConsignaciones2().listarConsignacionesBySede(sede);
+        Gson gson = new Gson();
+
+        String json = gson.toJson(consignaciones);
+        resp.setContentType("application/json");
+
+        PrintWriter out = resp.getWriter();
+
+        out.print(json);
+        out.flush();
+    }
+    
+    private void obtenerConsignacionesSedeByFecha(HttpServletRequest req, HttpServletResponse resp) throws ClassNotFoundException, IOException {
+        int sede = Integer.parseInt(req.getParameter("sede"));
+        String fechaString = req.getParameter("fecha");
+        Date fecha = Funciones.FuncionesGenerales.fechaSQL(fechaString, "yyyy-MM-dd");
+        List<Consignacion> consignaciones = new DaoConsignaciones2().listarConsignacionesBySedeByFecha(sede, fecha);
         Gson gson = new Gson();
 
         String json = gson.toJson(consignaciones);

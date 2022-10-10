@@ -231,10 +231,11 @@ function traerConsinacionesFechaValor(datos) {
     });
 }
 
-function guardarConsignacion() {
+function guardarConsignacion(obser) {
+    alert(obser);
     var form = document.getElementById('formConsignacion');
     var formData = new FormData(form);
-    var obser = document.getElementById('observa').value;
+    var obser = obser;
 
 
 
@@ -430,7 +431,8 @@ function cargarDatos() {
 
         cargarEstados('sltEstadoConsignacion');
         cargarConsignacionesGeneral();
-        cargarSedes();
+       
+        cargarSedes('sltSedeConsignacion');
 
 
 
@@ -618,7 +620,7 @@ function cargarBySede(estado, sede) {
 }
 
 
-function cargarSedes() {
+function cargarSedes(nombre) {
     validarSession();
     event.preventDefault();
     $.ajax({
@@ -631,7 +633,7 @@ function cargarSedes() {
 
 
         $.each(json, function (key, value) {
-            $("#sltSedeConsignacion").append('<option value="' + value.idSede + '" >' + value.nombre_sede + '</option>');
+            $("#"+nombre).append('<option value="' + value.idSede + '" >' + value.nombre_sede + '</option>');
         });
 
     }).fail(function () {
@@ -948,6 +950,7 @@ function traerCliente() {
             document.getElementById('nuevoCliente').style.display = "none";
             document.getElementById('cedulaCliente').style.display = "none";
             document.getElementById('sltSedeCon').style.display = "none";
+            
 
             $("#tblCliente tbody").empty();
 

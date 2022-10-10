@@ -16,6 +16,7 @@ public class DaoConsignaciones {
     private static final String SQL_SELECT_CONSIGNACIONES = "SELECT consignacion.idConsignacion, consignacion.num_recibo, consignacion.fecha_creacion, consignacion.fecha_pago, consignacion.valor, actualizacion.fecha_actualizacion, estado.nombre_estado, plataforma.nombre_plataforma, obligacion.nombre_titular FROM consignacion INNER JOIN actualizacion ON consignacion.id_actualizacion = actualizacion.idActualizacion INNER JOIN estado ON actualizacion.id_estado = estado.idEstado INNER JOIN plataforma ON consignacion.id_plataforma = plataforma.idPlataforma INNER JOIN obligacion ON consignacion.id_obligacion = obligacion.idObligacion ORDER BY consignacion.fecha_creacion ASC";
     private static final String SQL_SELECT_CONSIGNACIONESBYESTADO = "SELECT consignacion.idConsignacion, consignacion.num_recibo, consignacion.fecha_creacion, consignacion.fecha_pago, consignacion.valor, actualizacion.fecha_actualizacion, estado.nombre_estado, plataforma.idPlataforma ,plataforma.nombre_plataforma, obligacion.nombre_titular, obligacion.n_documento, sede.nombre_sede FROM consignacion INNER JOIN actualizacion ON consignacion.id_actualizacion = actualizacion.idActualizacion INNER JOIN estado ON actualizacion.id_estado = estado.idEstado INNER JOIN plataforma ON consignacion.id_plataforma = plataforma.idPlataforma INNER JOIN obligacion ON consignacion.id_obligacion = obligacion.idObligacion INNER JOIN sede ON obligacion.id_sede = sede.idSede WHERE estado.nombre_estado = ? ORDER BY consignacion.fecha_pago ASC ";
     private static final String SQL_SELECT_CONSIGNACIONESBYCEDULA = "SELECT consignacion.idConsignacion, consignacion.num_recibo, consignacion.fecha_creacion, consignacion.fecha_pago, consignacion.valor, actualizacion.fecha_actualizacion, estado.nombre_estado, plataforma.idPlataforma, plataforma.nombre_plataforma, obligacion.nombre_titular, obligacion.n_documento, sede.nombre_sede FROM consignacion INNER JOIN actualizacion ON consignacion.id_actualizacion = actualizacion.idActualizacion INNER JOIN estado ON actualizacion.id_estado = estado.idEstado INNER JOIN plataforma ON consignacion.id_plataforma = plataforma.idPlataforma INNER JOIN obligacion ON consignacion.id_obligacion = obligacion.idObligacion INNER JOIN sede ON obligacion.id_sede = sede.idSede WHERE obligacion.n_documento = ? ORDER BY consignacion.fecha_pago ASC";
+    private static final String SQL_SELECT_CONSIGNACIONESBYVALOR = "SELECT consignacion.idConsignacion, consignacion.num_recibo, consignacion.fecha_creacion, consignacion.fecha_pago, consignacion.valor, actualizacion.fecha_actualizacion, estado.nombre_estado, plataforma.idPlataforma, plataforma.nombre_plataforma, obligacion.nombre_titular, obligacion.n_documento, sede.nombre_sede FROM consignacion INNER JOIN actualizacion ON consignacion.id_actualizacion = actualizacion.idActualizacion INNER JOIN estado ON actualizacion.id_estado = estado.idEstado INNER JOIN plataforma ON consignacion.id_plataforma = plataforma.idPlataforma INNER JOIN obligacion ON consignacion.id_obligacion = obligacion.idObligacion INNER JOIN sede ON obligacion.id_sede = sede.idSede WHERE consignacion.valor = ? ORDER BY consignacion.fecha_pago ASC";
     private static final String SQL_SELECT_CLIENTEBYID = "SELECT obligacion.idObligacion, obligacion.nombre_titular, obligacion.saldo_capital, obligacion.fecha_obligacion, sede.idSede, sede.nombre_sede FROM obligacion INNER JOIN sede ON obligacion.id_sede = sede.idSede WHERE n_documento = ?";
     private static final String SQL_UPDATE_CONSIGNACION = "UPDATE consignacion SET id_actualizacion = ? WHERE idConsignacion = ?";
     private static final String SQL_SELECT_CONSIGNACIONESBYSEDE = "SELECT consignacion.idConsignacion, consignacion.num_recibo, consignacion.fecha_creacion, consignacion.fecha_pago, consignacion.valor, actualizacion.fecha_actualizacion, estado.nombre_estado, plataforma.nombre_plataforma, obligacion.nombre_titular, obligacion.n_documento, sede.nombre_sede FROM consignacion INNER JOIN actualizacion ON consignacion.id_actualizacion = actualizacion.idActualizacion INNER JOIN estado ON actualizacion.id_estado = estado.idEstado INNER JOIN plataforma ON consignacion.id_plataforma = plataforma.idPlataforma INNER JOIN obligacion ON consignacion.id_obligacion = obligacion.idObligacion INNER JOIN sede ON obligacion.id_sede = sede.idSede WHERE sede.nombre_sede = ? AND estado.nombre_estado = 'Comprobado' ORDER BY consignacion.fecha_pago ASC ";
@@ -182,6 +183,54 @@ public class DaoConsignaciones {
         return consigna;
 
     }
+    
+    public List<Consignacion> listarConsignacionesByValor(float value) throws ClassNotFoundException {
+        Connection con = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        Consignacion consignaciones = null;
+
+        List<Consignacion> consigna = new ArrayList<>();
+
+        try {
+            con = Conexion.getConnection();
+            stmt = con.prepareStatement(SQL_SELECT_CONSIGNACIONESBYVALOR);
+            stmt.setFloat(1, value);
+
+            rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                int idConsignacion = rs.getInt("idConsignacion");
+                String num_recibo = rs.getString("num_recibo");
+                Date fecha_creacion = rs.getDate("fecha_creacion");
+                Date fecha_pago = rs.getDate("fecha_pago");
+                float valor = rs.getFloat("valor");
+                String fecha = rs.getString("fecha_actualizacion");
+                DateTime fecha_actualizacion = Funciones.FuncionesGenerales.stringToDateTime(fecha);
+                String nombre_estado = rs.getString("nombre_estado");
+                int idPlataforma = rs.getInt("idPlataforma");
+                String nombre_plataforma = rs.getString("nombre_plataforma");
+                String nombre_titular = rs.getString("nombre_titular");
+                String num_cedula = rs.getString("n_documento");
+                String nombre_sede = rs.getString("nombre_sede");
+
+                consignaciones = new Consignacion(idConsignacion, num_recibo, fecha_creacion, fecha_pago, valor, fecha_actualizacion, nombre_estado, nombre_plataforma, nombre_titular, num_cedula, nombre_sede);
+                consignaciones.setId_plataforma(idPlataforma);
+                consigna.add(consignaciones);
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace(System.out);
+        } finally {
+            Conexion.close(con);
+            Conexion.close(stmt);
+            Conexion.close(rs);
+        }
+
+        return consigna;
+
+    }
+    
 
     public List<Obligaciones> listarClienteByCedula(String cedula) throws ClassNotFoundException {
         Connection con = null;
