@@ -30,13 +30,12 @@ public class DaoConsignaciones2 {
     private static final String SQL_SELECT_CONSIGNACIONESBYESTADOANDSEDEANDFECHA = "SELECT consignacion.idConsignacion, consignacion.num_recibo, consignacion.fecha_creacion, consignacion.fecha_pago, consignacion.valor, actualizacion.fecha_actualizacion, estado.nombre_estado, plataforma.idPlataforma ,plataforma.nombre_plataforma, obligacion.nombre_titular, obligacion.n_documento, sede.nombre_sede FROM consignacion INNER JOIN actualizacion ON consignacion.id_actualizacion = actualizacion.idActualizacion INNER JOIN estado ON actualizacion.id_estado = estado.idEstado INNER JOIN plataforma ON consignacion.id_plataforma = plataforma.idPlataforma INNER JOIN obligacion ON consignacion.id_obligacion = obligacion.idObligacion INNER JOIN sede ON obligacion.id_sede = sede.idSede WHERE estado.nombre_estado = ? AND obligacion.id_sede = ? AND consignacion.fecha_creacion = ? ORDER BY consignacion.fecha_pago ASC ";
     private static final String SQL_SELECT_CONSIGNACIONESBYESTADOANDFECHA = "SELECT consignacion.idConsignacion, consignacion.num_recibo, consignacion.fecha_creacion, consignacion.fecha_pago, consignacion.valor, actualizacion.fecha_actualizacion, estado.nombre_estado, plataforma.idPlataforma ,plataforma.nombre_plataforma, obligacion.nombre_titular, obligacion.n_documento, sede.nombre_sede FROM consignacion INNER JOIN actualizacion ON consignacion.id_actualizacion = actualizacion.idActualizacion INNER JOIN estado ON actualizacion.id_estado = estado.idEstado INNER JOIN plataforma ON consignacion.id_plataforma = plataforma.idPlataforma INNER JOIN obligacion ON consignacion.id_obligacion = obligacion.idObligacion INNER JOIN sede ON obligacion.id_sede = sede.idSede WHERE estado.nombre_estado = ?  AND consignacion.fecha_creacion = ? ORDER BY consignacion.fecha_pago ASC ";
     private static final String SQL_SELECT_CONSIGNACIONESFECHA = "SELECT consignacion.idConsignacion, consignacion.num_recibo, consignacion.fecha_creacion, consignacion.fecha_pago, consignacion.valor, actualizacion.fecha_actualizacion, estado.nombre_estado, plataforma.idPlataforma ,plataforma.nombre_plataforma, obligacion.nombre_titular, obligacion.n_documento, sede.nombre_sede FROM consignacion INNER JOIN actualizacion ON consignacion.id_actualizacion = actualizacion.idActualizacion INNER JOIN estado ON actualizacion.id_estado = estado.idEstado INNER JOIN plataforma ON consignacion.id_plataforma = plataforma.idPlataforma INNER JOIN obligacion ON consignacion.id_obligacion = obligacion.idObligacion INNER JOIN sede ON obligacion.id_sede = sede.idSede WHERE  consignacion.fecha_creacion = ? ORDER BY consignacion.fecha_pago ASC ";
-    private static final String SQL_SELECT_CONSIGNACIONESEDE= "SELECT consignacion.idConsignacion, consignacion.num_recibo, consignacion.fecha_creacion, consignacion.fecha_pago, consignacion.valor, actualizacion.fecha_actualizacion, estado.nombre_estado, plataforma.idPlataforma ,plataforma.nombre_plataforma, obligacion.nombre_titular, obligacion.n_documento, sede.nombre_sede FROM consignacion INNER JOIN actualizacion ON consignacion.id_actualizacion = actualizacion.idActualizacion INNER JOIN estado ON actualizacion.id_estado = estado.idEstado INNER JOIN plataforma ON consignacion.id_plataforma = plataforma.idPlataforma INNER JOIN obligacion ON consignacion.id_obligacion = obligacion.idObligacion INNER JOIN sede ON obligacion.id_sede = sede.idSede WHERE  obligacion.id_sede = ?  ORDER BY consignacion.fecha_pago ASC ";
-    private static final String SQL_SELECT_CONSIGNACIONESEDEBYFECHA= "SELECT consignacion.idConsignacion, consignacion.num_recibo, consignacion.fecha_creacion, consignacion.fecha_pago, consignacion.valor, actualizacion.fecha_actualizacion, estado.nombre_estado, plataforma.idPlataforma ,plataforma.nombre_plataforma, obligacion.nombre_titular, obligacion.n_documento, sede.nombre_sede FROM consignacion INNER JOIN actualizacion ON consignacion.id_actualizacion = actualizacion.idActualizacion INNER JOIN estado ON actualizacion.id_estado = estado.idEstado INNER JOIN plataforma ON consignacion.id_plataforma = plataforma.idPlataforma INNER JOIN obligacion ON consignacion.id_obligacion = obligacion.idObligacion INNER JOIN sede ON obligacion.id_sede = sede.idSede WHERE  obligacion.id_sede = ? AND consignacion.fecha_creacion = ? ORDER BY consignacion.fecha_pago ASC ";
-    
-    
-    
-    
-    
+    private static final String SQL_SELECT_CONSIGNACIONESEDE = "SELECT consignacion.idConsignacion, consignacion.num_recibo, consignacion.fecha_creacion, consignacion.fecha_pago, consignacion.valor, actualizacion.fecha_actualizacion, estado.nombre_estado, plataforma.idPlataforma ,plataforma.nombre_plataforma, obligacion.nombre_titular, obligacion.n_documento, sede.nombre_sede FROM consignacion INNER JOIN actualizacion ON consignacion.id_actualizacion = actualizacion.idActualizacion INNER JOIN estado ON actualizacion.id_estado = estado.idEstado INNER JOIN plataforma ON consignacion.id_plataforma = plataforma.idPlataforma INNER JOIN obligacion ON consignacion.id_obligacion = obligacion.idObligacion INNER JOIN sede ON obligacion.id_sede = sede.idSede WHERE  obligacion.id_sede = ?  ORDER BY consignacion.fecha_pago ASC ";
+    private static final String SQL_SELECT_CONSIGNACIONESEDEBYFECHA = "SELECT consignacion.idConsignacion, consignacion.num_recibo, consignacion.fecha_creacion, consignacion.fecha_pago, consignacion.valor, actualizacion.fecha_actualizacion, estado.nombre_estado, plataforma.idPlataforma ,plataforma.nombre_plataforma, obligacion.nombre_titular, obligacion.n_documento, sede.nombre_sede FROM consignacion INNER JOIN actualizacion ON consignacion.id_actualizacion = actualizacion.idActualizacion INNER JOIN estado ON actualizacion.id_estado = estado.idEstado INNER JOIN plataforma ON consignacion.id_plataforma = plataforma.idPlataforma INNER JOIN obligacion ON consignacion.id_obligacion = obligacion.idObligacion INNER JOIN sede ON obligacion.id_sede = sede.idSede WHERE  obligacion.id_sede = ? AND consignacion.fecha_creacion = ? ORDER BY consignacion.fecha_pago ASC ";
+    private static final String SQL_DELETE_CONSIGNACIONESTEMPCAJABYID = "DELETE FROM temporal_consignacion_caja WHERE id_aplicado = ?";
+    private static final String SQL_DELETE_CONSIGNACIONESTEMPCONTABILIDADBYID = "DELETE FROM temporal_consignacion WHERE id_comprobado = ?";
+    private static final String SQL_SELECT_CONSIGNACIONESBYNUMRECIBO = "SELECT consignacion.idConsignacion, consignacion.num_recibo, consignacion.fecha_pago, consignacion.valor, obligacion.idObligacion, obligacion.nombre_titular, sede.nombre_sede FROM consignacion INNER JOIN obligacion ON consignacion.id_obligacion = obligacion.idObligacion INNER JOIN sede ON obligacion.id_sede = sede.idSede INNER JOIN actualizacion ON consignacion.id_actualizacion = actualizacion.idActualizacion INNER JOIN estado ON actualizacion.id_estado = estado.idEstado WHERE consignacion.num_recibo = ?";
+
     public List<Consignacion> listarConsignacionesAplicadasByIdUsuario(int id) throws ClassNotFoundException, SQLException {
         Connection con = null;
         PreparedStatement stmt = null;
@@ -436,14 +435,14 @@ public class DaoConsignaciones2 {
             stmt = con.prepareStatement(SQL_SELECT_VALIDARCONSIGNACIONBYIDCONANDIDUSU);
             stmt.setInt(1, id_consignacion);
             stmt.setInt(2, id_aplicado);
-            
-             rs = stmt.executeQuery();
+
+            rs = stmt.executeQuery();
 
             while (rs.next()) {
                 int idConsignacion = rs.getInt("idConsignacion");
-                
+
                 row = idConsignacion;
-                
+
             }
         } catch (SQLException ex) {
             ex.printStackTrace(System.out);
@@ -454,7 +453,7 @@ public class DaoConsignaciones2 {
         }
         return row;
     }
-    
+
     public int validarIfExistConsignacionByIdConsignacionAndIdUsuarioContabilidad(int id_consignacion, int id_aplicado) throws ClassNotFoundException {
         Connection con = null;
         PreparedStatement stmt = null;
@@ -466,14 +465,14 @@ public class DaoConsignaciones2 {
             stmt = con.prepareStatement(SQL_SELECT_VALIDARCONSIGNACIONBYIDCONANDIDUSUCONTA);
             stmt.setInt(1, id_consignacion);
             stmt.setInt(2, id_aplicado);
-            
-             rs = stmt.executeQuery();
+
+            rs = stmt.executeQuery();
 
             while (rs.next()) {
                 int idConsignacion = rs.getInt("idConsignacion");
-                
+
                 row = idConsignacion;
-                
+
             }
         } catch (SQLException ex) {
             ex.printStackTrace(System.out);
@@ -484,7 +483,7 @@ public class DaoConsignaciones2 {
         }
         return row;
     }
-    
+
     public int validarEstadoConsig(int id_consignacion, int id_aplicado) throws ClassNotFoundException {
         Connection con = null;
         PreparedStatement stmt = null;
@@ -496,14 +495,14 @@ public class DaoConsignaciones2 {
             stmt = con.prepareStatement(SQL_SELECT_VALIDARESTADOCONSIGNACION);
             stmt.setInt(1, id_aplicado);
             stmt.setInt(2, id_consignacion);
-            
-             rs = stmt.executeQuery();
+
+            rs = stmt.executeQuery();
 
             while (rs.next()) {
                 int idConsignacion = rs.getInt("idObservaciones");
-                
+
                 row = idConsignacion;
-                
+
             }
         } catch (SQLException ex) {
             ex.printStackTrace(System.out);
@@ -514,8 +513,7 @@ public class DaoConsignaciones2 {
         }
         return row;
     }
-    
-    
+
     public List<Consignacion> listarConsignacionesByEstadoAndBySede(String estado, int Sede) throws ClassNotFoundException {
         Connection con = null;
         PreparedStatement stmt = null;
@@ -563,7 +561,7 @@ public class DaoConsignaciones2 {
         return consigna;
 
     }
-    
+
     public List<Consignacion> listarConsignacionesByEstadoAndBySedeByEstadoByFecha(String estado, int Sede, Date date) throws ClassNotFoundException {
         Connection con = null;
         PreparedStatement stmt = null;
@@ -612,8 +610,8 @@ public class DaoConsignaciones2 {
         return consigna;
 
     }
-    
-     public List<Consignacion> listarConsignacionesByEstadoAndByEstadoByFecha(String estado, Date date) throws ClassNotFoundException {
+
+    public List<Consignacion> listarConsignacionesByEstadoAndByEstadoByFecha(String estado, Date date) throws ClassNotFoundException {
         Connection con = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -625,7 +623,7 @@ public class DaoConsignaciones2 {
             con = Conexion.getConnection();
             stmt = con.prepareStatement(SQL_SELECT_CONSIGNACIONESBYESTADOANDFECHA);
             stmt.setString(1, estado);
-            
+
             stmt.setDate(2, date);
 
             rs = stmt.executeQuery();
@@ -661,8 +659,8 @@ public class DaoConsignaciones2 {
         return consigna;
 
     }
-     
-     public List<Consignacion> listarConsignacionesByFecha( Date date) throws ClassNotFoundException {
+
+    public List<Consignacion> listarConsignacionesByFecha(Date date) throws ClassNotFoundException {
         Connection con = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -673,7 +671,7 @@ public class DaoConsignaciones2 {
         try {
             con = Conexion.getConnection();
             stmt = con.prepareStatement(SQL_SELECT_CONSIGNACIONESFECHA);
-            
+
             stmt.setDate(1, date);
 
             rs = stmt.executeQuery();
@@ -709,8 +707,8 @@ public class DaoConsignaciones2 {
         return consigna;
 
     }
-     
-     public List<Consignacion> listarConsignacionesBySede( int sede) throws ClassNotFoundException {
+
+    public List<Consignacion> listarConsignacionesBySede(int sede) throws ClassNotFoundException {
         Connection con = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -721,7 +719,7 @@ public class DaoConsignaciones2 {
         try {
             con = Conexion.getConnection();
             stmt = con.prepareStatement(SQL_SELECT_CONSIGNACIONESEDE);
-            
+
             stmt.setInt(1, sede);
 
             rs = stmt.executeQuery();
@@ -757,8 +755,8 @@ public class DaoConsignaciones2 {
         return consigna;
 
     }
-     
-     public List<Consignacion> listarConsignacionesBySedeByFecha( int sede, Date date) throws ClassNotFoundException {
+
+    public List<Consignacion> listarConsignacionesBySedeByFecha(int sede, Date date) throws ClassNotFoundException {
         Connection con = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -769,7 +767,7 @@ public class DaoConsignaciones2 {
         try {
             con = Conexion.getConnection();
             stmt = con.prepareStatement(SQL_SELECT_CONSIGNACIONESEDEBYFECHA);
-            
+
             stmt.setInt(1, sede);
             stmt.setDate(2, date);
 
@@ -792,6 +790,98 @@ public class DaoConsignaciones2 {
 
                 consignaciones = new Consignacion(idConsignacion, num_recibo, fecha_creacion, fecha_pago, valor, fecha_actualizacion, nombre_estado, nombre_plataforma, nombre_titular, num_documento, nombre_sede);
                 consignaciones.setId_plataforma(idPlataforma);
+                consigna.add(consignaciones);
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace(System.out);
+        } finally {
+            Conexion.close(con);
+            Conexion.close(stmt);
+            Conexion.close(rs);
+        }
+
+        return consigna;
+
+    }
+
+    public int eliminarConsignacionesTemporalesById(int id_aplicado) throws ClassNotFoundException {
+        Connection con = null;
+        PreparedStatement stmt = null;
+        int rown = 0;
+        try {
+            con = Conexion.getConnection();
+            stmt = con.prepareStatement(SQL_DELETE_CONSIGNACIONESTEMPCAJABYID);
+
+            stmt.setInt(1, id_aplicado);
+
+            rown = stmt.executeUpdate();
+
+        } catch (SQLException ex) {
+            ex.printStackTrace(System.out);
+        } finally {
+            Conexion.close(con);
+            Conexion.close(stmt);
+
+        }
+        return rown;
+    }
+
+    public int eliminarConsignacionesTemporalesContabilidadById(int id_aplicado) throws ClassNotFoundException {
+        Connection con = null;
+        PreparedStatement stmt = null;
+        int rown = 0;
+        try {
+            con = Conexion.getConnection();
+            stmt = con.prepareStatement(SQL_DELETE_CONSIGNACIONESTEMPCONTABILIDADBYID);
+
+            stmt.setInt(1, id_aplicado);
+
+            rown = stmt.executeUpdate();
+
+        } catch (SQLException ex) {
+            ex.printStackTrace(System.out);
+        } finally {
+            Conexion.close(con);
+            Conexion.close(stmt);
+
+        }
+        return rown;
+    }
+
+    public List<Consignacion> validarConsignacionRecibo(String recibo) throws ClassNotFoundException, SQLException {
+        Connection con = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        Consignacion consignaciones = null;
+
+        List<Consignacion> consigna = new ArrayList<>();
+
+        try {
+            con = Conexion.getConnection();
+            stmt = con.prepareStatement(SQL_SELECT_CONSIGNACIONESBYNUMRECIBO);
+            stmt.setString(1, recibo);
+            
+
+            rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                int idConsignacion = rs.getInt("idConsignacion");
+                String num_recibo = rs.getString("num_recibo");
+                Date fecha_pago = rs.getDate("fecha_pago");
+                float valor = rs.getFloat("valor");
+                int idObligacion = rs.getInt("idObligacion");
+                String nombre_titular = rs.getString("nombre_titular");
+                String nombre_sede = rs.getString("nombre_sede");
+
+                consignaciones = new Consignacion();
+                consignaciones.setIdConsignacion(idConsignacion);
+                consignaciones.setNum_recibo(num_recibo);
+                consignaciones.setFecha_pago(fecha_pago);
+                consignaciones.setValor(valor);
+                consignaciones.setId_obligacion(idObligacion);
+                consignaciones.setNombre_titular(nombre_titular);
+                consignaciones.setNombre_sede(nombre_sede);
                 consigna.add(consignaciones);
             }
 

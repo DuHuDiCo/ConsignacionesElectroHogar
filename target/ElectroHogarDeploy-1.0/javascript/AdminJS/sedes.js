@@ -1,7 +1,7 @@
 
 /* global Swal */
 function guardarSede() {
-    validarSession();
+
     var json = {};
 
     json.sede = document.getElementById('txtSede').value;
@@ -55,7 +55,7 @@ function guardarSede() {
 
 
 function listarSedes() {
-    validarSession();
+    
     obtenerNombreUsuario();
 
     $.ajax({

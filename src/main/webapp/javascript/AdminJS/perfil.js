@@ -3,7 +3,7 @@
 /* global Swal */
 
 function traerDatosPerfil() {
-    validarSession();
+    
     obtenerNombreUsuario();
     $.ajax({
         method: "GET",
@@ -35,7 +35,7 @@ function traerDatosPerfil() {
 
 
 function editarPerfil() {
-    validarSession();
+    
     document.getElementById("nombreUsuarioPerfil").disabled = false;
     document.getElementById("emailperfil").disabled = false;
     document.getElementById("passwordPerfil").disabled = false;
@@ -52,7 +52,7 @@ function editarPerfil() {
 
 
 function DatosPerfil() {
-    validarSession();
+    
     var datos = {};
     datos.nombre = document.getElementById("nombreUsuarioPerfil").value;
     datos.n_documento = document.getElementById("numeroCedulaPerfil").value;
@@ -81,7 +81,6 @@ function DatosPerfil() {
 }
 
 function actualizarPerfil(datos) {
-    validarSession();
     $.ajax({
         method: "POST",
         url: "ServletControlador?accion=actualizarPerfil",

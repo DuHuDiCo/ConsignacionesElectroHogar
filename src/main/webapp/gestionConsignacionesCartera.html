@@ -507,10 +507,10 @@
 
                                         </div>
                                         <div class="col-md-3">
-                                           
-                                                <input type="date" class="form-control form-control-user" data-bs-toggle="tooltip" data-bs-placement="top" title="Fecha Consignacion" style="font-family: inherit; font-size: 13px;" id="date"
-                                                       name="fecha_pago"    required>
-                                           
+
+                                            <input type="date" class="form-control form-control-user" data-bs-toggle="tooltip" data-bs-placement="top" title="Fecha Consignacion" style="font-family: inherit; font-size: 13px;" id="date"
+                                                   name="fecha_pago"    required>
+
                                         </div>
 
                                         <div class="col-md-4">
@@ -657,6 +657,23 @@
                             </div>
                         </div>
 
+                        <!-- Modal Image Consigancion -->
+                        <div class="modal fade" id="staticBackdropImage" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+
+                                <div class="modal-content">
+
+                                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">×</span>
+                                    </button>
+
+                                    <img src="" id="imagenConsigancion" alt="alt" />
+
+
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- Modal Observaciones -->
                         <div class="modal fade" id="staticBackdropObserCartera" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropObserLabel" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered">
@@ -714,6 +731,57 @@
                         </div>
                     </div>
 
+                    <!-- Modal Consignaciones iguales Recibo-->
+                    <div class="modal fade" id="ModalConsignacionesIgualesRecibo" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-dialog modal-lg modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Consignaciones Que Coinciden:</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <input type="hidden" id="observaRecibo" name="name" value="">
+                                <div class="modal-body">
+                                    <div class="container">
+                                        <div class="row">
+                                            <div class="alert alert-danger" role="alert">
+                                                Estas Consignaciones Coinciden en Numero de Recibo!!
+                                            </div>
+                                            <table class="table" id="tableIgual">
+                                                <thead>
+                                                    <tr>
+                                                        <th>#</th>
+                                                        <th>Recibo</th>
+                                                        <th>Fecha Pago</th>
+                                                        <th>Valor</th>
+                                                        <th>Cliente</th>
+                                                        <th>Sede</th>
+                                                    </tr>
+
+                                                </thead>
+                                                <tbody>
+
+                                                </tbody>
+
+                                            </table>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                                <div class="modal-footer">
+
+                                    <button type="button" id="btnRecibos" class="btn btn-primary" data-dismiss="modal">Guardar de Todos Modos</button>
+                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
 
                     <!-- Modal Guardar Consigancion-->
                     <div class="modal fade" id="modalConsignacion" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -731,7 +799,7 @@
                                 </div>
                                 <div class="modal-footer">
                                     <a href="#" id="btnNoEnviarObser" onclick="noCrearObservacionCartera();" class="btn btn-secondary" data-dismiss="modal">No</a>
-                                    <a href="#" id="bntEnviarObser" onclick="guardarConsignacionConObservacionCartera();" class="btn btn-primary">Si</a>
+                                    <a href="#" id="bntEnviarObser" onclick="validarObservacionCartera();" class="btn btn-primary">Si</a>
                                 </div>
                             </div>
                         </div>
@@ -768,7 +836,7 @@
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        <input type="hidden" id="observa" name="name" value="">
+                        <input type="hidden" id="observaIguales" name="name" value="">
                         <div class="modal-body">
                             <div class="container">
                                 <div class="row">
@@ -800,13 +868,71 @@
                         </div>
                         <div class="modal-footer">
 
-                            <button type="button" onclick="validarGuardar();" class="btn btn-primary" data-dismiss="modal">Guardar de Todos Modos</button>
+                            <button type="button" id="btnIguales" class="btn btn-primary" data-dismiss="modal">Guardar de Todos Modos</button>
                             <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
 
                         </div>
                     </div>
                 </div>
             </div>
+
+
+            <!-- Modal Detalles -->
+            <div class="modal fade" id="modalDetalles" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropObserLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="staticBackdropObserLabel">Detalles del Proceso</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+
+                            <div class="row">
+                                <table id="tableSedeDetalles">
+                                    <thead >
+                                        <tr>
+                                            <th>Sede :</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                    </tbody>
+                                </table>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <table class="table table-responsive mt-3" style="overflow-y: auto;height: 400px;" id="tableDetalles">
+                                        <thead>
+                                            <tr>
+                                                <th>N°</th>
+                                                <th>Fecha Actualizacion</th>
+                                                <th>Estado</th>
+                                                <th>Usuario</th>
+                                                <th>Recibo</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                            </div>
+
+
+                        </div>
+
+                        <div class="modal-footer">
+                            <a type="button" id="" class="btn btn-secondary" data-dismiss="modal">Cerrar</a>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
 
             <!-- Logout Modal-->
             <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"

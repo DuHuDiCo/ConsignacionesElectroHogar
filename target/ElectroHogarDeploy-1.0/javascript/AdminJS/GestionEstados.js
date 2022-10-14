@@ -3,7 +3,7 @@
 /* global Swal */
 
 function crearEstado() {
-    validarSession();
+    
     var datos = {};
 
     datos.estado = document.getElementById('txtEstado').value;
@@ -51,7 +51,7 @@ function crearEstado() {
 
 
 function listarEstados() {
-    validarSession();
+    
     obtenerNombreUsuario();
     event.preventDefault();
 

@@ -221,8 +221,45 @@ public class ServletControladorConsignaciones2 extends HttpServlet {
                     }
                 }
                      break;
-                
+                 case "traerActualizaciones":
+                {
+                    try {
+                        this.traerActualizaciones(req, resp);
+                    } catch (ClassNotFoundException ex) {
+                        Logger.getLogger(ServletControladorConsignaciones2.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+                     break;
 
+                case "validarConsignacionesCajaTemporal":
+                {
+                    try {
+                        this.validarConsignacionesCajaTemporal(req, resp);
+                    } catch (ClassNotFoundException | SQLException ex) {
+                        Logger.getLogger(ServletControladorConsignaciones2.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+                    break;
+                case "validarConsignacionesContabilidadTemporal":
+                {
+                    try {
+                        this.validarConsignacionesContabilidademporal(req, resp);
+                    } catch (ClassNotFoundException ex) {
+                        Logger.getLogger(ServletControladorConsignaciones2.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+                    break;    
+                case "validarExistenciaByRecibo":
+                {
+                    try {
+                        this.validarExistenciaByRecibo(req, resp);
+                    } catch (ClassNotFoundException | SQLException ex) {
+                        Logger.getLogger(ServletControladorConsignaciones2.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+                    break;
+
+                    
 
             }
         }
@@ -252,7 +289,7 @@ public class ServletControladorConsignaciones2 extends HttpServlet {
                     }
                 }
                 break;
-
+                
             }
         }
     }
@@ -391,7 +428,8 @@ public class ServletControladorConsignaciones2 extends HttpServlet {
             String emal = (String) session.getAttribute("usuario");
             int id_usuario = new DaoUsuarios().obtenerIdUsuario(emal);
             Actualizacion actu = new Actualizacion(id_estado, id_usuario);
-            int id_actualizacion = new DaoActualizacion().guardarActualizacion(actu);
+            actu.setId_consignacion(idConsignacion);
+            int id_actualizacion = new DaoActualizacion().guardarActualizacionWithIdConsignacion(actu);
             int actualizar_consi = new DaoConsignaciones().actualizarEstadoConsig(id_actualizacion, idConsignacion);
 
         }
@@ -649,6 +687,56 @@ public class ServletControladorConsignaciones2 extends HttpServlet {
         Date fecha = Funciones.FuncionesGenerales.fechaSQL(fechaString, "yyyy-MM-dd");
         List<Consignacion> consignaciones = new DaoConsignaciones2().listarConsignacionesBySedeByFecha(sede, fecha);
         Gson gson = new Gson();
+
+        String json = gson.toJson(consignaciones);
+        resp.setContentType("application/json");
+
+        PrintWriter out = resp.getWriter();
+
+        out.print(json);
+        out.flush();
+    }
+
+    private void traerActualizaciones(HttpServletRequest req, HttpServletResponse resp) throws ClassNotFoundException, IOException {
+        int idConsignacion = Integer.parseInt(req.getParameter("idConsignacion"));
+        
+        List<Actualizacion> actualizaciones = new DaoActualizacion().obtenerActualizacionesByIdConsignacion(idConsignacion);
+         Gson gson = new Gson();
+
+        String json = gson.toJson(actualizaciones);
+        resp.setContentType("application/json");
+
+        PrintWriter out = resp.getWriter();
+
+        out.print(json);
+        out.flush();
+    }
+
+    private void validarConsignacionesCajaTemporal(HttpServletRequest req, HttpServletResponse resp) throws ClassNotFoundException, SQLException {
+      
+        List<Consignacion> consignacionesTemporales = new DaoConsignaciones().listarConsinacionesTempCajaByIdUsuario(0);
+        System.out.println(consignacionesTemporales.size());
+        if(consignacionesTemporales.size() > 0){
+            int eliminar = new DaoConsignaciones2().eliminarConsignacionesTemporalesById(0);
+            
+        }
+    }
+
+    private void validarConsignacionesContabilidademporal(HttpServletRequest req, HttpServletResponse resp) throws ClassNotFoundException {
+        List<Consignacion> consignacionesTemporales = new DaoConsignaciones().listarConsinacionesTemp(0);
+        System.out.println(consignacionesTemporales.size());
+        if(consignacionesTemporales.size() > 0){
+            int eliminar = new DaoConsignaciones2().eliminarConsignacionesTemporalesContabilidadById(0);
+            
+        }
+    }
+
+    private void validarExistenciaByRecibo(HttpServletRequest req, HttpServletResponse resp) throws ClassNotFoundException, SQLException, IOException {
+        String num_recibo = req.getParameter("recibo");
+        
+        
+        List<Consignacion> consignaciones = new DaoConsignaciones2().validarConsignacionRecibo(num_recibo);
+         Gson gson = new Gson();
 
         String json = gson.toJson(consignaciones);
         resp.setContentType("application/json");

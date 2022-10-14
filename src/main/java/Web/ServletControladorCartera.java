@@ -1,5 +1,6 @@
 package Web;
 
+import Datos.DaoActualizacion;
 import Datos.DaoCartera;
 import Datos.DaoObligaciones;
 import Datos.DaoConsignaciones2;
@@ -170,6 +171,8 @@ public class ServletControladorCartera extends HttpServlet {
         //Guardamos la consignacion en la BD
         Consignacion consig = new Consignacion(num_recibo, fecha_creacion, fecha_pago, valor, idFile, upd, id_usuario, plataforma, id_obligacion);
         int idConsignacion = new DaoCartera().guardarConsignacion(consig);
+        
+        int actualizarActualizacionWithIdConsignacion = new DaoActualizacion().actualizarActualizacion(upd, idConsignacion);
 
         return idConsignacion;
     }

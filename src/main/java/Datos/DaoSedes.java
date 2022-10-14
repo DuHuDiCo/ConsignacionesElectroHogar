@@ -16,7 +16,7 @@ public class DaoSedes {
     private static  String SQL_UPDATE_SEDE = "";
     private static final String SQL_DELETE_SEDE = "DELETE FROM sede WHERE idSede = ?";
     private static final String SQL_SELECT_NOMBRESEDE = "SELECT sede.nombre_sede FROM usuario INNER JOIN sede ON usuario.id_sede = sede.idSede WHERE idUsuario = ?";
-    
+    private static final String SQL_SELECT_SEDEBYIDCONSIGNACION = "SELECT sede.nombre_sede FROM consignacion INNER JOIN obligacion ON consignacion.id_obligacion = obligacion.idObligacion INNER JOIN sede ON obligacion.id_sede = sede.idSede WHERE consignacion.idConsignacion = ?";
 
     public List<Sedes> listarSedes() throws ClassNotFoundException {
         Connection con = null;
@@ -204,6 +204,37 @@ public class DaoSedes {
             con = Conexion.getConnection();
             stmt = con.prepareStatement(SQL_SELECT_NOMBRESEDE);
             stmt.setInt(1, id_usuario);
+            
+            rs = stmt.executeQuery();
+
+            while (rs.next()) {
+               
+                String nombreSede = rs.getString("nombre_sede");
+                
+                sede = nombreSede;
+               
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace(System.out);
+        } finally {
+            Conexion.close(con);
+            Conexion.close(stmt);
+            Conexion.close(rs);
+        }
+        return sede;
+    }
+    
+    public String obtenerSedeByIdConsignacion(int id_consignacion) throws ClassNotFoundException{
+        Connection con = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        String sede = null;
+        
+        try {
+            con = Conexion.getConnection();
+            stmt = con.prepareStatement(SQL_SELECT_SEDEBYIDCONSIGNACION);
+            stmt.setInt(1, id_consignacion);
             
             rs = stmt.executeQuery();
 

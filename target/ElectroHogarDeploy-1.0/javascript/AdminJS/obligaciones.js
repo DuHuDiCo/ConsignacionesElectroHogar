@@ -1,5 +1,5 @@
 function listarObligaciones() {
-    validarSession();
+    
     obtenerNombreUsuario();
     
 

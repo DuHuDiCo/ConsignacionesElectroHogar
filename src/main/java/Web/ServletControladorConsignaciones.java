@@ -326,8 +326,8 @@ public class ServletControladorConsignaciones extends HttpServlet {
         Date fecha = Funciones.FuncionesGenerales.obtenerFechaServer("yyyy-MM-dd");
 
         Actualizacion actu = new Actualizacion(fecha, idEstado, idUsuario);
-
-        int idActualizacion = new DaoActualizacion().guardarActualizacion(actu);
+        actu.setId_consignacion(idConsignaciones);
+        int idActualizacion = new DaoActualizacion().guardarActualizacionWithIdConsignacion(actu);
 
         int updateConsignacion = new DaoConsignaciones().actualizarEstadoConsig(idActualizacion, idConsignaciones);
 
@@ -426,8 +426,9 @@ public class ServletControladorConsignaciones extends HttpServlet {
                 int id_estado = new DaoEstados().obtenerIdEstado(estado);
 
                 Actualizacion actu = new Actualizacion(id_estado, id_usuario);
+                actu.setId_consignacion(consig.getIdConsignacion());
                 //guardamos la actualizacion
-                int guardarActu = new DaoActualizacion().guardarActualizacion(actu);
+                int guardarActu = new DaoActualizacion().guardarActualizacionWithIdConsignacion(actu);
 
                 //enviamos el id de la actualizacion a la consignacion con el idConsignacion correspondiente
                 int actualizarConsig = new DaoConsignaciones().actualizarEstadoConsig(guardarActu, consig.getIdConsignacion());
@@ -444,8 +445,9 @@ public class ServletControladorConsignaciones extends HttpServlet {
                     int id_estado = new DaoEstados().obtenerIdEstado(estadoD);
 
                     Actualizacion actu = new Actualizacion(id_estado, id_usuario);
+                    actu.setId_consignacion(consig.getIdConsignacion());
                     //guardamos la actualizacion
-                    int guardarActu = new DaoActualizacion().guardarActualizacion(actu);
+                    int guardarActu = new DaoActualizacion().guardarActualizacionWithIdConsignacion(actu);
 
                     //enviamos el id de la actualizacion a la consignacion con el idConsignacion correspondiente
                     int actualizarConsig = new DaoConsignaciones().actualizarEstadoConsig(guardarActu, consig.getIdConsignacion());
@@ -456,8 +458,9 @@ public class ServletControladorConsignaciones extends HttpServlet {
                     int id_estado = new DaoEstados().obtenerIdEstado(estado);
 
                     Actualizacion actu = new Actualizacion(id_estado, id_usuario);
+                    actu.setId_consignacion(consig.getIdConsignacion());
                     //guardamos la actualizacion
-                    int guardarActu = new DaoActualizacion().guardarActualizacion(actu);
+                    int guardarActu = new DaoActualizacion().guardarActualizacionWithIdConsignacion(actu);
 
                     //enviamos el id de la actualizacion a la consignacion con el idConsignacion correspondiente
                     int actualizarConsig = new DaoConsignaciones().actualizarEstadoConsig(guardarActu, consig.getIdConsignacion());
@@ -513,7 +516,8 @@ public class ServletControladorConsignaciones extends HttpServlet {
         int actualizarObservacionConsignacion = new DaoConsignaciones().actualizarObservacionConsignacion(id_observacion, id_consignacion);
 
         Actualizacion actu = new Actualizacion(id_estado, id_usuario);
-        int crearActua = new DaoActualizacion().guardarActualizacion(actu);
+        actu.setId_consignacion(id_consignacion);
+        int crearActua = new DaoActualizacion().guardarActualizacionWithIdConsignacion(actu);
         int id_actualizacion = new DaoActualizacion().obtenerIdActualizacion();
 
         int actualizarConsi = new DaoConsignaciones().actualizarEstadoConsig(id_actualizacion, id_consignacion);
@@ -587,13 +591,15 @@ public class ServletControladorConsignaciones extends HttpServlet {
             if (idEstado == idEstadoAp) {
 
                 Actualizacion actu = new Actualizacion(idEstadoAp, id_usuario);
-                int guardarActu = new DaoActualizacion().guardarActualizacion(actu);
+                actu.setId_consignacion(con.getIdConsignacion());
+                int guardarActu = new DaoActualizacion().guardarActualizacionWithIdConsignacion(actu);
                 int actualizarConsig = new DaoConsignaciones().actualizarEstadoConsig(guardarActu, con.getIdConsignacion());
                 confirmacion = actualizarConsig;
             } else {
                 if (idEstado == idEstadoComp) {
                     Actualizacion actu = new Actualizacion(idEstadoAp, id_usuario);
-                    int guardarActu = new DaoActualizacion().guardarActualizacion(actu);
+                    actu.setId_consignacion(con.getIdConsignacion());
+                    int guardarActu = new DaoActualizacion().guardarActualizacionWithIdConsignacion(actu);
                     int actualizarConsig = new DaoConsignaciones().actualizarEstadoConsig(guardarActu, con.getIdConsignacion());
                     confirmacion = actualizarConsig;
                 } else {
@@ -602,7 +608,8 @@ public class ServletControladorConsignaciones extends HttpServlet {
                     int crearObserva = new DaoObservacion().guardarObservacion(obs);
                     int actualizarObservaConsigna = new DaoConsignaciones().actualizarObservacionConsignacion(crearObserva, con.getIdConsignacion());
                     Actualizacion actu = new Actualizacion(idEstadoDevC, id_usuario);
-                    int actuNew = new DaoActualizacion().guardarActualizacion(actu);
+                    actu.setId_consignacion(con.getIdConsignacion());
+                    int actuNew = new DaoActualizacion().guardarActualizacionWithIdConsignacion(actu);
                     int actuConsig = new DaoConsignaciones().actualizarEstadoConsig(actuNew, con.getIdConsignacion());
 
                     confirmacion = actuConsig;

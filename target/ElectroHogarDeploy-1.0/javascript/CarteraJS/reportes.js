@@ -1,5 +1,5 @@
 function cargarDatosInformes() {
-    validarSession();
+    
     obtenerNombreUsuario();
     traerReportesCartera();
 }
@@ -40,7 +40,7 @@ function traerReportesCartera() {
 var filtro = document.getElementById('filtroReportes');
 
 filtro.addEventListener('change', (event) => {
-    validarSession();
+    
     event.preventDefault();
 
     var fecha = filtro.value;

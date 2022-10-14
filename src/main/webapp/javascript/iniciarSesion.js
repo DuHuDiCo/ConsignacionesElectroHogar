@@ -1,11 +1,11 @@
 /* global resp,respSesion, Swal  */
-$('#txtPassword').keypress(function (e){
-    
-    if(e.keyCode === 13){
-        
+$('#txtPassword').keypress(function (e) {
+
+    if (e.keyCode === 13) {
+
         $("#btnIniciar").click();
     }
-    
+
 });
 
 function iniciarSesion() {
@@ -15,7 +15,7 @@ function iniciarSesion() {
 
     datos.email = document.getElementById('txtEmail').value;
     datos.password = hex_sha1(passSinEncriptar);
-    
+
 
     $.ajax({
         method: "POST",
@@ -30,18 +30,12 @@ function iniciarSesion() {
 
 
         if (datos.nombre_rol !== "null") {
-            Swal.fire({
-                position: 'top-end',
-                icon: 'success',
-                title: 'Inicio Exitoso',
-                showConfirmButton: false,
-                timer: 2000
-            });
-            
-            cargarPagina(datos.nombre_rol);
-            
 
-            
+
+            cargarPagina(datos.nombre_rol);
+
+
+
         } else {
             Swal.fire({
                 icon: 'error',
@@ -73,7 +67,7 @@ function cerrarSesion() {
     }).then((result) => {
         if (result.isConfirmed) {
             eliminarSession();
-            
+
         }
     });
 }
@@ -85,8 +79,8 @@ function eliminarSession() {
     }).done(function (data) {
 
         var resp = data;
-        
-        if(resp === "null"){
+
+        if (resp === "null") {
             Swal.fire({
                 position: 'top-end',
                 icon: 'success',
@@ -108,12 +102,12 @@ function eliminarSession() {
     });
 }
 
-function redireccion(){
+function redireccion() {
     window.location.replace("login.html");
 }
 
 function cargarPagina(datos) {
-     roles(datos);
+    roles(datos);
 //    window.onload = function (datos) {
 //        roles(datos);
 //    };
@@ -156,29 +150,64 @@ function obtenerSesion() {
 
 
 function roles(datos) {
-    
+
     switch (datos) {
         case "Administrador":
+            Swal.fire({
+                position: 'top-end',
+                icon: 'success',
+                title: 'Inicio Exitoso',
+                showConfirmButton: false,
+                timer: 2000
+            });
             window.location.replace("inicioAdmin.html");
             break;
 
         case "Cartera":
+            Swal.fire({
+                position: 'top-end',
+                icon: 'success',
+                title: 'Inicio Exitoso',
+                showConfirmButton: false,
+                timer: 2000
+            });
             window.location.replace("inicioCartera.html");
             break;
         case "Contabilidad":
+            Swal.fire({
+                position: 'top-end',
+                icon: 'success',
+                title: 'Inicio Exitoso',
+                showConfirmButton: false,
+                timer: 2000
+            });
             window.location.replace("inicioContabilidad.html");
             break;
         case "Caja":
+            Swal.fire({
+                position: 'top-end',
+                icon: 'success',
+                title: 'Inicio Exitoso',
+                showConfirmButton: false,
+                timer: 2000
+            });
             window.location.replace("inicioCaja.html");
             break;
         default:
+            Swal.fire({
+                position: 'top-end',
+                icon: 'success',
+                title: 'Inicio Exitoso',
+                showConfirmButton: false,
+                timer: 2000
+            });
             window.location.replace("inicioSuperAdmin.html");
     }
 
 }
 
 function accion(id) {
-    
+
     document.getElementById(id).style.display = "none";
 }
 

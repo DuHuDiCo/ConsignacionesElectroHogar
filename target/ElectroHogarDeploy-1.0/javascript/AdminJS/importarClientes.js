@@ -4,7 +4,7 @@
 const $formC = document.querySelector('#formObligaciones');
 
 $formC.addEventListener('submit', (event) => {
-    validarSession();
+    
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
 
@@ -48,7 +48,7 @@ $formC.addEventListener('submit', (event) => {
 
 
 function listarFiles(){
-    validarSession();
+    
     obtenerNombreUsuario();
     $.ajax({
         method: "GET",

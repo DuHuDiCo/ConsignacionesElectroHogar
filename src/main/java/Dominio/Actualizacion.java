@@ -12,9 +12,24 @@ public class Actualizacion {
     private DateTime fechaActualizacion;
     private int id_estado;
     private int id_usuarios;
+    private int id_consignacion;
+    private String nombre_estado;
+    private String nombre;
+    private String num_recibo;
+    private String fecha;
 
     public Actualizacion() {
     }
+
+    public Actualizacion(int idActualizacion, String fechaActualizacion, String nombre_estado, String nombre, String num_recibo) {
+        this.idActualizacion = idActualizacion;
+        this.fecha = fechaActualizacion;
+        this.nombre_estado = nombre_estado;
+        this.nombre = nombre;
+        this.num_recibo = num_recibo;
+    }
+    
+    
 
     public Actualizacion(Date fecha_actualizacion, int id_estado, int id_usuarios) {
         this.fecha_actualizacion = fecha_actualizacion;
@@ -26,6 +41,48 @@ public class Actualizacion {
         this.id_estado = id_estado;
         this.id_usuarios = id_usuarios;
     }
+
+    public int getId_consignacion() {
+        return id_consignacion;
+    }
+
+    public void setId_consignacion(int id_consignacion) {
+        this.id_consignacion = id_consignacion;
+    }
+
+    public String getNombre_estado() {
+        return nombre_estado;
+    }
+
+    public void setNombre_estado(String nombre_estado) {
+        this.nombre_estado = nombre_estado;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getNum_recibo() {
+        return num_recibo;
+    }
+
+    public void setNum_recibo(String num_recibo) {
+        this.num_recibo = num_recibo;
+    }
+
+    public String getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(String fecha) {
+        this.fecha = fecha;
+    }
+    
+    
     
     
     

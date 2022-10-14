@@ -60,6 +60,14 @@ public class ServletSedes extends HttpServlet {
                 }
                 }
                 break;
+                case"obtenerSedeByIdConsignacion":
+                {
+                    try {
+                        this.obtenerSedeByIdConsignacion(req, resp);
+                    } catch (ClassNotFoundException ex) {
+                        Logger.getLogger(ServletSedes.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
 
                 default:
 
@@ -189,6 +197,18 @@ public class ServletSedes extends HttpServlet {
         out.print(sede);
         out.flush();
 
+    }
+
+    private void obtenerSedeByIdConsignacion(HttpServletRequest req, HttpServletResponse resp) throws ClassNotFoundException, IOException {
+        int idConsignacion = Integer.parseInt(req.getParameter("idConsignacion"));
+        
+        String sede = new DaoSedes().obtenerSedeByIdConsignacion(idConsignacion);
+        PrintWriter out = resp.getWriter();
+
+        resp.setContentType("text/plain");
+        out.print(sede);
+        out.flush();
+        
     }
 
 }

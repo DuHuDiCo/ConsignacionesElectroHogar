@@ -113,7 +113,7 @@ function abrirModalObservacionesGuardar() {
 
 
 function guardarConsignacionConObservacionCartera() {
-    validarSession();
+    
     var obser = document.getElementById('observacionGuardarConsig').value;
     if (obser === "") {
         Swal.fire({
@@ -123,15 +123,17 @@ function guardarConsignacionConObservacionCartera() {
             footer: '<a href="">Why do I have this issue?</a>'
         });
     } else {
-        validarSession();
+        
         validarExistencia(obser);
 
 
     }
 }
 
-function validarExistencia(obser) {
+function validarExistencia() {
     $('#modalConsignacion').modal('hide');
+    var obser = document.getElementById('observaIguales');
+
     var datos = {};
     datos.valor = document.getElementById('txtValor').value;
     datos.fecha = document.getElementById('dateCreacion').value;
@@ -148,7 +150,8 @@ function validarExistencia(obser) {
         var dato = data;
 
         if (dato > 0) {
-            document.getElementById('observa').value = obser;
+            document.getElementById('observaIguales').value = obser;
+            document.getElementById('observaRecibo').value = obser;
 
             traerConsinacionesFechaValor(datos);
 
@@ -218,6 +221,50 @@ function traerConsinacionesFechaValor(datos) {
                 $("#tableIgual tbody").append('<tr> <td>' + contador + '</td><td>' + value.num_recibo + '</td><td>' + value.fecha_pago + '</td><td>' + value.valor + '</td><td>' + value.nombre_titular + '</td><td>' + value.nombre_sede + '</td></tr>');
                 contador = contador + 1;
             });
+            var btnIguales = document.getElementById('btnIguales');
+            btnIguales.addEventListener('click', () => {
+                guardarConsig();
+            });
+
+        } else {
+
+        }
+        // imprimimos la respuesta
+    }).fail(function () {
+
+        window.location.replace("login.html");
+    }).always(function () {
+
+    });
+}
+
+function traerConsinacionesFechaValorObservacion(datos) {
+    $.ajax({
+        method: "GET",
+        url: "ServletControladorConsignaciones2?accion=listarConsignacionesFechaValor",
+        data: datos,
+        dataType: 'JSON'
+
+
+    }).done(function (data) {
+
+        var dato = JSON.stringify(data);
+        var json = JSON.parse(dato);
+
+
+        if (Object.keys(json).length > 0) {
+            $('#ModalConsignacionesIguales').modal('show');
+            $("#tableIgual tbody").empty();
+            var contador = 1;
+            $.each(json, function (key, value) {
+                $("#tableIgual tbody").append('<tr> <td>' + contador + '</td><td>' + value.num_recibo + '</td><td>' + value.fecha_pago + '</td><td>' + value.valor + '</td><td>' + value.nombre_titular + '</td><td>' + value.nombre_sede + '</td></tr>');
+                contador = contador + 1;
+            });
+            var btnIguales = document.getElementById('btnIguales');
+            btnIguales.addEventListener('click', () => {
+                var obs = document.getElementById('observaIguales').value;
+                guardarConsignacion(obs);
+            });
 
         } else {
 
@@ -232,10 +279,10 @@ function traerConsinacionesFechaValor(datos) {
 }
 
 function guardarConsignacion(obser) {
-    alert(obser);
+
     var form = document.getElementById('formConsignacion');
     var formData = new FormData(form);
-    var obser = obser;
+
 
 
 
@@ -274,13 +321,13 @@ function guardarConsignacion(obser) {
 }
 
 function validarGuardar() {
-    var obs = document.getElementById('observa').value;
+    var obs = document.getElementById('observaIguales').value;
 
 
     if (obs === "") {
         guardarConsig();
     } else {
-        guardarConsignacion();
+        guardarConsignacion(obs);
     }
 
 }
@@ -339,12 +386,209 @@ function crearObservacion(obser, idConsignacion) {
 
 
 function noCrearObservacionCartera() {
-    validarSession();
-    validarExistenciaSinObserva();
+    
+    validarExistenciaByReciboCartera();
+
+}
+
+
+
+
+
+
+function validarExistenciaConObservaAdmin() {
+    var datos = {};
+    datos.valor = document.getElementById('txtValor').value;
+    datos.fecha = document.getElementById('dateCreacion').value;
+
+    $.ajax({
+        method: "GET",
+        url: "ServletControladorConsignaciones2?accion=validarConsignacion",
+        data: datos,
+        dataType: 'JSON'
+
+
+    }).done(function (data) {
+
+        var dato = data;
+
+        if (dato > 0) {
+
+            traerConsinacionesFechaValorObservacion(datos);
+
+        } else {
+            guardarConsignacionConObservacionCartera();
+        }
+        // imprimimos la respuesta
+    }).fail(function () {
+
+        window.location.replace("login.html");
+    }).always(function () {
+
+    });
+}
+
+
+function validarObservacionCartera() {
+
+    var obs = document.getElementById('observacionGuardarConsig').value;
+    if (obs === "") {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error al guardar la consignacion',
+            text: 'Campo de Observacion Vacio, Por Favor Ingrese una Observacion',
+            footer: '<a href="">Why do I have this issue?</a>'
+        });
+    } else {
+        document.getElementById('observaRecibo').value = obs;
+        document.getElementById('observaIguales').value = obs;
+        $('#modalConsignacion').modal('hide');
+        validarExistenciaByReciboConObservacionCartera();
+    }
+}
+
+function validarExistenciaByReciboConObservacionCartera() {
+    var recibo = document.getElementById('txtNumRecibo').value;
+    $.ajax({
+        method: "GET",
+        url: "ServletControladorConsignaciones2?accion=validarExistenciaByRecibo&recibo=" + recibo
+
+    }).done(function (data) {
+
+        var dato = JSON.stringify(data);
+        var json = JSON.parse(dato);
+
+        if (Object.keys(json).length > 0) {
+            $('#ModalConsignacionesIgualesRecibo').modal('show');
+            $("#tableIgual tbody").empty();
+            var contador = 1;
+            $.each(json, function (key, value) {
+                $("#tableIgual tbody").append('<tr> <td>' + contador + '</td><td>' + value.num_recibo + '</td><td>' + value.fecha_pago + '</td><td>' + value.valor + '</td><td>' + value.nombre_titular + '</td><td>' + value.nombre_sede + '</td></tr>');
+                contador = contador + 1;
+            });
+
+            var btnRecibo = document.getElementById('btnRecibos');
+            btnRecibo.addEventListener('click', () => {
+                validarExistenciaConObservaCartera();
+            });
+
+        } else {
+            validarExistenciaConObservaCartera();
+        }
+
+    }).fail(function () {
+
+        window.location.replace("login.html");
+    }).always(function () {
+
+    });
+}
+
+function validarExistenciaConObservaCartera() {
+    var datos = {};
+    datos.valor = document.getElementById('txtValor').value;
+    datos.fecha = document.getElementById('dateCreacion').value;
+
+    $.ajax({
+        method: "GET",
+        url: "ServletControladorConsignaciones2?accion=validarConsignacion",
+        data: datos,
+        dataType: 'JSON'
+
+
+    }).done(function (data) {
+
+        var dato = data;
+
+        if (dato > 0) {
+
+            traerConsinacionesFechaValorObservacion(datos);
+
+        } else {
+            var obse = document.getElementById('observaRecibo').value;
+            guardarConsignacion(obse);
+        }
+        // imprimimos la respuesta
+    }).fail(function () {
+
+        window.location.replace("login.html");
+    }).always(function () {
+
+    });
+}
+
+
+function validarExistenciaSinObservaCartera() {
+    var datos = {};
+    datos.valor = document.getElementById('txtValor').value;
+    datos.fecha = document.getElementById('dateCreacion').value;
+
+    $.ajax({
+        method: "GET",
+        url: "ServletControladorConsignaciones2?accion=validarConsignacion",
+        data: datos,
+        dataType: 'JSON'
+
+
+    }).done(function (data) {
+
+        var dato = data;
+
+        if (dato > 0) {
+
+            traerConsinacionesFechaValor(datos);
+
+        } else {
+            guardarConsig();
+        }
+        // imprimimos la respuesta
+    }).fail(function () {
+
+        window.location.replace("login.html");
+    }).always(function () {
+
+    });
+}
+
+function validarExistenciaByReciboCartera() {
+    var recibo = document.getElementById('txtNumRecibo').value;
+    $.ajax({
+        method: "GET",
+        url: "ServletControladorConsignaciones2?accion=validarExistenciaByRecibo&recibo=" + recibo
+
+    }).done(function (data) {
+
+        var dato = JSON.stringify(data);
+        var json = JSON.parse(dato);
+
+        if (Object.keys(json).length > 0) {
+            $('#ModalConsignacionesIgualesRecibo').modal('show');
+            $("#tableIgual tbody").empty();
+            var contador = 1;
+            $.each(json, function (key, value) {
+                $("#tableIgual tbody").append('<tr> <td>' + contador + '</td><td>' + value.num_recibo + '</td><td>' + value.fecha_pago + '</td><td>' + value.valor + '</td><td>' + value.nombre_titular + '</td><td>' + value.nombre_sede + '</td></tr>');
+                contador = contador + 1;
+            });
+
+            var btnRecibo = document.getElementById('btnRecibos');
+            btnRecibo.addEventListener('click', () => {
+                validarExistenciaSinObservaCartera();
+            });
+
+        } else {
+            validarExistenciaSinObserva();
+        }
+
+    }).fail(function () {
+
+        window.location.replace("login.html");
+    }).always(function () {
+
+    });
 }
 
 function guardarConsig() {
-    validarSession();
+    
     var form = document.getElementById('formConsignacion');
     var formData = new FormData(form);
 
@@ -403,7 +647,7 @@ function guardarConsig() {
 
 
 function cargarDatos() {
-    validarSession();
+    
     obtenerNombreUsuario();
 
 
@@ -431,7 +675,7 @@ function cargarDatos() {
 
         cargarEstados('sltEstadoConsignacion');
         cargarConsignacionesGeneral();
-       
+
         cargarSedes('sltSedeConsignacion');
 
 
@@ -451,65 +695,86 @@ var filtro = document.getElementById('sltSedeConsignacion');
 filtro.addEventListener('change', function () {
     var estado = document.getElementById('sltEstadoConsignacion').value;
 
-    if (estado === '' || estado === null || estado === undefined) {
-        Swal.fire({
-            icon: 'error',
-            title: 'Error al Consultar',
-            text: 'Seleccione un estado de consignacion',
-            footer: '<a href="">Why do I have this issue?</a>'
 
-        });
-    } else {
+
+    if (estado === '' || estado === null || estado === undefined) {
         var sede = filtro.value;
-        if (sede === '' || sede === null || sede === undefined) {
+        if (sede === '' || sede === null) {
             Swal.fire({
                 icon: 'error',
-                title: 'Error al Consultar',
-                text: 'Seleccione una sede',
+                title: 'El Campo de Sede esta vacio',
+                text: 'Seleccione una sede valida',
                 footer: '<a href="">Why do I have this issue?</a>'
 
             });
         } else {
-            cargarBySede(estado, sede);
+            cargarSoloBySede(sede);
         }
 
+    } else {
+        var sede = filtro.value;
+        if (sede === '') {
+            Swal.fire({
+                icon: 'error',
+                title: 'El Campo de Sede esta vacio',
+                text: 'Ingrese una fecha valida',
+                footer: '<a href="">Why do I have this issue?</a>'
+
+            });
+        } else {
+            cargarByEstadoAndSede(estado, sede);
+        }
 
     }
 });
 
 
 var fecha = document.getElementById('date');
-fecha.addEventListener('change', function (){
+fecha.addEventListener('change', function () {
+
     var stado = document.getElementById('sltEstadoConsignacion').value;
     var sede = filtro.value;
-    if(stado  === '' || stado === null){
-        Swal.fire({
-            icon: 'error',
-            title: 'Error al Consultar',
-            text: 'Seleccione un estado de consignacion',
-            footer: '<a href="">Why do I have this issue?</a>'
+    if (stado === '' || stado === null) {
+        if (sede === '' || sede === null) {
+            if (fecha.value === '') {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'El Campo de fecha esta vacio',
+                    text: 'Ingrese una fecha valida',
+                    footer: '<a href="">Why do I have this issue?</a>'
 
-        });
-    }else{
-        if(sede === '' || sede === null){
-            Swal.fire({
-                icon: 'error',
-                title: 'Error al Consultar',
-                text: 'Seleccione una sede',
-                footer: '<a href="">Why do I have this issue?</a>'
+                });
+            } else {
+                cargarByFecha(fecha.value);
+            }
 
-            });
-        }else{
+        } else {
+            if (fecha.value === '' || sede === '') {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'El Campo de fecha esta vacio',
+                    text: 'Ingrese una fecha valida',
+                    footer: '<a href="">Why do I have this issue?</a>'
+
+                });
+            } else {
+                cargarBySedeByFecha(sede, fecha.value);
+            }
+
+        }
+    } else {
+        if (sede === '' || sede === null) {
+            cargarByEstadoBySede(stado, fecha.value);
+        } else {
             cargarBySedeByEstadoByFecha(stado, sede, fecha.value);
         }
     }
 });
 
-
-function cargarBySedeByEstadoByFecha(estado, sede, fecha){
+function cargarByEstadoBySede(estado, fecha) {
     $.ajax({
         method: "GET",
-        url: "ServletControladorConsignaciones2?accion=obtenerConsignacionesBySedeByEstadoByFecha&estado=" + estado + "&sede=" + sede+"&fecha="+fecha
+        url: "ServletControladorConsignaciones2?accion=obtenerConsignacionesByEstadoAndFecha&estado=" + estado + "&fecha=" + fecha
 
     }).done(function (data) {
         var datos = JSON.stringify(data);
@@ -519,42 +784,70 @@ function cargarBySedeByEstadoByFecha(estado, sede, fecha){
 
         var contador = 1;
 
-        $.each(json, function (key, value) {
-            if (value.nombre_estado === "Devuelta") {
 
-                var observa = '<a href="#" id="btn_observa" onclick="abrirModalObservacionesCartera(' + value.idConsignacion + ');" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>';
-                var accion = "<td><a href='#' class='btn btn-primary btn-sm' onclick='editarConsignacion(" + value.idConsignacion + ")'><i class='fas fa-pen'></i></a>" + observa + "</td>";
+        $.each(json, function (key, value) {
+            if (value.nombre_estado === "Pendiente") {
+                var imagen = '<button  onclick="abrirModalImagenCartera(' + value.idConsignacion + ')" class="btn btn-success btn-sm"><i class="fas fa-image"></i></button>';
+                var observa = '<button  id="btn_observa" onclick="abrirModalObservacionesCartera(' + value.idConsignacion + ');" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></button>';
+                var detalles = '<button class="btn btn-secondary" onclick="detalles(' + value.idConsignacion + ');"><i class="fas fa-info"></i></button>';
+                var accion = "<td><button  class='btn btn-primary btn-sm' onclick='editarConsignacion(" + value.idConsignacion + ")'><i class='fas fa-pen'></i></button>" + observa + imagen + detalles + "</td>";
+
                 $("#dataTable").append('<tr> <td>' + contador + '</td><td>' + value.num_recibo + '</td><td>' + value.numero_documento + '</td><td>' + value.nombre_titular + '</td><td>' + value.fecha_pago + '</td><td>' + value.fecha_creacion + '</td><td>' + value.valor + '</td><td>' + value.nombre_estado + '</td><td>' + value.nombre_sede + '</td><td>' + value.nombre_plataforma + '</td>' + accion + '</tr>');
                 contador = contador + 1;
-                document.getElementById('btnCancelarConsignacion').style.display = "block";
-                document.getElementById('nuevoEstado').value = "Pendiente";
-
-
             } else {
-                if (value.nombre_estado === "Pendiente") {
-                    var observa = '<a href="#" id="btn_observa" onclick="abrirModalObservacionesCartera(' + value.idConsignacion + ');" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>';
-                    var accion = "<td><a href='#' class='btn btn-primary btn-sm' onclick='editarConsignacion(" + value.idConsignacion + ")'><i class='fas fa-pen'></i></a>" + observa + "</td>";
-                    $("#dataTable").append('<tr> <td>' + contador + '</td><td>' + value.num_recibo + '</td><td>' + value.numero_documento + '</td><td>' + value.nombre_titular + '</td><td>' + value.fecha_pago + '</td><td>' + value.fecha_creacion + '</td><td>' + value.valor + '</td><td>' + value.nombre_estado + '</td><td>' + value.nombre_sede + '</td><td>' + value.nombre_plataforma + '</td>' + accion + '</tr>');
-                    contador = contador + 1;
-                } else {
-                    if (value.nombre_estado === "Devuelta-Caja") {
-                        var observa = '<a href="#" id="btn_observa" onclick="abrirModalObservacionesCartera(' + value.idConsignacion + ');" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>';
-                        var accion = "<td><a href='#' class='btn btn-primary btn-sm' onclick='editarConsignacion(" + value.idConsignacion + ")'><i class='fas fa-pen'></i></a>" + observa + "</td>";
-                        $("#dataTable").append('<tr> <td>' + contador + '</td><td>' + value.num_recibo + '</td><td>' + value.numero_documento + '</td><td>' + value.nombre_titular + '</td><td>' + value.fecha_pago + '</td><td>' + value.fecha_creacion + '</td><td>' + value.valor + '</td><td>' + value.nombre_estado + '</td><td>' + value.nombre_sede + '</td><td>' + value.nombre_plataforma + '</td>' + accion + '</tr>');
-                        contador = contador + 1;
-                        document.getElementById('btnCancelarConsignacion').style.display = "block";
-                        document.getElementById('nuevoEstado').value = "Comprobado";
-                    } else {
-                        var observa = '<a href="#" id="btn_observa" onclick="abrirModalObservacionesCartera(' + value.idConsignacion + ');" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>';
-                        $("#dataTable").append('<tr> <td>' + contador + '</td><td>' + value.num_recibo + '</td><td>' + value.numero_documento + '</td><td>' + value.nombre_titular + '</td><td>' + value.fecha_pago + '</td><td>' + value.fecha_creacion + '</td><td>' + value.valor + '</td><td>' + value.nombre_estado + '</td><td>' + value.nombre_sede + '</td><td>' + value.nombre_plataforma + '</td><td>' + observa + '</td></tr>');
-                        contador = contador + 1;
-                    }
-
-                }
+                var detalles = '<button class="btn btn-secondary btn-sm" onclick="detallesCartera(' + value.idConsignacion + ');"><i class="fas fa-info"></i></button>';
+                var imagen = '<button  id="btn_image' + value.idConsignacion + '" onclick="abrirModalImagenCartera(' + value.idConsignacion + ')" class="btn btn-success btn-sm"><i class="fas fa-image"></i></button>';
+                var observa = '<td><a href="#" id="btn_observa" onclick="abrirModalObservacionesCartera(' + value.idConsignacion + ');" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>' + imagen + detalles + '</td>';
+                $("#dataTable").append('<tr> <td>' + contador + '</td><td>' + value.num_recibo + '</td><td>' + value.numero_documento + '</td><td>' + value.nombre_titular + '</td><td>' + value.fecha_pago + '</td><td>' + value.fecha_creacion + '</td><td>' + value.valor + '</td><td>' + value.nombre_estado + '</td><td>' + value.nombre_sede + '</td><td>' + value.nombre_plataforma + '</td>' + observa + '/tr>');
+                contador = contador + 1;
             }
+        }
 
 
-        });
+
+        );
+
+    }).fail(function () {
+        window.location.replace("login.html");
+    }).always(function () {
+    });
+}
+
+function cargarBySedeByFecha(sede, fecha) {
+    $.ajax({
+        method: "GET",
+        url: "ServletControladorConsignaciones2?accion=obtenerConsignacionesSedeByFecha&sede=" + sede + "&fecha=" + fecha
+
+    }).done(function (data) {
+        var datos = JSON.stringify(data);
+        var json = JSON.parse(datos);
+
+        $("#dataTable tbody").empty();
+
+        var contador = 1;
+
+
+        $.each(json, function (key, value) {
+            if (value.nombre_estado === "Pendiente") {
+                var imagen = '<button  onclick="abrirModalImagenCartera(' + value.idConsignacion + ')" class="btn btn-success btn-sm"><i class="fas fa-image"></i></button>';
+                var observa = '<button  id="btn_observa" onclick="abrirModalObservacionesCartera(' + value.idConsignacion + ');" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></button>';
+                var detalles = '<button class="btn btn-secondary" onclick="detalles(' + value.idConsignacion + ');"><i class="fas fa-info"></i></button>';
+                var accion = "<td><button  class='btn btn-primary btn-sm' onclick='editarConsignacion(" + value.idConsignacion + ")'><i class='fas fa-pen'></i></button>" + observa + imagen + detalles + "</td>";
+
+                $("#dataTable").append('<tr> <td>' + contador + '</td><td>' + value.num_recibo + '</td><td>' + value.numero_documento + '</td><td>' + value.nombre_titular + '</td><td>' + value.fecha_pago + '</td><td>' + value.fecha_creacion + '</td><td>' + value.valor + '</td><td>' + value.nombre_estado + '</td><td>' + value.nombre_sede + '</td><td>' + value.nombre_plataforma + '</td>' + accion + '</tr>');
+                contador = contador + 1;
+            } else {
+                var detalles = '<button class="btn btn-secondary btn-sm" onclick="detallesCartera(' + value.idConsignacion + ');"><i class="fas fa-info"></i></button>';
+                var imagen = '<button  id="btn_image' + value.idConsignacion + '" onclick="abrirModalImagenCartera(' + value.idConsignacion + ')" class="btn btn-success btn-sm"><i class="fas fa-image"></i></button>';
+                var observa = '<td><a href="#" id="btn_observa" onclick="abrirModalObservacionesCartera(' + value.idConsignacion + ');" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>' + imagen + detalles + '</td>';
+                $("#dataTable").append('<tr> <td>' + contador + '</td><td>' + value.num_recibo + '</td><td>' + value.numero_documento + '</td><td>' + value.nombre_titular + '</td><td>' + value.fecha_pago + '</td><td>' + value.fecha_creacion + '</td><td>' + value.valor + '</td><td>' + value.nombre_estado + '</td><td>' + value.nombre_sede + '</td><td>' + value.nombre_plataforma + '</td>' + observa + '/tr>');
+                contador = contador + 1;
+            }
+        }
+
+
+
+        );
 
     }).fail(function () {
         window.location.replace("login.html");
@@ -563,7 +856,154 @@ function cargarBySedeByEstadoByFecha(estado, sede, fecha){
 }
 
 
-function cargarBySede(estado, sede) {
+function cargarByFecha(fecha) {
+    $.ajax({
+        method: "GET",
+        url: "ServletControladorConsignaciones2?accion=obtenerConsignacionesByFecha&fecha=" + fecha
+
+    }).done(function (data) {
+        var datos = JSON.stringify(data);
+        var json = JSON.parse(datos);
+
+        $("#dataTable tbody").empty();
+
+        var contador = 1;
+
+
+        $.each(json, function (key, value) {
+            if (value.nombre_estado === "Pendiente") {
+                var imagen = '<button  onclick="abrirModalImagenCartera(' + value.idConsignacion + ')" class="btn btn-success btn-sm"><i class="fas fa-image"></i></button>';
+                var observa = '<button  id="btn_observa" onclick="abrirModalObservacionesCartera(' + value.idConsignacion + ');" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></button>';
+                var detalles = '<button class="btn btn-secondary" onclick="detalles(' + value.idConsignacion + ');"><i class="fas fa-info"></i></button>';
+                var accion = "<td><button  class='btn btn-primary btn-sm' onclick='editarConsignacion(" + value.idConsignacion + ")'><i class='fas fa-pen'></i></button>" + observa + imagen + detalles + "</td>";
+
+                $("#dataTable").append('<tr> <td>' + contador + '</td><td>' + value.num_recibo + '</td><td>' + value.numero_documento + '</td><td>' + value.nombre_titular + '</td><td>' + value.fecha_pago + '</td><td>' + value.fecha_creacion + '</td><td>' + value.valor + '</td><td>' + value.nombre_estado + '</td><td>' + value.nombre_sede + '</td><td>' + value.nombre_plataforma + '</td>' + accion + '</tr>');
+                contador = contador + 1;
+            } else {
+                var detalles = '<button class="btn btn-secondary btn-sm" onclick="detallesCartera(' + value.idConsignacion + ');"><i class="fas fa-info"></i></button>';
+                var imagen = '<button  id="btn_image' + value.idConsignacion + '" onclick="abrirModalImagenCartera(' + value.idConsignacion + ')" class="btn btn-success btn-sm"><i class="fas fa-image"></i></button>';
+                var observa = '<td><a href="#" id="btn_observa" onclick="abrirModalObservacionesCartera(' + value.idConsignacion + ');" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>' + imagen + detalles + '</td>';
+                $("#dataTable").append('<tr> <td>' + contador + '</td><td>' + value.num_recibo + '</td><td>' + value.numero_documento + '</td><td>' + value.nombre_titular + '</td><td>' + value.fecha_pago + '</td><td>' + value.fecha_creacion + '</td><td>' + value.valor + '</td><td>' + value.nombre_estado + '</td><td>' + value.nombre_sede + '</td><td>' + value.nombre_plataforma + '</td>' + observa + '/tr>');
+                contador = contador + 1;
+            }
+        }
+
+
+
+        );
+
+    }).fail(function () {
+        window.location.replace("login.html");
+    }).always(function () {
+    });
+}
+function abrirModalImagenCartera(idConsignacion) {
+    $.ajax({
+        method: "GET",
+        url: "ServletControladorFiles?accion=obtenerRutaImagen&idConsignacion=" + idConsignacion
+
+    }).done(function (data) {
+        var datos = data;
+
+        var imagen = document.getElementById('imagenConsigancion');
+        imagen.src = datos;
+        $('#staticBackdropImage').modal('show');
+    }).fail(function () {
+
+        window.location.replace("login.html");
+    }).always(function () {
+
+    });
+
+}
+
+function cargarSoloBySede(sede) {
+    $.ajax({
+        method: "GET",
+        url: "ServletControladorConsignaciones2?accion=obtenerConsignacionesSede&sede=" + sede
+
+    }).done(function (data) {
+        var datos = JSON.stringify(data);
+        var json = JSON.parse(datos);
+
+        $("#dataTable tbody").empty();
+
+        var contador = 1;
+
+
+        $.each(json, function (key, value) {
+            if (value.nombre_estado === "Pendiente") {
+                var imagen = '<button  onclick="abrirModalImagenCartera(' + value.idConsignacion + ')" class="btn btn-success btn-sm"><i class="fas fa-image"></i></button>';
+                var observa = '<button  id="btn_observa" onclick="abrirModalObservacionesCartera(' + value.idConsignacion + ');" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></button>';
+                var detalles = '<button class="btn btn-secondary" onclick="detalles(' + value.idConsignacion + ');"><i class="fas fa-info"></i></button>';
+                var accion = "<td><button  class='btn btn-primary btn-sm' onclick='editarConsignacion(" + value.idConsignacion + ")'><i class='fas fa-pen'></i></button>" + observa + imagen + detalles + "</td>";
+
+                $("#dataTable").append('<tr> <td>' + contador + '</td><td>' + value.num_recibo + '</td><td>' + value.numero_documento + '</td><td>' + value.nombre_titular + '</td><td>' + value.fecha_pago + '</td><td>' + value.fecha_creacion + '</td><td>' + value.valor + '</td><td>' + value.nombre_estado + '</td><td>' + value.nombre_sede + '</td><td>' + value.nombre_plataforma + '</td>' + accion + '</tr>');
+                contador = contador + 1;
+            } else {
+                var detalles = '<button class="btn btn-secondary btn-sm" onclick="detallesCartera(' + value.idConsignacion + ');"><i class="fas fa-info"></i></button>';
+                var imagen = '<button  id="btn_image' + value.idConsignacion + '" onclick="abrirModalImagenCartera(' + value.idConsignacion + ')" class="btn btn-success btn-sm"><i class="fas fa-image"></i></button>';
+                var observa = '<td><a href="#" id="btn_observa" onclick="abrirModalObservacionesCartera(' + value.idConsignacion + ');" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>' + imagen + detalles + '</td>';
+                $("#dataTable").append('<tr> <td>' + contador + '</td><td>' + value.num_recibo + '</td><td>' + value.numero_documento + '</td><td>' + value.nombre_titular + '</td><td>' + value.fecha_pago + '</td><td>' + value.fecha_creacion + '</td><td>' + value.valor + '</td><td>' + value.nombre_estado + '</td><td>' + value.nombre_sede + '</td><td>' + value.nombre_plataforma + '</td>' + observa + '/tr>');
+                contador = contador + 1;
+            }
+        }
+
+
+
+        );
+
+    }).fail(function () {
+        window.location.replace("login.html");
+    }).always(function () {
+    });
+
+}
+
+function cargarBySedeByEstadoByFecha(estado, sede, fecha) {
+    $.ajax({
+        method: "GET",
+        url: "ServletControladorConsignaciones2?accion=obtenerConsignacionesBySedeByEstadoByFecha&estado=" + estado + "&sede=" + sede + "&fecha=" + fecha
+
+    }).done(function (data) {
+        var datos = JSON.stringify(data);
+        var json = JSON.parse(datos);
+
+        $("#dataTable tbody").empty();
+
+        var contador = 1;
+
+
+        $.each(json, function (key, value) {
+            if (value.nombre_estado === "Pendiente") {
+                var imagen = '<button  onclick="abrirModalImagenCartera(' + value.idConsignacion + ')" class="btn btn-success btn-sm"><i class="fas fa-image"></i></button>';
+                var observa = '<button  id="btn_observa" onclick="abrirModalObservacionesCartera(' + value.idConsignacion + ');" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></button>';
+                var detalles = '<button class="btn btn-secondary" onclick="detalles(' + value.idConsignacion + ');"><i class="fas fa-info"></i></button>';
+                var accion = "<td><button  class='btn btn-primary btn-sm' onclick='editarConsignacion(" + value.idConsignacion + ")'><i class='fas fa-pen'></i></button>" + observa + imagen + detalles + "</td>";
+
+                $("#dataTable").append('<tr> <td>' + contador + '</td><td>' + value.num_recibo + '</td><td>' + value.numero_documento + '</td><td>' + value.nombre_titular + '</td><td>' + value.fecha_pago + '</td><td>' + value.fecha_creacion + '</td><td>' + value.valor + '</td><td>' + value.nombre_estado + '</td><td>' + value.nombre_sede + '</td><td>' + value.nombre_plataforma + '</td>' + accion + '</tr>');
+                contador = contador + 1;
+            } else {
+                var detalles = '<button class="btn btn-secondary btn-sm" onclick="detallesCartera(' + value.idConsignacion + ');"><i class="fas fa-info"></i></button>';
+                var imagen = '<button  id="btn_image' + value.idConsignacion + '" onclick="abrirModalImagenCartera(' + value.idConsignacion + ')" class="btn btn-success btn-sm"><i class="fas fa-image"></i></button>';
+                var observa = '<td><a href="#" id="btn_observa" onclick="abrirModalObservacionesCartera(' + value.idConsignacion + ');" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>' + imagen + detalles + '</td>';
+                $("#dataTable").append('<tr> <td>' + contador + '</td><td>' + value.num_recibo + '</td><td>' + value.numero_documento + '</td><td>' + value.nombre_titular + '</td><td>' + value.fecha_pago + '</td><td>' + value.fecha_creacion + '</td><td>' + value.valor + '</td><td>' + value.nombre_estado + '</td><td>' + value.nombre_sede + '</td><td>' + value.nombre_plataforma + '</td>' + observa + '/tr>');
+                contador = contador + 1;
+            }
+        }
+
+
+
+        );
+
+    }).fail(function () {
+        window.location.replace("login.html");
+    }).always(function () {
+    });
+}
+
+
+function cargarByEstadoAndSede(estado, sede) {
     $.ajax({
         method: "GET",
         url: "ServletControladorConsignaciones2?accion=obtenerConsignacionesBySede&estado=" + estado + "&sede=" + sede
@@ -577,41 +1017,26 @@ function cargarBySede(estado, sede) {
         var contador = 1;
 
         $.each(json, function (key, value) {
-            if (value.nombre_estado === "Devuelta") {
+            if (value.nombre_estado === "Pendiente") {
+                var imagen = '<button  onclick="abrirModalImagenCartera(' + value.idConsignacion + ')" class="btn btn-success btn-sm"><i class="fas fa-image"></i></button>';
+                var observa = '<button  id="btn_observa" onclick="abrirModalObservacionesCartera(' + value.idConsignacion + ');" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></button>';
+                var detalles = '<button class="btn btn-secondary" onclick="detalles(' + value.idConsignacion + ');"><i class="fas fa-info"></i></button>';
+                var accion = "<td><button  class='btn btn-primary btn-sm' onclick='editarConsignacion(" + value.idConsignacion + ")'><i class='fas fa-pen'></i></button>" + observa + imagen + detalles + "</td>";
 
-                var observa = '<a href="#" id="btn_observa" onclick="abrirModalObservacionesCartera(' + value.idConsignacion + ');" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>';
-                var accion = "<td><a href='#' class='btn btn-primary btn-sm' onclick='editarConsignacion(" + value.idConsignacion + ")'><i class='fas fa-pen'></i></a>" + observa + "</td>";
                 $("#dataTable").append('<tr> <td>' + contador + '</td><td>' + value.num_recibo + '</td><td>' + value.numero_documento + '</td><td>' + value.nombre_titular + '</td><td>' + value.fecha_pago + '</td><td>' + value.fecha_creacion + '</td><td>' + value.valor + '</td><td>' + value.nombre_estado + '</td><td>' + value.nombre_sede + '</td><td>' + value.nombre_plataforma + '</td>' + accion + '</tr>');
                 contador = contador + 1;
-                document.getElementById('btnCancelarConsignacion').style.display = "block";
-                document.getElementById('nuevoEstado').value = "Pendiente";
-
-
             } else {
-                if (value.nombre_estado === "Pendiente") {
-                    var observa = '<a href="#" id="btn_observa" onclick="abrirModalObservacionesCartera(' + value.idConsignacion + ');" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>';
-                    var accion = "<td><a href='#' class='btn btn-primary btn-sm' onclick='editarConsignacion(" + value.idConsignacion + ")'><i class='fas fa-pen'></i></a>" + observa + "</td>";
-                    $("#dataTable").append('<tr> <td>' + contador + '</td><td>' + value.num_recibo + '</td><td>' + value.numero_documento + '</td><td>' + value.nombre_titular + '</td><td>' + value.fecha_pago + '</td><td>' + value.fecha_creacion + '</td><td>' + value.valor + '</td><td>' + value.nombre_estado + '</td><td>' + value.nombre_sede + '</td><td>' + value.nombre_plataforma + '</td>' + accion + '</tr>');
-                    contador = contador + 1;
-                } else {
-                    if (value.nombre_estado === "Devuelta-Caja") {
-                        var observa = '<a href="#" id="btn_observa" onclick="abrirModalObservacionesCartera(' + value.idConsignacion + ');" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>';
-                        var accion = "<td><a href='#' class='btn btn-primary btn-sm' onclick='editarConsignacion(" + value.idConsignacion + ")'><i class='fas fa-pen'></i></a>" + observa + "</td>";
-                        $("#dataTable").append('<tr> <td>' + contador + '</td><td>' + value.num_recibo + '</td><td>' + value.numero_documento + '</td><td>' + value.nombre_titular + '</td><td>' + value.fecha_pago + '</td><td>' + value.fecha_creacion + '</td><td>' + value.valor + '</td><td>' + value.nombre_estado + '</td><td>' + value.nombre_sede + '</td><td>' + value.nombre_plataforma + '</td>' + accion + '</tr>');
-                        contador = contador + 1;
-                        document.getElementById('btnCancelarConsignacion').style.display = "block";
-                        document.getElementById('nuevoEstado').value = "Comprobado";
-                    } else {
-                        var observa = '<a href="#" id="btn_observa" onclick="abrirModalObservacionesCartera(' + value.idConsignacion + ');" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>';
-                        $("#dataTable").append('<tr> <td>' + contador + '</td><td>' + value.num_recibo + '</td><td>' + value.numero_documento + '</td><td>' + value.nombre_titular + '</td><td>' + value.fecha_pago + '</td><td>' + value.fecha_creacion + '</td><td>' + value.valor + '</td><td>' + value.nombre_estado + '</td><td>' + value.nombre_sede + '</td><td>' + value.nombre_plataforma + '</td><td>' + observa + '</td></tr>');
-                        contador = contador + 1;
-                    }
-
-                }
+                var detalles = '<button class="btn btn-secondary btn-sm" onclick="detallesCartera(' + value.idConsignacion + ');"><i class="fas fa-info"></i></button>';
+                var imagen = '<button  id="btn_image' + value.idConsignacion + '" onclick="abrirModalImagenCartera(' + value.idConsignacion + ')" class="btn btn-success btn-sm"><i class="fas fa-image"></i></button>';
+                var observa = '<td><a href="#" id="btn_observa" onclick="abrirModalObservacionesCartera(' + value.idConsignacion + ');" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>' + imagen + detalles + '</td>';
+                $("#dataTable").append('<tr> <td>' + contador + '</td><td>' + value.num_recibo + '</td><td>' + value.numero_documento + '</td><td>' + value.nombre_titular + '</td><td>' + value.fecha_pago + '</td><td>' + value.fecha_creacion + '</td><td>' + value.valor + '</td><td>' + value.nombre_estado + '</td><td>' + value.nombre_sede + '</td><td>' + value.nombre_plataforma + '</td>' + observa + '/tr>');
+                contador = contador + 1;
             }
+        }
 
 
-        });
+        );
+
 
     }).fail(function () {
         window.location.replace("login.html");
@@ -621,7 +1046,7 @@ function cargarBySede(estado, sede) {
 
 
 function cargarSedes(nombre) {
-    validarSession();
+    
     event.preventDefault();
     $.ajax({
         method: "GET",
@@ -633,7 +1058,7 @@ function cargarSedes(nombre) {
 
 
         $.each(json, function (key, value) {
-            $("#"+nombre).append('<option value="' + value.idSede + '" >' + value.nombre_sede + '</option>');
+            $("#" + nombre).append('<option value="' + value.idSede + '" >' + value.nombre_sede + '</option>');
         });
 
     }).fail(function () {
@@ -643,7 +1068,7 @@ function cargarSedes(nombre) {
 }
 
 function cargarBancos(id, dato) {
-    validarSession();
+    
     $.ajax({
         method: "GET",
         url: "ServletControladorCartera?accion=llenarBanco"
@@ -679,7 +1104,7 @@ function cargarBancos(id, dato) {
 
 
 function cargarEstados(idSelect) {
-    validarSession();
+    
     $.ajax({
         method: "GET",
         url: "ServletControladorEstados?accion=cargarEstados"
@@ -716,7 +1141,7 @@ function cargarEstados(idSelect) {
 var select = document.getElementById('sltEstadoConsignacion');
 
 select.addEventListener('change', (event) => {
-    validarSession();
+    
     event.preventDefault();
     var valor = document.getElementById('sltEstadoConsignacion').value;
 
@@ -736,9 +1161,10 @@ select.addEventListener('change', (event) => {
 
         $.each(json, function (key, value) {
             if (value.nombre_estado === "Devuelta") {
-
+                var imagen = '<button  onclick="abrirModalImagenCartera(' + value.idConsignacion + ')" class="btn btn-success btn-sm"><i class="fas fa-image"></i></button>';
+                var detalles = '<button class="btn btn-secondary" onclick="detallesCartera(' + value.idConsignacion + ');"><i class="fas fa-info"></i></button>';
                 var observa = '<a href="#" id="btn_observa" onclick="abrirModalObservacionesCartera(' + value.idConsignacion + ');" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>';
-                var accion = "<td><a href='#' class='btn btn-primary btn-sm' onclick='editarConsignacion(" + value.idConsignacion + ")'><i class='fas fa-pen'></i></a>" + observa + "</td>";
+                var accion = "<td><a href='#' class='btn btn-primary btn-sm' onclick='editarConsignacion(" + value.idConsignacion + ")'><i class='fas fa-pen'></i></a>" + observa + imagen + detalles + "</td>";
                 $("#dataTable").append('<tr> <td>' + contador + '</td><td>' + value.num_recibo + '</td><td>' + value.numero_documento + '</td><td>' + value.nombre_titular + '</td><td>' + value.fecha_pago + '</td><td>' + value.fecha_creacion + '</td><td>' + value.valor + '</td><td>' + value.nombre_estado + '</td><td>' + value.nombre_sede + '</td><td>' + value.nombre_plataforma + '</td>' + accion + '</tr>');
                 contador = contador + 1;
                 document.getElementById('btnCancelarConsignacion').style.display = "block";
@@ -747,21 +1173,27 @@ select.addEventListener('change', (event) => {
 
             } else {
                 if (value.nombre_estado === "Pendiente") {
+                    var imagen = '<button  onclick="abrirModalImagenCartera(' + value.idConsignacion + ')" class="btn btn-success btn-sm"><i class="fas fa-image"></i></button>';
+                    var detalles = '<button class="btn btn-secondary" onclick="detallesCartera(' + value.idConsignacion + ');"><i class="fas fa-info"></i></button>';
                     var observa = '<a href="#" id="btn_observa" onclick="abrirModalObservacionesCartera(' + value.idConsignacion + ');" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>';
-                    var accion = "<td><a href='#' class='btn btn-primary btn-sm' onclick='editarConsignacion(" + value.idConsignacion + ")'><i class='fas fa-pen'></i></a>" + observa + "</td>";
+                    var accion = "<td><a href='#' class='btn btn-primary btn-sm' onclick='editarConsignacion(" + value.idConsignacion + ")'><i class='fas fa-pen'></i></a>" + observa + imagen + detalles + "</td>";
                     $("#dataTable").append('<tr> <td>' + contador + '</td><td>' + value.num_recibo + '</td><td>' + value.numero_documento + '</td><td>' + value.nombre_titular + '</td><td>' + value.fecha_pago + '</td><td>' + value.fecha_creacion + '</td><td>' + value.valor + '</td><td>' + value.nombre_estado + '</td><td>' + value.nombre_sede + '</td><td>' + value.nombre_plataforma + '</td>' + accion + '</tr>');
                     contador = contador + 1;
                 } else {
                     if (value.nombre_estado === "Devuelta-Caja") {
+                        var imagen = '<button  onclick="abrirModalImagenCartera(' + value.idConsignacion + ')" class="btn btn-success btn-sm"><i class="fas fa-image"></i></button>';
+                        var detalles = '<button class="btn btn-secondary" onclick="detallesCartera(' + value.idConsignacion + ');"><i class="fas fa-info"></i></button>';
                         var observa = '<a href="#" id="btn_observa" onclick="abrirModalObservacionesCartera(' + value.idConsignacion + ');" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>';
-                        var accion = "<td><a href='#' class='btn btn-primary btn-sm' onclick='editarConsignacion(" + value.idConsignacion + ")'><i class='fas fa-pen'></i></a>" + observa + "</td>";
+                        var accion = "<td><a href='#' class='btn btn-primary btn-sm' onclick='editarConsignacion(" + value.idConsignacion + ")'><i class='fas fa-pen'></i></a>" + observa + imagen + detalles + "</td>";
                         $("#dataTable").append('<tr> <td>' + contador + '</td><td>' + value.num_recibo + '</td><td>' + value.numero_documento + '</td><td>' + value.nombre_titular + '</td><td>' + value.fecha_pago + '</td><td>' + value.fecha_creacion + '</td><td>' + value.valor + '</td><td>' + value.nombre_estado + '</td><td>' + value.nombre_sede + '</td><td>' + value.nombre_plataforma + '</td>' + accion + '</tr>');
                         contador = contador + 1;
                         document.getElementById('btnCancelarConsignacion').style.display = "block";
                         document.getElementById('nuevoEstado').value = "Comprobado";
                     } else {
+                        var imagen = '<button  onclick="abrirModalImagenCartera(' + value.idConsignacion + ')" class="btn btn-success btn-sm"><i class="fas fa-image"></i></button>';
+                        var detalles = '<button class="btn btn-secondary" onclick="detallesCartera(' + value.idConsignacion + ');"><i class="fas fa-info"></i></button>';
                         var observa = '<a href="#" id="btn_observa" onclick="abrirModalObservacionesCartera(' + value.idConsignacion + ');" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>';
-                        $("#dataTable").append('<tr> <td>' + contador + '</td><td>' + value.num_recibo + '</td><td>' + value.numero_documento + '</td><td>' + value.nombre_titular + '</td><td>' + value.fecha_pago + '</td><td>' + value.fecha_creacion + '</td><td>' + value.valor + '</td><td>' + value.nombre_estado + '</td><td>' + value.nombre_sede + '</td><td>' + value.nombre_plataforma + '</td><td>' + observa + '</td></tr>');
+                        $("#dataTable").append('<tr> <td>' + contador + '</td><td>' + value.num_recibo + '</td><td>' + value.numero_documento + '</td><td>' + value.nombre_titular + '</td><td>' + value.fecha_pago + '</td><td>' + value.fecha_creacion + '</td><td>' + value.valor + '</td><td>' + value.nombre_estado + '</td><td>' + value.nombre_sede + '</td><td>' + value.nombre_plataforma + '</td><td>' + observa + imagen + detalles + '</td></tr>');
                         contador = contador + 1;
                     }
 
@@ -788,9 +1220,10 @@ select.addEventListener('change', (event) => {
 
 
 
+
 function cargarConsignacionesGeneral() {
 
-    validarSession();
+    
 
     var rol = document.getElementById('rol').value;
 
@@ -823,8 +1256,10 @@ function cargarConsignacionesGeneral() {
         var contador = 1;
 
         $.each(json, function (key, value) {
+            var imagen = '<button  onclick="abrirModalImagenCartera(' + value.idConsignacion + ')" class="btn btn-success btn-sm"><i class="fas fa-image"></i></button>';
+            var detalles = '<button class="btn btn-secondary" onclick="detallesCartera(' + value.idConsignacion + ');"><i class="fas fa-info"></i></button>';
             var observa = '<button  id="btn_observa" onclick="abrirModalObservacionesCartera(' + value.idConsignacion + ');" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></button>';
-            var accion = "<td><button  class='btn btn-primary btn-sm' onclick='editarConsignacion(" + value.idConsignacion + ")'><i class='fas fa-pen'></i></button>" + observa + "</td>";
+            var accion = "<td><button  class='btn btn-primary btn-sm' onclick='editarConsignacion(" + value.idConsignacion + ")'><i class='fas fa-pen'></i></button>" + observa + imagen + detalles + "</td>";
 
             $("#dataTable").append('<tr> <td>' + contador + '</td><td>' + value.num_recibo + '</td><td>' + value.numero_documento + '</td><td>' + value.nombre_titular + '</td><td>' + value.fecha_pago + '</td><td>' + value.fecha_creacion + '</td><td>' + value.valor + '</td><td>' + value.nombre_estado + '</td><td>' + value.nombre_sede + '</td><td>' + value.nombre_plataforma + '</td>' + accion + '</tr>');
             contador = contador + 1;
@@ -846,9 +1281,72 @@ function cargarConsignacionesGeneral() {
 
 }
 
+
+function detallesCartera(id) {
+    $('#modalDetalles').modal('show');
+
+    obtenerSedeByIdConsignacionCartera(id);
+
+    $.ajax({
+        method: "GET",
+        url: "ServletControladorConsignaciones2?accion=traerActualizaciones&idConsignacion=" + id
+
+    }).done(function (data) {
+
+        var datos = JSON.stringify(data);
+        var json = JSON.parse(datos);
+
+        $("#tableDetalles tbody").empty();
+
+        var contador = 1;
+        $.each(json, function (key, value) {
+            $("#tableDetalles").append('<tr> <td>' + contador + '</td><td>' + value.fecha + '</td><td>' + value.nombre_estado + '</td><td>' + value.nombre + '</td><td>' + value.num_recibo + '</td></tr>');
+            contador = contador + 1;
+
+        });
+
+
+        console.log(json);
+
+
+
+    }).fail(function () {
+
+        window.location.replace("login.html");
+    }).always(function () {
+
+    });
+}
+
+
+function obtenerSedeByIdConsignacionCartera(idConsignacion) {
+    $("#tableSedeDetalles tbody").empty();
+    $.ajax({
+        method: "GET",
+        url: "ServletSedes?accion=obtenerSedeByIdConsignacion&idConsignacion=" + idConsignacion
+
+    }).done(function (data) {
+
+        var datos = data;
+        
+
+        $("#tableSedeDetalles").append('<tr> <td>'+datos+'</td></tr>');
+
+
+
+
+
+    }).fail(function () {
+
+        window.location.replace("login.html");
+    }).always(function () {
+
+    });
+}
+
 function consignacionesCedula() {
 
-    validarSession();
+    
     var cedula = document.getElementById('txtCedula').value;
 
     $.ajax({
@@ -868,22 +1366,27 @@ function consignacionesCedula() {
             $.each(json, function (key, value) {
                 if (value.nombre_estado !== 'Pendiente') {
                     if (value.nombre_estado === 'Devuelta') {
+                        var imagen = '<button  onclick="abrirModalImagenCartera(' + value.idConsignacion + ')" class="btn btn-success btn-sm"><i class="fas fa-image"></i></button>';
+                        var detalles = '<button class="btn btn-secondary" onclick="detallesCartera(' + value.idConsignacion + ');"><i class="fas fa-info"></i></button>';
                         var editar = "<button  class='btn btn-primary btn-sm' onclick='editarConsignacion(" + value.idConsignacion + ")'><i class='fas fa-pen'></i></button>";
-                        var obser = '<td><button  id="btn_observa" onclick="abrirModalObservacionesCartera(' + value.idConsignacion + ');" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></button>' + editar + '</td>';
+                        var obser = '<td><button  id="btn_observa" onclick="abrirModalObservacionesCartera(' + value.idConsignacion + ');" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></button>' + editar + imagen + detalles + '</td>';
                         //var comprobar = '<td><a href="#" id="btn_comprobar" onclick="comprobarConsignacion(' + value.idConsignacion + ');" class="btn btn-primary btn-sm" disabled><i class="fas fa-check"></i></a>' +  obser + '</td>';
                         $("#dataTable").append('<tr> <td>' + contador + '</td><td>' + value.num_recibo + '</td><td>' + value.numero_documento + '</td><td>' + value.nombre_titular + '</td><td>' + value.fecha_pago + '</td><td>' + value.fecha_creacion + '</td><td>' + value.valor + '</td><td>' + value.nombre_estado + '</td><td>' + value.nombre_sede + '</td><td>' + value.nombre_plataforma + '</td>' + obser + '</tr>');
                         contador = contador + 1;
                     } else {
-                        var obser = '<td><button  id="btn_observa" onclick="abrirModalObservacionesCartera(' + value.idConsignacion + ');" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></button></td>';
+                        var imagen = '<button  onclick="abrirModalImagenCartera(' + value.idConsignacion + ')" class="btn btn-success btn-sm"><i class="fas fa-image"></i></button>';
+                        var detalles = '<button class="btn btn-secondary" onclick="detallesCartera(' + value.idConsignacion + ');"><i class="fas fa-info"></i></button>';
+                        var obser = '<td><button  id="btn_observa" onclick="abrirModalObservacionesCartera(' + value.idConsignacion + ');" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></button>' + imagen + detalles + '</td>';
                         //var comprobar = '<td><a href="#" id="btn_comprobar" onclick="comprobarConsignacion(' + value.idConsignacion + ');" class="btn btn-primary btn-sm" disabled><i class="fas fa-check"></i></a>' +  obser + '</td>';
                         $("#dataTable").append('<tr> <td>' + contador + '</td><td>' + value.num_recibo + '</td><td>' + value.numero_documento + '</td><td>' + value.nombre_titular + '</td><td>' + value.fecha_pago + '</td><td>' + value.fecha_creacion + '</td><td>' + value.valor + '</td><td>' + value.nombre_estado + '</td><td>' + value.nombre_sede + '</td><td>' + value.nombre_plataforma + '</td>' + obser + '</tr>');
                         contador = contador + 1;
                     }
 
                 } else {
-
+                    var imagen = '<button  onclick="abrirModalImagenCartera(' + value.idConsignacion + ')" class="btn btn-success btn-sm"><i class="fas fa-image"></i></button>';
+                    var detalles = '<button class="btn btn-secondary" onclick="detallesCartera(' + value.idConsignacion + ');"><i class="fas fa-info"></i></button>';
                     var obser = '<button  id="btn_observa" onclick="abrirModalObservacionesCartera(' + value.idConsignacion + ');" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></button>';
-                    var comprobar = '<td><button  id="btn_comprobar" onclick="editarConsignacion(' + value.idConsignacion + ');" class="btn btn-primary btn-sm"><i class="fas fa-pen"></i></button>' + obser + '</td>';
+                    var comprobar = '<td><button  id="btn_comprobar" onclick="editarConsignacion(' + value.idConsignacion + ');" class="btn btn-primary btn-sm"><i class="fas fa-pen"></i></button>' + obser + imagen + detalles + '</td>';
 
                     $("#dataTable").append('<tr> <td>' + contador + '</td><td>' + value.num_recibo + '</td><td>' + value.numero_documento + '</td><td>' + value.nombre_titular + '</td><td>' + value.fecha_pago + '</td><td>' + value.fecha_creacion + '</td><td>' + value.valor + '</td><td>' + value.nombre_estado + '</td><td>' + value.nombre_sede + '</td><td>' + value.nombre_plataforma + '</td>' + comprobar + '</tr>');
                     contador = contador + 1;
@@ -924,7 +1427,7 @@ function consignacionesCedula() {
 
 
 function traerCliente() {
-    validarSession();
+    
     var cedula = document.getElementById('txtCliente').value;
 
 
@@ -950,7 +1453,7 @@ function traerCliente() {
             document.getElementById('nuevoCliente').style.display = "none";
             document.getElementById('cedulaCliente').style.display = "none";
             document.getElementById('sltSedeCon').style.display = "none";
-            
+
 
             $("#tblCliente tbody").empty();
 
@@ -1006,7 +1509,7 @@ function traerCliente() {
 }
 
 function editarConsignacion(idConsignacion) {
-    validarSession();
+    
     $.ajax({
         method: "GET",
         url: "ServletControladorConsignaciones?accion=editarConsignacion&idConsignacion=" + idConsignacion
@@ -1056,7 +1559,7 @@ function editarConsignacion(idConsignacion) {
 
 
 function traerClienteModal() {
-    validarSession();
+    
     var cedula = document.getElementById('txtClienteModal').value;
 
 
@@ -1109,7 +1612,7 @@ function traerClienteModal() {
 }
 
 function actualizarConsignacion() {
-    validarSession();
+    
     var datos = {};
     var nuevoEstado = document.getElementById("nuevoEstado").value;
     var valid = document.getElementById('obligacionModal').checked;
@@ -1186,7 +1689,7 @@ function actualizarConsignacion() {
 }
 
 function  abrirModalObservacionesCartera(id_consignacion) {
-    validarSession();
+    
 
     $('#staticBackdropObserCartera').modal('show');
 
@@ -1203,7 +1706,7 @@ var enviar = document.getElementById('enviarObservacionCon').addEventListener("c
 });
 
 function observacionesConsignacion(id_consignacion) {
-    validarSession();
+    
     var txtObservacion = document.getElementById('txtObservacion').value;
 
     if (txtObservacion === "") {
@@ -1263,7 +1766,7 @@ function observacionesConsignacion(id_consignacion) {
 
 
 function traerObservaciones(idConsignacion) {
-    validarSession();
+    
     $.ajax({
         method: "GET",
         url: "ServletObservaciones?accion=obtenerObservaciones&idConsignacion=" + idConsignacion

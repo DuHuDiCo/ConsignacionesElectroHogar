@@ -433,7 +433,7 @@
                                                         </div>
                                                         <div class="col-sm-2 mb-3 mb-sm-0">
 
-                                                            <a onclick="traerCliente();" target="_blank" class="btn btn-primary btn-user btn-block  pt-3"><i class="fas fa-search"></i></a>
+                                                            <a onclick="traerClienteAdmin();" target="_blank" class="btn btn-primary btn-user btn-block  pt-3"><i class="fas fa-search"></i></a>
                                                         </div>
 
                                                     </div>
@@ -447,7 +447,7 @@
                                                                     <input type="number" id="cedulaCliente" class="form-control form-control-user" name="cedulaCliente" placeholder="Ingrese Cedula Cliente" value="" style="display: none;">
                                                                 </div>
                                                                 <div class="col-md-4">
-                                                                    <select id="sltSedeCon" style="font-family: inherit; font-size: 13px; display: none;" name="sltSedeCon" required>
+                                                                    <select id="sltSedeConAdmin" style="font-family: inherit; font-size: 13px; display: none;" name="sltSedeCon" required>
                                                                         <option selected>Sede:</option>
                                                                     </select>
                                                                 </div>
@@ -465,7 +465,7 @@
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody>
-                                                                
+
 
                                                                 </tbody>
 
@@ -531,14 +531,14 @@
 
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3">
-                                     <div class="row">
+                                    <div class="row">
                                         <div class="col-md-10">
                                             <h6 class="m-0 font-weight-bold text-primary">Lista Consignaciones</h6>
                                         </div>
                                         <div class="col-md-2">
                                             <a onclick="generarReporte();" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Generar Reporte</a>
                                         </div>
-                                        
+
                                     </div>
                                 </div>
 
@@ -547,21 +547,21 @@
                                     <div class="row" >
                                         <div class="col-md-3" >
 
-                                            <select id="sltEstadoConsignacion" style="font-family: inherit; font-size: 13px;" name="plataforma" >
+                                            <select id="sltEstadoConsignacionAdmin" style="font-family: inherit; font-size: 13px;" name="plataforma" >
                                                 <option value="" selected="">Estado:</option>
                                             </select>
                                         </div>
                                         <div class="col-md-2">
-                                            <select id="sltSedeConsignacion" style="font-family: inherit; font-size: 13px;" name="plataforma">
+                                            <select id="sltSedeConsignacionAdmin" style="font-family: inherit; font-size: 13px;" name="plataforma">
                                                 <option value="" selected>Sede:</option>
                                             </select>
 
                                         </div>
                                         <div class="col-md-3">
-                                           
-                                                <input type="date" class="form-control form-control-user" data-bs-toggle="tooltip" data-bs-placement="top" title="Fecha Consignacion" style="font-family: inherit; font-size: 13px;" id="date"
-                                                       name="fecha_pago"    required>
-                                           
+
+                                            <input type="date" class="form-control form-control-user" data-bs-toggle="tooltip" data-bs-placement="top" title="Fecha Consignacion" style="font-family: inherit; font-size: 13px;" id="date"
+                                                   name="fecha_pago"    required>
+
                                         </div>
 
                                         <div class="col-md-4">
@@ -571,7 +571,7 @@
                                                 <div class="input-group">
                                                     <input type="text" class="form-control bg-light border-0 small" placeholder="Buscar" aria-label="Search" aria-describedby="basic-addon2" id="txtCedula"> 
                                                     <div class="input-group-append">
-                                                        <a class="btn btn-primary" onclick="consignacionesCedula();">
+                                                        <a class="btn btn-primary" onclick="consignacionesCedulaAdmin();">
                                                             <i class="fas fa-search fa-sm"></i>
                                                         </a>
                                                     </div>
@@ -749,7 +749,7 @@
                 <!-- Modal Guardar Consigancion-->
                 <div class="modal fade" id="modalConsignacion" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">
+                        <div class="modal-content"  >
                             <div class="modal-header">
                                 <h5 class="modal-title" id="modalConsignacionLabel">Advertencia</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -762,7 +762,7 @@
                             </div>
                             <div class="modal-footer">
                                 <a href="#" id="btnNoEnviarObser" onclick="noCrearObservacion();" class="btn btn-secondary" data-dismiss="modal">No</a>
-                                <a href="#" id="bntEnviarObser" onclick="guardarConsignacionConObservacion();" class="btn btn-primary">Si</a>
+                                <a href="#" id="bntEnviarObser" onclick="validarObservacion();" class="btn btn-primary">Si</a>
                             </div>
                         </div>
                     </div>
@@ -813,6 +813,165 @@
 
                                     </tbody>
                                 </table>
+                            </div>
+
+                            <div class="modal-footer">
+                                <a type="button" id="" class="btn btn-secondary" data-dismiss="modal">Cerrar</a>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal Consignaciones iguales-->
+                <div class="modal fade" id="ModalConsignacionesIguales" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-dialog modal-lg modal-dialog-scrollable">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Consignaciones Que Coinciden:</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <input type="hidden" id="observaIguales" name="name" value="">
+                            <div class="modal-body">
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="alert alert-danger" role="alert">
+                                            Estas Consignaciones Coinciden en Fecha y Valor con la que Intentas Crear!!
+                                        </div>
+                                        <table class="table" id="tableIgual">
+                                            <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>Recibo</th>
+                                                    <th>Fecha Pago</th>
+                                                    <th>Valor</th>
+                                                    <th>Cliente</th>
+                                                    <th>Sede</th>
+                                                </tr>
+
+                                            </thead>
+                                            <tbody>
+
+                                            </tbody>
+
+                                        </table>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+                            <div class="modal-footer">
+
+                                <button type="button" id="btnIguales" class="btn btn-primary" data-dismiss="modal">Guardar de Todos Modos</button>
+                                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Modal Consignaciones iguales Recibo-->
+                <div class="modal fade" id="ModalConsignacionesIgualesRecibo" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-dialog modal-lg modal-dialog-scrollable">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Consignaciones Que Coinciden:</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <input type="hidden" id="observaRecibo" name="name" value="">
+                            <div class="modal-body">
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="alert alert-danger" role="alert">
+                                            Estas Consignaciones Coinciden en Numero de Recibo!!
+                                        </div>
+                                        <table class="table" id="tableIgual">
+                                            <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>Recibo</th>
+                                                    <th>Fecha Pago</th>
+                                                    <th>Valor</th>
+                                                    <th>Cliente</th>
+                                                    <th>Sede</th>
+                                                </tr>
+
+                                            </thead>
+                                            <tbody>
+
+                                            </tbody>
+
+                                        </table>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+                            <div class="modal-footer">
+
+                                <button type="button" id="btnRecibos"  class="btn btn-primary" data-dismiss="modal">Guardar de Todos Modos</button>
+                                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Modal Detalles -->
+                <div class="modal fade" id="modalDetalles" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropObserLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="staticBackdropObserLabel">Detalles del Proceso</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+
+                                <div class="row">
+                                    <table id="tableSedeDetalles">
+                                        <thead >
+                                            <tr>
+                                                <th>Sede :</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                           
+                                        </tbody>
+                                    </table>
+
+                                </div>
+
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <table class="table table-responsive mt-3" style="overflow-y: auto;height: 400px;" id="tableDetalles">
+                                            <thead>
+                                                <tr>
+                                                    <th>N°</th>
+                                                    <th>Fecha Actualizacion</th>
+                                                    <th>Estado</th>
+                                                    <th>Usuario</th>
+                                                    <th>Recibo</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                </div>
+
+
                             </div>
 
                             <div class="modal-footer">

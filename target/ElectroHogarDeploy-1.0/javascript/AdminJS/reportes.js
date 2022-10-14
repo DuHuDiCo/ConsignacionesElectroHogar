@@ -1,5 +1,5 @@
 function cargarDatosInformes() {
-    validarSession();
+    
     obtenerNombreUsuario();
     traerReportesAdmin();
     cargarUsuariosReporte();
@@ -63,7 +63,7 @@ function descargarReporteAdmin(idFile) {
 var filtro = document.getElementById('filtroReportes');
 
 filtro.addEventListener('change', (event) => {
-    validarSession();
+    
     event.preventDefault();
 
     var fecha = filtro.value;
@@ -127,7 +127,7 @@ function cargarUsuariosReporte() {
 var filtroUsuario = document.getElementById('sltUsuariosReportes');
 
 filtroUsuario.addEventListener('change', (event) => {
-    validarSession();
+    
     event.preventDefault();
 
     var usuario = filtroUsuario.value;

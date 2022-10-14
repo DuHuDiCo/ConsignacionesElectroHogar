@@ -4,7 +4,7 @@
 
 
 function consignacionesMesCartera(){
-    validarSession();
+    
     obtenerNombreUsuarioCartera();
     consignacionesDiaCartera();
      $.ajax({

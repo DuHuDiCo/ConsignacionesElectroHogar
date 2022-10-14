@@ -336,22 +336,22 @@
 
                                     <div class="row" >
                                         <div class="col-md-4" >
-                                            
-                                            <select id="sltEstadoConsignacionCaja" style="font-family: inherit; font-size: 13px;" name="plataforma" >
 
+                                            <select id="sltEstadoConsignacionCaja" style="font-family: inherit; font-size: 13px;" name="plataforma" >
+                                                <option value="" selected>Seleccione:</option>
                                             </select>
                                         </div>
                                         <div class="col-md-3">
-                                           
-                                                <input type="date" class="form-control form-control-user" data-bs-toggle="tooltip" data-bs-placement="top" title="Fecha Consignacion" style="font-family: inherit; font-size: 13px;" id="date"
-                                                       name="fecha_pago"    required>
-                                           
+
+                                            <input type="date" class="form-control form-control-user" data-bs-toggle="tooltip" data-bs-placement="top" title="Fecha Consignacion" style="font-family: inherit; font-size: 13px;" id="date"
+                                                   name="fecha_pago"    required>
+
                                         </div>
 
-                                        
+
                                         <div class="col-md-5">
-                                            
-                                            
+
+
                                             <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
                                                 <div class="input-group">
                                                     <input type="text" class="form-control bg-light border-0 small" placeholder="Buscar por Cedula Cliente" aria-label="Search" aria-describedby="basic-addon2" id="txtCedula"> 
@@ -382,7 +382,7 @@
 
                                                     </tr>
                                                 </thead>
-                                                
+
                                                 <tbody  >
 
                                                 </tbody>
@@ -484,51 +484,54 @@
                 </div>
             </div>
 
-            <!-- Modal Observaciones -->
-            <div class="modal fade" id="staticBackdropObserCaja" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropObserLabel" aria-hidden="true">
+            <!-- Modal Detalles -->
+            <div class="modal fade" id="modalDetalles" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropObserLabel" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="staticBackdropObserLabel">Historial de Observaciones</h5>
+                            <h5 class="modal-title" id="staticBackdropObserLabel">Detalles del Proceso</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
                         <div class="modal-body">
 
+                            <div class="row">
+                                <table id="tableSedeDetalles">
+                                    <thead >
+                                        <tr>
+                                            <th>Sede :</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
 
-                            <h6>Crear Nueva Observacion</h6>
+                                    </tbody>
+                                </table>
 
-
+                            </div>
 
 
                             <div class="row">
+                                <div class="col-md-12">
+                                    <table class="table table-responsive mt-3" style="overflow-y: auto;height: 400px;" id="tableDetalles">
+                                        <thead>
+                                            <tr>
+                                                <th>N°</th>
+                                                <th>Fecha Actualizacion</th>
+                                                <th>Estado</th>
+                                                <th>Usuario</th>
+                                                <th>Recibo</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
 
-                                <div class="col-md-9 input-group">
-                                    <input class="form-control" type="text" placeholder="Ingrese el Texto de la Observacion" id="txtObservacion">
-                                    <input type="hidden" id="id_consignacion" name="name" value="">
-                                </div>
-
-                                <div class="col-md-3">
-                                    <button type="button"  id="enviarObservacionConCaja" class="btn btn-primary btn-user btn-sm mt-1">Crear Nueva</button>
+                                        </tbody>
+                                    </table>
                                 </div>
 
                             </div>
 
-                            <table class="table table-responsive mt-3" style="overflow-y: auto;height: 400px;" id="tableObservaciones">
-                                <thead>
-                                    <tr>
-                                        <th>N°</th>
-                                        <th>Observacion</th>
-                                        <th>Fecha</th>
-                                        <th>Usuario</th>
 
-                                    </tr>
-                                </thead>
-                                <tbody>
-
-                                </tbody>
-                            </table>
                         </div>
 
                         <div class="modal-footer">
@@ -538,33 +541,111 @@
                     </div>
                 </div>
             </div>
-            <!-- End of Main Content -->
 
-            <!-- Bootstrap core JavaScript-->
-            <script src="vendor/jquery/jquery.min.js"></script>
-            <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+            <!-- Logout Modal-->
+            <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                            <a class="btn btn-primary" href="login.html">Logout</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-            <!-- Core plugin JavaScript-->
-            <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
-
-            <!-- Custom scripts for all pages-->
-            <script src="js/sb-admin-2.min.js"></script>
-
-            <!-- Page level plugins -->
-            <!-- <script src="vendor/datatables/jquery.dataTables.min.js"></script> -->
-            <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
-
-            <!-- Page level custom scripts -->
-            <script src="js/demo/datatables-demo.js"></script>
 
 
+        <!-- Modal Observaciones -->
+        <div class="modal fade" id="staticBackdropObserCaja" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropObserLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="staticBackdropObserLabel">Historial de Observaciones</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
 
-            <script  src="javascript/usuarios.js"></script>
-            <script src="javascript/iniciarSesion.js"></script>
-            <script  src="javascript/session.js"></script>
-            <script src="javascript/CarteraJS/consignaciones.js"></script>
-            <script  src="javascript/AdminJS/funciones.js"></script>
-            <script src="javascript/CajaJS/consignaciones.js"></script>
+
+                        <h6>Crear Nueva Observacion</h6>
+
+
+
+
+                        <div class="row">
+
+                            <div class="col-md-9 input-group">
+                                <input class="form-control" type="text" placeholder="Ingrese el Texto de la Observacion" id="txtObservacion">
+                                <input type="hidden" id="id_consignacion" name="name" value="">
+                            </div>
+
+                            <div class="col-md-3">
+                                <button type="button"  id="enviarObservacionConCaja" class="btn btn-primary btn-user btn-sm mt-1">Crear Nueva</button>
+                            </div>
+
+                        </div>
+
+                        <table class="table table-responsive mt-3" style="overflow-y: auto;height: 400px;" id="tableObservaciones">
+                            <thead>
+                                <tr>
+                                    <th>N°</th>
+                                    <th>Observacion</th>
+                                    <th>Fecha</th>
+                                    <th>Usuario</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="modal-footer">
+                        <a type="button" id="" class="btn btn-secondary" data-dismiss="modal">Cerrar</a>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End of Main Content -->
+
+        <!-- Bootstrap core JavaScript-->
+        <script src="vendor/jquery/jquery.min.js"></script>
+        <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+        <!-- Core plugin JavaScript-->
+        <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+        <!-- Custom scripts for all pages-->
+        <script src="js/sb-admin-2.min.js"></script>
+
+        <!-- Page level plugins -->
+        <!-- <script src="vendor/datatables/jquery.dataTables.min.js"></script> -->
+        <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+        <!-- Page level custom scripts -->
+        <script src="js/demo/datatables-demo.js"></script>
+
+
+
+        <script  src="javascript/usuarios.js"></script>
+        <script src="javascript/iniciarSesion.js"></script>
+        <script  src="javascript/session.js"></script>
+        <script src="javascript/CarteraJS/consignaciones.js"></script>
+        <script  src="javascript/AdminJS/funciones.js"></script>
+        <script src="javascript/CajaJS/consignaciones.js"></script>
 
 
     </body>

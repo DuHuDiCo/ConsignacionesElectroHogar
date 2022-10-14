@@ -1,3 +1,4 @@
+
 function obtenerNombreUsuario() {
     cargarDatosInicio();
     $.ajax({
@@ -25,7 +26,6 @@ function obtenerNombreUsuario() {
 }
 
 function obtenerNombreUsuarioAdmin() {
-    validarSession();
     cargarDatosInicio();
     $.ajax({
         method: "POST",
