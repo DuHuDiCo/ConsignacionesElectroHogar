@@ -2,7 +2,7 @@
 /* global Swal */
 
 function crearTipoPago() {
-   
+    validarSession();
     var datos = {};
 
     datos.tipo_pago = document.getElementById('txtTipoPago').value;
@@ -56,7 +56,7 @@ function crearTipoPago() {
 
 
 function crearBanco() {
-    
+    validarSession();
     var datos = {};
 
     datos.banco = document.getElementById('txtBanco').value;
@@ -105,6 +105,7 @@ function crearBanco() {
 
 }
 function cargarDatosPago() {
+    validarSession();
     obtenerNombreUsuario();
     event.preventDefault();
 
@@ -135,7 +136,7 @@ function cargarDatosPago() {
 }
 
 function listarBancos() {
-    
+    validarSession();
     event.preventDefault();
 
     $.ajax({

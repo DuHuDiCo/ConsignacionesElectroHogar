@@ -3,7 +3,7 @@
 /* global Swal */
 
 function crearEstado() {
-    
+    validarSession();
     var datos = {};
 
     datos.estado = document.getElementById('txtEstado').value;
@@ -51,7 +51,7 @@ function crearEstado() {
 
 
 function listarEstados() {
-    
+    validarSession();
     obtenerNombreUsuario();
     event.preventDefault();
 
@@ -87,6 +87,7 @@ function listarEstados() {
 }
 
 function editarEstado(idEstado) {
+    validarSession();
     $.ajax({
         method: "GET",
         url: "ServletControladorEstados?accion=obtenerEstadoById&idEstado=" + idEstado
@@ -114,6 +115,7 @@ function editarEstado(idEstado) {
 }
 
 function actualizarEstado() {
+    validarSession();
     var datos = {};
     datos.idEstado = document.getElementById('IdEstadoModal').value;
     datos.nombre_estado = document.getElementById('txtNombreEstado').value;

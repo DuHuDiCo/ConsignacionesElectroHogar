@@ -1,7 +1,7 @@
 /* global Swal */
 
 function cargarDatosCaja() {
-    
+    validarSession();
     cargarEstados("sltEstadoConsignacionCaja");
     listarConsignacionesCaja();
     obtenerNombreUsuario();
@@ -9,13 +9,13 @@ function cargarDatosCaja() {
 }
 
 
-function validarConsigTemporal(){
-     $.ajax({
+function validarConsigTemporal() {
+    $.ajax({
         method: "GET",
         url: "ServletControladorConsignaciones2?accion=validarConsignacionesCajaTemporal"
 
     }).done(function (data) {
-        
+
     }).fail(function () {
 
         window.location.replace("login.html");
@@ -27,7 +27,7 @@ function validarConsigTemporal(){
 
 var fecha = document.getElementById('date');
 fecha.addEventListener('change', function () {
-
+    validarSession();
 
     var stado = document.getElementById('sltEstadoConsignacionCaja').value;
 
@@ -69,7 +69,7 @@ function cargarByEstadoBySede(estado, fecha) {
 
 
         $.each(json, function (key, value) {
-             if (value.nombre_estado === "Comprobado") {
+            if (value.nombre_estado === "Comprobado") {
                 var detalles = '<button class="btn btn-secondary btn-sm" onclick="detallesCaja(' + value.idConsignacion + ');"><i class="fas fa-info"></i></button>';
                 var imagen = '<button id="btn_image' + value.idConsignacion + '" onclick="abrirModalImagen(' + value.idConsignacion + ')" class="btn btn-success btn-sm"><i class="fas fa-image"></i></button>';
                 var observa = '<button id="btn_observa' + value.idConsignacion + '" onclick="abrirModalObservacionesCaja(' + value.idConsignacion + ');" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></button>';
@@ -145,7 +145,7 @@ function cargarByFecha(fecha) {
 
 
 function listarConsignacionesCaja() {
-    
+    validarSession();
     $.ajax({
         method: "GET",
         url: "ServletControladorConsignaciones?accion=listarConsignacionesCaja"
@@ -308,9 +308,9 @@ function obtenerSedeByIdConsignacionCaja(idConsignacion) {
     }).done(function (data) {
 
         var datos = data;
-        
 
-        $("#tableSedeDetalles").append('<tr> <td>'+datos+'</td></tr>');
+
+        $("#tableSedeDetalles").append('<tr> <td>' + datos + '</td></tr>');
 
 
 
@@ -326,7 +326,7 @@ function obtenerSedeByIdConsignacionCaja(idConsignacion) {
 
 
 function validarEstado(idConignacion) {
-    
+    validarSession();
     var valid = $.ajax({
         method: "GET",
         url: "ServletControladorConsignaciones2?accion=validarEstado&idConsignacion=" + idConignacion,
@@ -338,7 +338,7 @@ function validarEstado(idConignacion) {
 
 
 function validarIfExistTableTemp(idConignacion) {
-    
+
     var valid = $.ajax({
         method: "GET",
         url: "ServletControladorConsignaciones2?accion=validarIfExist&idConsignacion=" + idConignacion,
@@ -470,7 +470,7 @@ var enviar = document.getElementById('enviarObservacionConCaja').addEventListene
 
 
 function traerObservacionesCaja(idConsignacion) {
-    
+
     $.ajax({
         method: "GET",
         url: "ServletObservaciones?accion=obtenerObservaciones&idConsignacion=" + idConsignacion
@@ -513,7 +513,7 @@ function traerObservacionesCaja(idConsignacion) {
 }
 
 function observacionesConsignacion(id_consignacion) {
-    
+    validarSession();
     var txtObservacion = document.getElementById('txtObservacion').value;
 
     if (txtObservacion === "") {
@@ -577,7 +577,7 @@ function observacionesConsignacion(id_consignacion) {
 var select = document.getElementById('sltEstadoConsignacionCaja');
 
 select.addEventListener('change', (event) => {
-    
+    validarSession();
     event.preventDefault();
     var valor = document.getElementById('sltEstadoConsignacionCaja').value;
 
@@ -646,7 +646,7 @@ select.addEventListener('change', (event) => {
 
 
 function obtenerSede() {
-    
+
     var sede = $.ajax({
         method: "GET",
         url: "ServletSedes?accion=obtenerSede",
@@ -657,7 +657,7 @@ function obtenerSede() {
 }
 
 function aplicarConsignacion(id_consignacion, id) {
-    
+    validarSession();
     var datos = {};
     datos.idConsignacion = id_consignacion;
 
@@ -731,7 +731,7 @@ function recargarPagina() {
 }
 
 function consignacionesByCedulaCaja() {
-    
+
     var cedula = document.getElementById('txtCedula').value;
 
     $.ajax({
@@ -797,7 +797,7 @@ function consignacionesByCedulaCaja() {
 }
 
 function guardarCambiosCaja() {
-    
+    validarSession();
     $.ajax({
         method: "GET",
         url: "ServletControladorConsignaciones?accion=guardarCambiosCaja"
@@ -843,7 +843,7 @@ function guardarCambiosCaja() {
 }
 
 function cancelarCambios() {
-    
+    validarSession();
     $.ajax({
         method: "GET",
         url: "ServletControladorConsignaciones?accion=cancelarCambiosCaja"
@@ -888,7 +888,7 @@ function cancelarCambios() {
 }
 
 function cancelarCambiosIndividualDevolver(id_consignacion) {
-    
+    validarSession();
     $.ajax({
         method: "GET",
         url: "ServletControladorConsignaciones2?accion=cancelarCambiosIndividual&idConsignacion=" + id_consignacion
@@ -941,7 +941,7 @@ function cancelarCambiosIndividualDevolver(id_consignacion) {
 }
 
 function cancelarCambiosIndividual(id_consignacion) {
-    
+    validarSession();
     $.ajax({
         method: "GET",
         url: "ServletControladorConsignaciones2?accion=cancelarCambiosIndividual&idConsignacion=" + id_consignacion

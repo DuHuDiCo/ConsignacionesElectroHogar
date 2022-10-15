@@ -113,7 +113,7 @@ function abrirModalObservacionesGuardar() {
 
 
 function guardarConsignacionConObservacionCartera() {
-    
+    validarSession();
     var obser = document.getElementById('observacionGuardarConsig').value;
     if (obser === "") {
         Swal.fire({
@@ -123,7 +123,7 @@ function guardarConsignacionConObservacionCartera() {
             footer: '<a href="">Why do I have this issue?</a>'
         });
     } else {
-        
+
         validarExistencia(obser);
 
 
@@ -279,7 +279,7 @@ function traerConsinacionesFechaValorObservacion(datos) {
 }
 
 function guardarConsignacion(obser) {
-
+    validarSession();
     var form = document.getElementById('formConsignacion');
     var formData = new FormData(form);
 
@@ -322,7 +322,7 @@ function guardarConsignacion(obser) {
 
 function validarGuardar() {
     var obs = document.getElementById('observaIguales').value;
-
+    validarSession();
 
     if (obs === "") {
         guardarConsig();
@@ -386,7 +386,8 @@ function crearObservacion(obser, idConsignacion) {
 
 
 function noCrearObservacionCartera() {
-    
+    validarSession();
+    F
     validarExistenciaByReciboCartera();
 
 }
@@ -430,7 +431,7 @@ function validarExistenciaConObservaAdmin() {
 
 
 function validarObservacionCartera() {
-
+    validarSession();
     var obs = document.getElementById('observacionGuardarConsig').value;
     if (obs === "") {
         Swal.fire({
@@ -588,7 +589,7 @@ function validarExistenciaByReciboCartera() {
 }
 
 function guardarConsig() {
-    
+    validarSession();
     var form = document.getElementById('formConsignacion');
     var formData = new FormData(form);
 
@@ -647,7 +648,7 @@ function guardarConsig() {
 
 
 function cargarDatos() {
-    
+    validarSession();
     obtenerNombreUsuario();
 
 
@@ -693,6 +694,7 @@ function cargarDatos() {
 var filtro = document.getElementById('sltSedeConsignacion');
 
 filtro.addEventListener('change', function () {
+    validarSession();
     var estado = document.getElementById('sltEstadoConsignacion').value;
 
 
@@ -731,7 +733,7 @@ filtro.addEventListener('change', function () {
 
 var fecha = document.getElementById('date');
 fecha.addEventListener('change', function () {
-
+    validarSession();
     var stado = document.getElementById('sltEstadoConsignacion').value;
     var sede = filtro.value;
     if (stado === '' || stado === null) {
@@ -1046,7 +1048,7 @@ function cargarByEstadoAndSede(estado, sede) {
 
 
 function cargarSedes(nombre) {
-    
+    validarSession();
     event.preventDefault();
     $.ajax({
         method: "GET",
@@ -1068,7 +1070,7 @@ function cargarSedes(nombre) {
 }
 
 function cargarBancos(id, dato) {
-    
+    validarSession();
     $.ajax({
         method: "GET",
         url: "ServletControladorCartera?accion=llenarBanco"
@@ -1104,7 +1106,7 @@ function cargarBancos(id, dato) {
 
 
 function cargarEstados(idSelect) {
-    
+    validarSession();
     $.ajax({
         method: "GET",
         url: "ServletControladorEstados?accion=cargarEstados"
@@ -1141,7 +1143,7 @@ function cargarEstados(idSelect) {
 var select = document.getElementById('sltEstadoConsignacion');
 
 select.addEventListener('change', (event) => {
-    
+    validarSession();
     event.preventDefault();
     var valor = document.getElementById('sltEstadoConsignacion').value;
 
@@ -1223,7 +1225,7 @@ select.addEventListener('change', (event) => {
 
 function cargarConsignacionesGeneral() {
 
-    
+    validarSession();
 
     var rol = document.getElementById('rol').value;
 
@@ -1328,9 +1330,9 @@ function obtenerSedeByIdConsignacionCartera(idConsignacion) {
     }).done(function (data) {
 
         var datos = data;
-        
 
-        $("#tableSedeDetalles").append('<tr> <td>'+datos+'</td></tr>');
+
+        $("#tableSedeDetalles").append('<tr> <td>' + datos + '</td></tr>');
 
 
 
@@ -1345,8 +1347,8 @@ function obtenerSedeByIdConsignacionCartera(idConsignacion) {
 }
 
 function consignacionesCedula() {
+    validarSession();
 
-    
     var cedula = document.getElementById('txtCedula').value;
 
     $.ajax({
@@ -1427,7 +1429,7 @@ function consignacionesCedula() {
 
 
 function traerCliente() {
-    
+    validarSession();
     var cedula = document.getElementById('txtCliente').value;
 
 
@@ -1509,7 +1511,7 @@ function traerCliente() {
 }
 
 function editarConsignacion(idConsignacion) {
-    
+    validarSession();
     $.ajax({
         method: "GET",
         url: "ServletControladorConsignaciones?accion=editarConsignacion&idConsignacion=" + idConsignacion
@@ -1559,7 +1561,7 @@ function editarConsignacion(idConsignacion) {
 
 
 function traerClienteModal() {
-    
+    validarSession();
     var cedula = document.getElementById('txtClienteModal').value;
 
 
@@ -1612,7 +1614,7 @@ function traerClienteModal() {
 }
 
 function actualizarConsignacion() {
-    
+    validarSession();
     var datos = {};
     var nuevoEstado = document.getElementById("nuevoEstado").value;
     var valid = document.getElementById('obligacionModal').checked;
@@ -1689,7 +1691,7 @@ function actualizarConsignacion() {
 }
 
 function  abrirModalObservacionesCartera(id_consignacion) {
-    
+
 
     $('#staticBackdropObserCartera').modal('show');
 
@@ -1706,7 +1708,7 @@ var enviar = document.getElementById('enviarObservacionCon').addEventListener("c
 });
 
 function observacionesConsignacion(id_consignacion) {
-    
+    validarSession();
     var txtObservacion = document.getElementById('txtObservacion').value;
 
     if (txtObservacion === "") {
@@ -1766,7 +1768,7 @@ function observacionesConsignacion(id_consignacion) {
 
 
 function traerObservaciones(idConsignacion) {
-    
+    validarSession();
     $.ajax({
         method: "GET",
         url: "ServletObservaciones?accion=obtenerObservaciones&idConsignacion=" + idConsignacion
@@ -1856,7 +1858,7 @@ function generarReporte() {
 
 function cancelarConsignacion() {
 
-
+    validarSession();
     var idConsignacion = document.getElementById("txtIdConModal").value;
     Swal.fire({
         title: 'Estas Seguro?',

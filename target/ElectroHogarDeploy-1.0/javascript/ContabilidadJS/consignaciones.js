@@ -2,7 +2,7 @@
 /* global Swal */
 
 function cargarDatosContabilidad() {
-    
+    validarSession();
     cargarEstados('sltEstadoConsignacionContabilidad');
     listarConsignacionesContabilidad();
     obtenerNombreUsuario();
@@ -31,7 +31,7 @@ var filtro = document.getElementById('sltSedeConsignacionContabilidad');
 
 filtro.addEventListener('change', function () {
     var estado = document.getElementById('sltEstadoConsignacionContabilidad').value;
-
+    validarSession();
 
     if (estado === '' || estado === null || estado === undefined) {
         var sede = filtro.value;
@@ -360,7 +360,7 @@ function cargarByEstadoAndSede(estado, sede) {
 
 
 function listarConsignacionesContabilidad() {
-    
+    validarSession();
     var valor = "Pendiente";
     $.ajax({
         method: "GET",
@@ -543,7 +543,7 @@ function obtenerSedeByIdConsignacionContabilidad(idConsignacion) {
 
 
 function validarEstadoContabilidad(idConignacion) {
-    
+    validarSession();
     var valid = $.ajax({
         method: "GET",
         url: "ServletControladorConsignaciones2?accion=validarEstado&idConsignacion=" + idConignacion,
@@ -554,7 +554,7 @@ function validarEstadoContabilidad(idConignacion) {
 }
 
 function cargarSedes(nombre) {
-    
+    validarSession();
     event.preventDefault();
     $.ajax({
         method: "GET",
@@ -628,6 +628,7 @@ cerrar.addEventListener('click', (event) => {
 
 var enviar = document.getElementById('enviarObservacion');
 enviar.addEventListener("click", function () {
+    validarSession();
     var observa = document.getElementById('observacionDevolucion').value;
     var id_consignacion = document.getElementById('idConsignacion').value;
 
@@ -718,7 +719,7 @@ enviar.addEventListener("click", function () {
 
 
 function CancelardevolverConsignacionIndiv(id_consignacion) {
-    
+    validarSession();
     $.ajax({
         method: "GET",
         url: "ServletControladorConsignaciones?accion=cancelarDevolucionConsignacionById&idConsignacion=" + id_consignacion
@@ -773,7 +774,7 @@ function CancelardevolverConsignacionIndiv(id_consignacion) {
 var select = document.getElementById('sltEstadoConsignacionContabilidad');
 
 select.addEventListener('change', (event) => {
-    
+    validarSession();
     event.preventDefault();
     var valor = document.getElementById('sltEstadoConsignacionContabilidad').value;
 
@@ -904,7 +905,7 @@ function buscarPorValor() {
 }
 
 function cargarEstados(idSelect) {
-    
+    validarSession();
     $.ajax({
         method: "GET",
         url: "ServletControladorEstados?accion=cargarEstados"
@@ -940,7 +941,7 @@ function cargarEstados(idSelect) {
 
 
 function consignacionesByCedulaContabilidad() {
-    
+    validarSession();
     var cedula = document.getElementById('txtCedula').value;
 
     $.ajax({
@@ -1009,7 +1010,7 @@ function consignacionesByCedulaContabilidad() {
 }
 
 function comprobarConsignacion(id_consignacion) {
-    
+    validarSession();
     var datos = {};
     datos.idConsignacion = id_consignacion;
 
@@ -1076,7 +1077,7 @@ function comprobarConsignacion(id_consignacion) {
 }
 
 function cancelarConsignacionIndiv(id_consignacion) {
-    
+    validarSession();
     $.ajax({
         method: "GET",
         url: "ServletControladorConsignaciones?accion=cancelarCambiosIndividual&idConsignacion=" + id_consignacion
@@ -1132,7 +1133,7 @@ function cancelarConsignacionIndiv(id_consignacion) {
 
 
 function cancelarCambios() {
-    
+    validarSession();
     $.ajax({
         method: "GET",
         url: "ServletControladorConsignaciones?accion=cancelarCambios"
@@ -1177,7 +1178,7 @@ function cancelarCambios() {
 }
 
 function guardarCambios() {
-    
+    validarSession();
     $.ajax({
         method: "GET",
         url: "ServletControladorConsignaciones?accion=guardarCambios"
@@ -1223,7 +1224,7 @@ function guardarCambios() {
 }
 
 function imprimirReporte(nombre) {
-    
+    validarSession();
     Swal.fire({
         title: 'Deseas Imprimir el Reporte?',
         icon: 'warning',
@@ -1288,12 +1289,13 @@ function  abrirModalObservacionesContabilidad(id_consignacion) {
 }
 
 var enviar = document.getElementById('enviarObservacionCon').addEventListener("click", function () {
+    validarSession();
     var id_consignacion = document.getElementById('id_consignacion').value;
     observacionesConsignacion(id_consignacion);
 });
 
 function observacionesConsignacion(id_consignacion) {
-    
+    validarSession();
     var txtObservacion = document.getElementById('txtObservacion').value;
 
     if (txtObservacion === "") {
@@ -1353,7 +1355,7 @@ function observacionesConsignacion(id_consignacion) {
 
 
 function traerObservaciones(idConsignacion) {
-    
+    validarSession();
     $.ajax({
         method: "GET",
         url: "ServletObservaciones?accion=obtenerObservaciones&idConsignacion=" + idConsignacion
