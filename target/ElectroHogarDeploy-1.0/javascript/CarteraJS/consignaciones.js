@@ -387,7 +387,6 @@ function crearObservacion(obser, idConsignacion) {
 
 function noCrearObservacionCartera() {
     validarSession();
-    F
     validarExistenciaByReciboCartera();
 
 }
