@@ -126,6 +126,7 @@ public class FuncionesGenerales {
 
         try {
             try (PDDocument doc = new PDDocument()) {
+               
                 PDPage page = new PDPage();
                 doc.addPage(page);
                 int height = (int) page.getTrimBox().getHeight();//792
@@ -196,7 +197,7 @@ public class FuncionesGenerales {
                             initY = (height - 150) - (con += 10);
                             //body tabla primera
                             for (int j = 1; j <= colCount; j++) {
-
+                                
                                 if (j == 1) {
                                     contens.addRect(initX, initY, 20, -cellHeight);
 
@@ -239,6 +240,7 @@ public class FuncionesGenerales {
                             initY = (height - 150) - (con += 10);
 
                             for (int j = 1; j <= colCount; j++) {
+                               
 
                                 if (j == 1) {
                                     contens.addRect(initX, initY, 20, -cellHeight);

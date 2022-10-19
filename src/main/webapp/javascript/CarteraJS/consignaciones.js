@@ -13,9 +13,19 @@ $(function () {
 
 const $form = document.querySelector('#formConsignacion');
 
+function cargarDatosCartera() {
+    
+    llenarBancos();
+    obtenerNombreUsuario();
+    cargarEstados('sltEstadoConsignacion');
+    cargarConsignacionesGeneral();
 
+    cargarSedes('sltSedeConsignacion');
+
+}
 
 function abrirModalObservacionesGuardar() {
+    
     var recibo = document.getElementById('txtNumRecibo').value;
     var valor = document.getElementById('txtValor').value;
     var fecha = document.getElementById('dateCreacion').value;
@@ -109,6 +119,46 @@ function abrirModalObservacionesGuardar() {
 
 
 
+}
+
+function validarReporte() {
+    $.ajax({
+        method: "GET",
+        url: "ServletControladorFiles?accion=validarReporte"
+
+
+
+    }).done(function (data) {
+
+        var dato = data;
+
+        if (dato >= 50 && dato <= 60) {
+            Swal.fire({
+                title: 'Generar Reporte',
+                text: "Deber Generar el Reporte Para Continuar",
+                icon: 'Advertencia',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Si, Generar!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    generarReporte();
+
+                }
+            });
+        }else{
+            abrirModalObservacionesGuardar();
+        }
+
+
+        // imprimimos la respuesta
+    }).fail(function () {
+
+        window.location.replace("login.html");
+    }).always(function () {
+
+    });
 }
 
 
@@ -646,12 +696,10 @@ function guardarConsig() {
 
 
 
-function cargarDatos() {
+function llenarBancos() {
     validarSession();
-    obtenerNombreUsuario();
 
 
-    event.preventDefault();
 
     $.ajax({
         method: "GET",
@@ -673,11 +721,6 @@ function cargarDatos() {
         });
 
 
-        cargarEstados('sltEstadoConsignacion');
-        cargarConsignacionesGeneral();
-
-        cargarSedes('sltSedeConsignacion');
-
 
 
     }).fail(function () {
@@ -690,6 +733,32 @@ function cargarDatos() {
 
 }
 
+
+function obtenerNombreUsuario() {
+
+    $.ajax({
+        method: "POST",
+        url: "ServletControlador?accion=obtenerNombreUsuario"
+
+
+    }).done(function (data) {
+
+        var datos = data;
+       
+
+        document.getElementById("username").innerHTML = datos;
+
+
+
+
+    }).fail(function () {
+
+        window.location.replace("login.html");
+    }).always(function () {
+
+    });
+
+}
 var filtro = document.getElementById('sltSedeConsignacion');
 
 filtro.addEventListener('change', function () {
@@ -1583,7 +1652,7 @@ function traerClienteModal() {
 
             $.each(json, function (key, value) {
 
-                $("#tblClienteModal tbody").append('<tr> <td><input type="checkbox" value=' + value.idObligacion + ' id="obligacionModal" name="obligacion" required></td><td>' + value.nombre_titular + '</td><td>' + value.saldo_capital + '</td><td>' + value.fecha_obligacion + '</td><td>' + value.nombre_sede + '</td></tr>');
+                $("#tblClienteModal tbody").append('<tr> <td><input type="checkbox" value=' + value.idObligacion + ' id="obligacionModal" onclick="validar()" name="obligacion" required></td><td>' + value.nombre_titular + '</td><td>' + value.saldo_capital + '</td><td>' + value.fecha_obligacion + '</td><td>' + value.nombre_sede + '</td></tr>');
                 contador = contador + 1;
             });
 
@@ -1612,11 +1681,15 @@ function traerClienteModal() {
 
 }
 
+function validar(){
+    document.getElementById('valid').value = '1';
+}
+
 function actualizarConsignacion() {
     validarSession();
     var datos = {};
     var nuevoEstado = document.getElementById("nuevoEstado").value;
-    var valid = document.getElementById('obligacionModal').checked;
+    var valid = document.getElementById('valid').value;
     if (nuevoEstado !== "") {
         datos.idConsignacion = document.getElementById('txtIdConModal').value;
         datos.num_recibo = document.getElementById('txtNumReciboModal').value;
@@ -1637,7 +1710,7 @@ function actualizarConsignacion() {
 
 
 
-    if (datos.num_recibo === "" || datos.valor === "" || datos.fecha_pago === "" || datos.id_obligacion === "" || datos.banco === "" || !valid) {
+    if (datos.num_recibo === "" || datos.valor === "" || datos.fecha_pago === "" || datos.id_obligacion === "" || datos.banco === "" || valid === '' || valid === null) {
         Swal.fire({
             icon: 'error',
             title: 'Error al Actualizar la Consignacion',

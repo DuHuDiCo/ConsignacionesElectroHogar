@@ -133,6 +133,16 @@ public class ServletControladorFiles extends HttpServlet {
                     }
                 }
                 break;
+                case "validarReporte":
+                {
+                    try {
+                        this.validarReporte(req, resp);
+                    } catch (ClassNotFoundException | SQLException ex) {
+                        Logger.getLogger(ServletControladorFiles.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+                    break;
+
                 default:
                     this.accionDefaul(req, resp);
             }
@@ -552,6 +562,19 @@ public class ServletControladorFiles extends HttpServlet {
         out.print(json);
         out.flush();
 
+    }
+
+    private void validarReporte(HttpServletRequest req, HttpServletResponse resp) throws ClassNotFoundException, SQLException, IOException {
+         HttpSession session = req.getSession(true);
+        String email = (String) session.getAttribute("usuario");
+        int id_usuario = new DaoUsuarios().obtenerIdUsuario(email);
+        List<Consignacion> consigTempCartera = new DaoConsignaciones2().listarConsignacionesTempoCartera(id_usuario);
+         resp.setContentType("text/plain");
+
+        PrintWriter out = resp.getWriter();
+
+        out.print(consigTempCartera.size());
+        out.flush();
     }
 
 }
