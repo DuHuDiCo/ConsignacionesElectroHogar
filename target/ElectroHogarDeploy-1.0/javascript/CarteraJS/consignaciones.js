@@ -13,19 +13,22 @@ $(function () {
 
 const $form = document.querySelector('#formConsignacion');
 
+<<<<<<< HEAD
 function cargarDatosCartera() {
 
     llenarBancos();
     obtenerNombreUsuario();
     cargarEstados('sltEstadoConsignacion');
     cargarConsignacionesGeneral();
+=======
+>>>>>>> parent of b62fd63 (commit 19/10/2022)
 
-    cargarSedes('sltSedeConsignacion');
-
-}
 
 function abrirModalObservacionesGuardar() {
+<<<<<<< HEAD
 
+=======
+>>>>>>> parent of b62fd63 (commit 19/10/2022)
     var recibo = document.getElementById('txtNumRecibo').value;
     var valor = document.getElementById('txtValor').value;
     var fecha = document.getElementById('dateCreacion').value;
@@ -121,6 +124,7 @@ function abrirModalObservacionesGuardar() {
 
 }
 
+<<<<<<< HEAD
 function validarReporte() {
     $.ajax({
         method: "GET",
@@ -161,6 +165,8 @@ function validarReporte() {
     });
 }
 
+=======
+>>>>>>> parent of b62fd63 (commit 19/10/2022)
 
 function guardarConsignacionConObservacionCartera() {
     validarSession();
@@ -696,10 +702,12 @@ function guardarConsig() {
 
 
 
-function llenarBancos() {
+function cargarDatos() {
     validarSession();
+    obtenerNombreUsuario();
 
 
+    event.preventDefault();
 
     $.ajax({
         method: "GET",
@@ -721,6 +729,11 @@ function llenarBancos() {
         });
 
 
+        cargarEstados('sltEstadoConsignacion');
+        cargarConsignacionesGeneral();
+
+        cargarSedes('sltSedeConsignacion');
+
 
 
     }).fail(function () {
@@ -733,6 +746,7 @@ function llenarBancos() {
 
 }
 
+<<<<<<< HEAD
 
 function obtenerNombreUsuario() {
 
@@ -762,6 +776,8 @@ function obtenerNombreUsuario() {
 
 
 
+=======
+>>>>>>> parent of b62fd63 (commit 19/10/2022)
 var filtro = document.getElementById('sltSedeConsignacion');
 
 filtro.addEventListener('change', function () {
@@ -1655,7 +1671,7 @@ function traerClienteModal() {
 
             $.each(json, function (key, value) {
 
-                $("#tblClienteModal tbody").append('<tr> <td><input type="checkbox" value=' + value.idObligacion + ' id="obligacionModal" onclick="validar()" name="obligacion" required></td><td>' + value.nombre_titular + '</td><td>' + value.saldo_capital + '</td><td>' + value.fecha_obligacion + '</td><td>' + value.nombre_sede + '</td></tr>');
+                $("#tblClienteModal tbody").append('<tr> <td><input type="checkbox" value=' + value.idObligacion + ' id="obligacionModal" name="obligacion" required></td><td>' + value.nombre_titular + '</td><td>' + value.saldo_capital + '</td><td>' + value.fecha_obligacion + '</td><td>' + value.nombre_sede + '</td></tr>');
                 contador = contador + 1;
             });
 
@@ -1684,15 +1700,18 @@ function traerClienteModal() {
 
 }
 
+<<<<<<< HEAD
 function validar() {
     document.getElementById('valid').value = '1';
 }
 
+=======
+>>>>>>> parent of b62fd63 (commit 19/10/2022)
 function actualizarConsignacion() {
     validarSession();
     var datos = {};
     var nuevoEstado = document.getElementById("nuevoEstado").value;
-    var valid = document.getElementById('valid').value;
+    var valid = document.getElementById('obligacionModal').checked;
     if (nuevoEstado !== "") {
         datos.idConsignacion = document.getElementById('txtIdConModal').value;
         datos.num_recibo = document.getElementById('txtNumReciboModal').value;
@@ -1713,7 +1732,7 @@ function actualizarConsignacion() {
 
 
 
-    if (datos.num_recibo === "" || datos.valor === "" || datos.fecha_pago === "" || datos.id_obligacion === "" || datos.banco === "" || valid === '' || valid === null) {
+    if (datos.num_recibo === "" || datos.valor === "" || datos.fecha_pago === "" || datos.id_obligacion === "" || datos.banco === "" || !valid) {
         Swal.fire({
             icon: 'error',
             title: 'Error al Actualizar la Consignacion',

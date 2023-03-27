@@ -601,47 +601,6 @@ function cargarSedes(dato) {
     });
 }
 
-function validarReporte() {
-    $.ajax({
-        method: "GET",
-        url: "ServletControladorFiles?accion=validarReporte"
-
-
-
-    }).done(function (data) {
-
-        var dato = data;
-
-        if (dato >= 50 && dato <= 60) {
-            Swal.fire({
-                title: 'Generar Reporte',
-                text: "Deber Generar el Reporte Para Continuar",
-                icon: 'Advertencia',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Si, Generar!'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    generarReporte();
-
-                }
-            });
-        }else{
-            abrirModalObservaciones();
-        }
-
-
-        // imprimimos la respuesta
-    }).fail(function () {
-
-        window.location.replace("login.html");
-    }).always(function () {
-
-    });
-}
-
-
 function abrirModalObservaciones() {
     var recibo = document.getElementById('txtNumRecibo').value;
     var valor = document.getElementById('txtValor').value;

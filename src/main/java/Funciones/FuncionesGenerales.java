@@ -105,20 +105,20 @@ public class FuncionesGenerales {
         String cargo = new DaoRoles().obtenerRolUsuario(email);
         String ciudad = new DaoUsuarios().obtenerSedeUsuario(email);
         String nombre = new DaoConsignaciones().obtenerNombreUsuario(email);
-        int random = (int) (Math.random() * 100);
+        Calendar calendar = Calendar.getInstance();
         String ruta = null;
         switch(cargo){
             case "Administrador":
-                ruta = "/var/lib/tomcat9/webapps/ROOT/archivos/reportes/Admin/reporte_" + fecha + "_" + random + "_" + cargo + ".pdf";
+                ruta = "/var/lib/tomcat9/webapps/ROOT/archivos/reportes/Admin/reporte_" + fecha + "_" + calendar.getTimeInMillis() + "_" + cargo + ".pdf";
             break;
             case "Cartera":
-                ruta = "/var/lib/tomcat9/webapps/ROOT/archivos/reportes/Cartera/reporte_" + fecha + "_" + random + "_" + cargo + ".pdf";
+                ruta = "/var/lib/tomcat9/webapps/ROOT/archivos/reportes/Cartera/reporte_" + fecha + "_" + calendar.getTimeInMillis() + "_" + cargo + ".pdf";
             break;
             case "Contabilidad":
-                ruta = "/var/lib/tomcat9/webapps/ROOT/archivos/reportes/Contabilidad/reporte_" + fecha + "_" + random + "_" + cargo + ".pdf";
+                ruta = "/var/lib/tomcat9/webapps/ROOT/archivos/reportes/Contabilidad/reporte_" + fecha + "_" + calendar.getTimeInMillis() + "_" + cargo + ".pdf";
             break;
             case "Caja":
-                ruta = "/var/lib/tomcat9/webapps/ROOT/archivos/reportes/Caja/reporte_" + fecha + "_" + random + "_" + cargo + ".pdf";
+                ruta = "/var/lib/tomcat9/webapps/ROOT/archivos/reportes/Caja/reporte_" + fecha + "_" + calendar.getTimeInMillis() + "_" + cargo + ".pdf";
             break;
         }
         
@@ -126,7 +126,6 @@ public class FuncionesGenerales {
 
         try {
             try (PDDocument doc = new PDDocument()) {
-               
                 PDPage page = new PDPage();
                 doc.addPage(page);
                 int height = (int) page.getTrimBox().getHeight();//792
@@ -197,7 +196,7 @@ public class FuncionesGenerales {
                             initY = (height - 150) - (con += 10);
                             //body tabla primera
                             for (int j = 1; j <= colCount; j++) {
-                                
+
                                 if (j == 1) {
                                     contens.addRect(initX, initY, 20, -cellHeight);
 
@@ -240,7 +239,6 @@ public class FuncionesGenerales {
                             initY = (height - 150) - (con += 10);
 
                             for (int j = 1; j <= colCount; j++) {
-                               
 
                                 if (j == 1) {
                                     contens.addRect(initX, initY, 20, -cellHeight);
@@ -300,8 +298,10 @@ public class FuncionesGenerales {
         String cargo = new DaoRoles().obtenerRolUsuario(email);
         String ciudad = new DaoUsuarios().obtenerSedeUsuario(email);
         String nombre = new DaoConsignaciones().obtenerNombreUsuario(email);
-        int random = (int) (Math.random() * 100);
-        String ruta = "/var/lib/tomcat9/webapps/ROOT/archivos/reportes/Caja/reporte_" + fecha + "_" + random + "_" + cargo + ".pdf";
+        Calendar calendar = Calendar.getInstance();
+        
+        
+        String ruta = "/var/lib/tomcat9/webapps/ROOT/archivos/reportes/Caja/reporte_" + fecha + "_" + calendar.getTimeInMillis() + "_" + cargo + ".pdf";
 //        String ruta = "J:\\Duvan Humberto Diaz Contreras\\ConsignacionesElectroHogar\\ConsignacionesElectroHogar\\src\\main\\webapp\\archivos\\reportes\\Caja\\reporte_" + fecha + "_" + random + "_" + cargo + ".pdf";
 
         float heightDoc = 792;
