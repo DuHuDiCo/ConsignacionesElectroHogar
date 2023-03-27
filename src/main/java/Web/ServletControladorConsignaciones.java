@@ -409,12 +409,13 @@ public class ServletControladorConsignaciones extends HttpServlet {
     }
 
     private void guardarCambios(HttpServletRequest req, HttpServletResponse resp) throws ClassNotFoundException, SQLException, IOException {
+        String correo = req.getParameter("email");
         HttpSession sesion = req.getSession(true);
         String email = (String) sesion.getAttribute("usuario");
-        int id_usuario = new DaoUsuarios().obtenerIdUsuario(email);
+        int id_usuario = new DaoUsuarios().obtenerIdUsuario(correo);
         List<Consignacion> consignaciones = new DaoConsignaciones().listarConsinacionesTemp(id_usuario);
 
-        System.out.println(email);
+        System.out.println(correo);
         int confirmacion = 0;
         String estado = "Comprobado";
 

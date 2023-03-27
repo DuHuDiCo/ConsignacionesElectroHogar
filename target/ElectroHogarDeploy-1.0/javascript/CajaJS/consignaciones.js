@@ -798,9 +798,10 @@ function consignacionesByCedulaCaja() {
 
 function guardarCambiosCaja() {
     validarSession();
+    var email = localStorage.getItem("email");
     $.ajax({
         method: "GET",
-        url: "ServletControladorConsignaciones?accion=guardarCambiosCaja"
+        url: "ServletControladorConsignaciones?accion=guardarCambiosCaja&email="+email
 
     }).done(function (data) {
 

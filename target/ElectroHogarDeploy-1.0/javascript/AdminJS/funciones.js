@@ -12,8 +12,9 @@ function obtenerNombreUsuario() {
         
         
         document.getElementById("username").innerHTML = datos;
-      
+       
 
+        
 
      
     }).fail(function () {

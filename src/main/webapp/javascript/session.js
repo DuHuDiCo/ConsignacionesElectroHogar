@@ -10,6 +10,7 @@ function validarSession() {
         var datos = data;
         
         if(datos === "null"){
+            localStorage.clear();
             window.location.replace("login.html");
         }
 

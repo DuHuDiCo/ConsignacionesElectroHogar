@@ -31,8 +31,9 @@ function iniciarSesion() {
 
         if (datos.nombre_rol !== "null") {
 
-
-            cargarPagina(datos.nombre_rol);
+            
+            cargarPagina(datos.rol.nombre_rol);
+            localStorage.setItem("email", datos.emailUsuario);
 
 
 
@@ -67,6 +68,7 @@ function cerrarSesion() {
     }).then((result) => {
         if (result.isConfirmed) {
             eliminarSession();
+            localStorage.clear();
 
         }
     });

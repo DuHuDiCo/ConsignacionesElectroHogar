@@ -3,6 +3,7 @@ package Web;
 import Datos.Dao;
 import Datos.DaoRoles;
 import Datos.DaoUsuarios;
+import Dominio.Response;
 import Dominio.Rol;
 import Dominio.Usuario;
 import com.google.gson.Gson;
@@ -120,6 +121,7 @@ public class ServletControlador extends HttpServlet {
 
         out.print(usu);
         out.flush();
+        
 
     }
 
@@ -147,8 +149,11 @@ public class ServletControlador extends HttpServlet {
                     Gson gson = new Gson();
 
                     Rol rolJson = new Rol(user.getNombre_rol());
+                    Response response = new Response();
+                    response.setRol(rolJson);
+                    response.setEmailUsuario(email);
 
-                    String json = gson.toJson(rolJson);
+                    String json = gson.toJson(response);
                     resp.setContentType("application/json");
                     PrintWriter out = resp.getWriter();
 

@@ -14,7 +14,7 @@ $(function () {
 const $form = document.querySelector('#formConsignacion');
 
 function cargarDatosCartera() {
-    
+
     llenarBancos();
     obtenerNombreUsuario();
     cargarEstados('sltEstadoConsignacion');
@@ -25,7 +25,7 @@ function cargarDatosCartera() {
 }
 
 function abrirModalObservacionesGuardar() {
-    
+
     var recibo = document.getElementById('txtNumRecibo').value;
     var valor = document.getElementById('txtValor').value;
     var fecha = document.getElementById('dateCreacion').value;
@@ -147,7 +147,7 @@ function validarReporte() {
 
                 }
             });
-        }else{
+        } else {
             abrirModalObservacionesGuardar();
         }
 
@@ -744,10 +744,10 @@ function obtenerNombreUsuario() {
     }).done(function (data) {
 
         var datos = data;
-       
+
 
         document.getElementById("username").innerHTML = datos;
-
+        localStorage.setItem("email", datos);
 
 
 
@@ -759,6 +759,9 @@ function obtenerNombreUsuario() {
     });
 
 }
+
+
+
 var filtro = document.getElementById('sltSedeConsignacion');
 
 filtro.addEventListener('change', function () {
@@ -1681,7 +1684,7 @@ function traerClienteModal() {
 
 }
 
-function validar(){
+function validar() {
     document.getElementById('valid').value = '1';
 }
 
