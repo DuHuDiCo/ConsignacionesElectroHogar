@@ -415,6 +415,7 @@ public class ServletControladorConsignaciones extends HttpServlet {
         int id_usuario = new DaoUsuarios().obtenerIdUsuario(correo);
         List<Consignacion> consignaciones = new DaoConsignaciones().listarConsinacionesTemp(id_usuario);
 
+        System.out.println(id_usuario);
         System.out.println(correo);
         int confirmacion = 0;
         String estado = "Comprobado";
@@ -476,7 +477,7 @@ public class ServletControladorConsignaciones extends HttpServlet {
 
             List<Consignacion> conTemp = new DaoConsignaciones().listarConsinacionesTempPdf(id_usuario);
 
-            String ruta = Funciones.FuncionesGenerales.generarPdf(conTemp, email);
+            String ruta = Funciones.FuncionesGenerales.generarPdf(conTemp, correo);
             String nombreArchivo = Funciones.FuncionesGenerales.nombreArchivo(ruta);
 
             DateTime fechaHora = Funciones.FuncionesGenerales.stringToDateTime(Funciones.FuncionesGenerales.fechaDateTime());

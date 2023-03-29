@@ -1179,9 +1179,11 @@ function cancelarCambios() {
 
 function guardarCambios() {
     validarSession();
+    
+    var correo = localStorage.getItem("email");
     $.ajax({
         method: "GET",
-        url: "ServletControladorConsignaciones?accion=guardarCambios"
+        url: "ServletControladorConsignaciones?accion=guardarCambios&email="+correo
 
     }).done(function (data) {
 
