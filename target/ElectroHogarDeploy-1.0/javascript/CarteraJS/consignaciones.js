@@ -13,22 +13,17 @@ $(function () {
 
 const $form = document.querySelector('#formConsignacion');
 
-<<<<<<< HEAD
+
 function cargarDatosCartera() {
 
     llenarBancos();
     obtenerNombreUsuario();
     cargarEstados('sltEstadoConsignacion');
     cargarConsignacionesGeneral();
-=======
->>>>>>> parent of b62fd63 (commit 19/10/2022)
-
+}
 
 function abrirModalObservacionesGuardar() {
-<<<<<<< HEAD
 
-=======
->>>>>>> parent of b62fd63 (commit 19/10/2022)
     var recibo = document.getElementById('txtNumRecibo').value;
     var valor = document.getElementById('txtValor').value;
     var fecha = document.getElementById('dateCreacion').value;
@@ -124,7 +119,7 @@ function abrirModalObservacionesGuardar() {
 
 }
 
-<<<<<<< HEAD
+
 function validarReporte() {
     $.ajax({
         method: "GET",
@@ -165,8 +160,6 @@ function validarReporte() {
     });
 }
 
-=======
->>>>>>> parent of b62fd63 (commit 19/10/2022)
 
 function guardarConsignacionConObservacionCartera() {
     validarSession();
@@ -776,8 +769,7 @@ function obtenerNombreUsuario() {
 
 
 
-=======
->>>>>>> parent of b62fd63 (commit 19/10/2022)
+
 var filtro = document.getElementById('sltSedeConsignacion');
 
 filtro.addEventListener('change', function () {
@@ -1700,13 +1692,11 @@ function traerClienteModal() {
 
 }
 
-<<<<<<< HEAD
 function validar() {
     document.getElementById('valid').value = '1';
 }
 
-=======
->>>>>>> parent of b62fd63 (commit 19/10/2022)
+
 function actualizarConsignacion() {
     validarSession();
     var datos = {};
